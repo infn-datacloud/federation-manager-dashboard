@@ -2,8 +2,6 @@ export default function Home() {
 	return (
 		<>
 			<h1>Federation Manager</h1>
-			<a href="/profile">My Profile</a>
-			<br />
 
 			<h2>Providers List</h2>
 			<ul>
@@ -12,7 +10,7 @@ export default function Home() {
 				<li><a href="/providers/3">Provider 3</a></li>
 			</ul>
 			<br />
-			<a href="/request">New Reuest +</a>
+			<a href="/providers/request">New Reuest +</a>
 		</>
 	);
 }
