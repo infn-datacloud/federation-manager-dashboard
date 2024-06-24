@@ -5,7 +5,15 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 ## Getting Started
 
-First, run the development server:
+Node.js `v18.0` or higher is required. Download at [Node.js](https://nodejs.org/en/download/package-manager).
+Npm is required to manage the project.
+
+To set up the working space and install all the libraries execute:
+```bash
+npm install
+```
+
+Then, run the development server:
 
 ```bash
 npm run dev
