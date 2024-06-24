@@ -15,27 +15,28 @@ export default function HomeButton() {
 		router.push('/');
 	};
 
+    const textClasses = styles.textEllipsis +' '+ styles.navbarLogoText
+
     return (
-        <>
-            <Button 
-                onClick={ handleClick } 
-                sx={{ marginRight: 'auto' }}
-            >
-                <img
+        <Button 
+            onClick={ handleClick } 
+            sx={{ marginRight: 'auto' }}
+            startIcon=
+                {<img
                     src="/logos/infn_logo_white.png"
                     height={50}
                     alt="Logo"
                     className={ styles.navbarLogoImg }
-                />
-                <Typography 
-                    variant="h6"
-                    component="div"
-                    sx={{ fontWeight: 'bold', paddingRight: '15px' }}
-                    className={ styles.navbarLogoText }
-                >
-                    Federation Manager
-                </Typography>
-            </Button>
-        </>
+                />}
+        >
+            <Typography 
+                variant="h6"
+                component="div"
+                sx={{ fontWeight: 'bold', paddingRight: '15px' }}
+                className={ textClasses }
+            >
+                Federation Manager
+            </Typography>
+        </Button>
     )
 }

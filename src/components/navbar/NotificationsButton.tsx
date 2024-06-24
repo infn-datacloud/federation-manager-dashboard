@@ -48,49 +48,45 @@ export default function NotificationsButton() {
 				}}
 				sx={{ maxHeight: '40%' }}
 			>
+				<Typography variant="h5" gutterBottom sx={{ padding: '0.2rem 1rem', display: 'flex', alignItems: 'center' }}>
+					<NotificationsIcon />&nbsp;Notifications
+				</Typography>
 
+				<Divider sx={{ margin: '8px 0' }}/>
+				
 				<MenuItem onClick={handleClose} sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', textWrap: 'wrap' }}>
-					<React.Fragment>
-						<Typography
-							component="span"
-							color="text.primary"
-							variant="body2"
-						>
-							<FiberManualRecordIcon sx={{ fontSize: 10 }} color="error" />&nbsp;
-							<b>Lorem ipsum</b> dolor sit amet.
-						</Typography>
-					</React.Fragment>
+					<Typography
+						component="span"
+						variant="body2"
+					>
+						<FiberManualRecordIcon sx={{ fontSize: 10 }} color="error" />&nbsp;
+						<b>Lorem ipsum</b> dolor sit amet.
+					</Typography>
 				</MenuItem>
 
 				<Divider />
 
 				<MenuItem onClick={handleClose} sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', textWrap: 'wrap' }}>
-					<React.Fragment>
-						<Typography
-							component="span"
-							color="text.primary"
-							variant="body2"
-						>
-							<FiberManualRecordIcon sx={{ fontSize: 10 }} color="error" />&nbsp;
-							<b>Lorem ipsum</b> dolor sit amet, consectetur adipiscing elit.
-						</Typography>
-					</React.Fragment>
+					<Typography
+						component="span"
+						variant="body2"
+					>
+						<FiberManualRecordIcon sx={{ fontSize: 10 }} color="error" />&nbsp;
+						<b>Lorem ipsum</b> dolor sit amet, consectetur adipiscing elit.
+					</Typography>
 				</MenuItem>
 
 				<Divider />
 
 				<MenuItem onClick={handleClose} sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', textWrap: 'wrap' }}>
-					<React.Fragment>
-						<Typography
-							component="span"
-							color="text.disabled"
-							variant="body2"
-						>
-							<b>Lorem ipsum</b> dolor sit amet.
-						</Typography>
-					</React.Fragment>
+					<Typography
+						component="span"
+						color="text.disabled"
+						variant="body2"
+					>
+						<b>Lorem ipsum</b> dolor sit amet.
+					</Typography>
 				</MenuItem>
-
 			</Menu>
 		</>
 	);

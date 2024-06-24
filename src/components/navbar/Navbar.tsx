@@ -12,26 +12,24 @@ import ProfileButton from "@/components/navbar/ProfileButton";
 
 export default function Navbar() {
     return (
-        <>
-            <Box sx={{ flexGrow: 1 }}>
-                <AppBar position="static" sx={{ backgroundColor: '#002A48' }}>
-                    <Toolbar>
+        <Box sx={{ flexGrow: 1 }}>
+            <AppBar position="static" sx={{ backgroundColor: '#002A48' }}>
+                <Toolbar>
 
-                        {/* Title */}
-                        <HomeButton />
+                    {/* Title */}
+                    <HomeButton />
 
-                        {/* Roles */}
-                        <RolesButton />
+                    {/* Roles */}
+                    <RolesButton />
 
-                        {/* Notifications */}
-                        <NotificationsButton />
+                    {/* Notifications */}
+                    <NotificationsButton />
 
-                        {/* Account */}
-                        <ProfileButton />
-                        
-                    </Toolbar>
-                </AppBar>
-            </Box>
-        </>
+                    {/* Account */}
+                    <ProfileButton />
+                    
+                </Toolbar>
+            </AppBar>
+        </Box>
     )
 }
