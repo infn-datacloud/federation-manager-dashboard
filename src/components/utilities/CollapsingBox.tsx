@@ -12,12 +12,11 @@ export default function CollapsingBox(params: {
         <>
             <Accordion
                 sx={{ 
-                    padding: '1em 3em',
                     borderRadius: '25px!important',
                     boxShadow: '-3px 3px 8px -3px #00000020',
                     color: 'inherit',
                     '&:before': {
-                        backgroundColor: 'transparent',
+                        backgroundColor: 'transparent'
                     }
                 }}
             >
@@ -25,13 +24,13 @@ export default function CollapsingBox(params: {
                     expandIcon={<ArrowDropDownRoundedIcon fontSize='large' />}
                     aria-controls="panel1-content"
                     id="panel1-header"
-                    sx={{ padding: 0 }}
+                    sx={{ padding: '1em 3em' }}
                 >
                     <Typography variant='h5' fontWeight='bold' sx={{ display: 'flex', alignItems: 'center'}}>
                         { params.title }
                     </Typography>
                 </AccordionSummary>
-                <AccordionDetails sx={{padding: '0 0 1em 0'}}>
+                <AccordionDetails sx={{padding: '1em 3em'}}>
                     { params.body }
                 </AccordionDetails>
             </Accordion>
