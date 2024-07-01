@@ -28,7 +28,7 @@
 }
 
 .statusContainer {
-    width: 33%;
+    width: 24%;
     display: flex;
     justify-content: center;
 }
@@ -43,11 +43,14 @@
     align-items: center;
     justify-content: center;
     border-radius: 10px;
-    width: 60%;
+    width: 100%;
 }
 
-.textEllipsis {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.errorContainer {
+    padding: 2em 3em;
+    margin: 4em 0;
+    border: 3px solid #DE2335;
+    border-radius: 25px;
+    background: #DE233525;
+    color: #DE2335;
 }

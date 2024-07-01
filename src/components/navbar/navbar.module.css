@@ -14,9 +14,3 @@
     max-width: 360px;
     text-wrap: 'wrap';
 }
-
-.textEllipsis {
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}

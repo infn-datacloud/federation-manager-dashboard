@@ -20,7 +20,7 @@ export default function Home() {
 						alt="Logo"
 						className={ styles.logoImg }
 					/>
-
+					<br />
 					<Typography variant="h4">
 						Federation Manager
 					</Typography>

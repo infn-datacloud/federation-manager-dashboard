@@ -4,6 +4,7 @@ import AccessTimeFilledRoundedIcon from '@mui/icons-material/AccessTimeFilledRou
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 
 import styles from "./providers.module.css"
+import page_styles from "@/app/page.module.css"
 
 
 export default function ProviderStatus(props: {
@@ -28,7 +29,7 @@ export default function ProviderStatus(props: {
         <div className={styles.statusContainer}>
             <Typography variant="button" className={styles.statusElem} style={style}>
                 {icon}&nbsp;
-                <span className={styles.textEllipsis}>
+                <span className={page_styles.textEllipsis}>
                     {props.status}
                 </span>
             </Typography>

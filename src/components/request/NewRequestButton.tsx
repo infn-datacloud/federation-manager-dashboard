@@ -19,7 +19,7 @@ export default function NewRequestButton() {
             <Button 
                 size="large"
                 onClick={ handleClick } 
-                sx={{ backgroundColor: '#002A48', padding: '1.5em 3em', color: 'white', fontWeight: 'bold', boxShadow: 'rgb(38, 57, 77) 0px 15px 30px -10px',
+                sx={{ backgroundColor: '#002A48', padding: '1.5em 3em', color: 'white', fontWeight: 'bold', boxShadow: 'rgb(38, 57, 77) 0px 15px 30px -10px', borderRadius: '16px',
                     '&:hover': {
                         backgroundColor: '#012d4d',
                         transform: 'scale(1.01)',

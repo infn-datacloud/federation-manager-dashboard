@@ -1,20 +1,31 @@
+'use client'
+
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import PersonIcon from '@mui/icons-material/Person';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
 
-import ProviderStatus from './ProviderStatus'
-import styles from './providers.module.css'
+import { useRouter } from 'next/navigation';
+import ProviderStatus from './ProviderStatus';
+import styles from './providers.module.css';
+import page_styles from "@/app/page.module.css";
 
 export default function Provider(props: {
+    id: string,
     name: string,
     user: string,
     status: string,
 }) {
-    
+    const router = useRouter();
+
+	const handleClick = () => {
+        let id = props.id.split('provider_')[1];
+
+		router.push('/providers/' + id);
+	};
 
     return (
-        <div className={styles.providerContainer}>
+        <div className={styles.providerContainer} onClick={ handleClick } >
             <Box
                 display='flex'
                 alignItems='center'
@@ -23,7 +34,7 @@ export default function Provider(props: {
                 <Typography variant='h5' className={styles.providerInitials} padding='12px' margin='4px 20px 4px 0' sx={{backgroundColor: 'lightblue'}}>
                     PE
                 </Typography>
-                <Typography variant='h6' fontWeight={'bold'} className={styles.textEllipsis}>
+                <Typography variant='h6' fontWeight={'bold'} className={page_styles.textEllipsis}>
                     {props.name}
                 </Typography>
             </Box>
@@ -46,7 +57,7 @@ export default function Provider(props: {
             return (
                 <>
                     <PersonIcon />&nbsp;
-                    <Typography lineHeight={'unset'} fontWeight={'600'} className={styles.textEllipsis}>
+                    <Typography lineHeight={'unset'} fontWeight={'600'} className={page_styles.textEllipsis}>
                         {props.user}
                     </Typography>
                 </>
@@ -56,7 +67,7 @@ export default function Provider(props: {
         return (
             <>
                 <PersonOutlineRoundedIcon />&nbsp;
-                <Typography lineHeight={'unset'} fontWeight={'600'} className={styles.textEllipsis}>
+                <Typography lineHeight={'unset'} fontWeight={'600'} className={page_styles.textEllipsis}>
                     No user
                 </Typography>
             </>

@@ -13,7 +13,7 @@ import ProfileButton from "@/components/navbar/ProfileButton";
 export default function Navbar() {
     return (
         <Box sx={{ flexGrow: 1 }}>
-            <AppBar position="static" sx={{ backgroundColor: '#002A48' }}>
+            <AppBar position="fixed" sx={{ backgroundColor: '#002A48' }}>
                 <Toolbar>
 
                     {/* Title */}

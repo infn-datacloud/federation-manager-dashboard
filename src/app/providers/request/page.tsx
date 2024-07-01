@@ -6,7 +6,7 @@ import { Container, Typography, Box, Button } from "@mui/material"
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
-import styles from './request.module.css'
+import styles from '../../page.module.css'
 
 export default function Request() {
 	const router = useRouter();
@@ -39,7 +39,7 @@ export default function Request() {
 						<Button 
 							variant="contained"
 							color="error"
-							sx={{borderRadius: '25px', }} 
+							sx={{borderRadius: '25px', fontWeight: 'bold' }} 
 							endIcon={<NotInterestedIcon />}
 							onClick={ handleCancelClick } 
 						>
@@ -47,7 +47,7 @@ export default function Request() {
 						</Button>
 						<Button 
 							variant="contained" 
-							sx={{borderRadius: '25px', backgroundColor: '#002A48',
+							sx={{borderRadius: '25px', fontWeight: 'bold', backgroundColor: '#002A48',
 								'&:hover': {
 									backgroundColor: '#012d4d',
 								}}} 

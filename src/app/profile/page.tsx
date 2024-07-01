@@ -1,6 +1,6 @@
 import { Container, Typography, Box, IconButton } from '@mui/material'
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
-import styles from './profile.module.css'
+import styles from '../page.module.css'
 
 export default function Profile() {
     return (
