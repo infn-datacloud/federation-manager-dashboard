@@ -82,7 +82,7 @@ export default function TimelineBox() {
                             Hello this is working fine! Lorem ipsum dolor sit amet consectetur adipisicing elit. Inventore aliquid, iste repellat.
                         </Typography>
                         <Typography fontSize='small'>
-                            Ettore Serra added a comment
+                            <b>Ettore Serra</b> added a comment
                         </Typography>
                     </TimelineContent>
                 </TimelineItem>
@@ -113,7 +113,7 @@ export default function TimelineBox() {
                             Status changed from “IN PROGRESS” to “ERROR”
                         </Typography>
                         <Typography fontSize='small'>
-                            Sysyem changed status
+                            <b>Sysyem</b> changed status
                         </Typography>
                     </TimelineContent>
                 </TimelineItem>
@@ -144,7 +144,7 @@ export default function TimelineBox() {
                             Created “Provider Example”
                         </Typography>
                         <Typography fontSize='small'>
-                            Admin created the provider
+                            <b>Admin</b> created the provider
                         </Typography>
                     </TimelineContent>
                 </TimelineItem>
