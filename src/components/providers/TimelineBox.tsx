@@ -38,15 +38,16 @@ export default function TimelineBox() {
 			{/* COMMENT SECTION */}
 			<Box
 				display='flex'
-				alignItems='center'
+				alignItems='flex-end'
 				justifyContent='space-between'
 			>
-				{/* <InputText label='Add a comment'/> */}
 				<ThemeProvider theme={theme}>
 					<TextField
 						label='Add a comment'
 						variant='standard'
 						color='primary'
+						autoComplete='off'
+						multiline
 						fullWidth
 					/>
 				</ThemeProvider>

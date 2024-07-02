@@ -27,6 +27,7 @@ export default function Provider({
 				justifyContent='space-between'
 				alignItems='center'
 				marginTop='8em'
+				marginBottom='4em'
 			>
 				<Box display='flex' alignItems='center'>
 					<Typography

@@ -48,7 +48,7 @@
 
 .errorContainer {
 	padding: 2em 3em;
-	margin: 4em 0;
+	margin-bottom: 4em;
 	border: 3px solid #de2335;
 	border-radius: 25px;
 	background: #de233525;
