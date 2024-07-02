@@ -1,8 +1,8 @@
-'use client'
+'use client';
 
 import { useRouter } from 'next/navigation';
 
-import { Container, Typography, Box, Button, TextField } from "@mui/material"
+import { Container, Typography, Box, Button, TextField } from '@mui/material';
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
@@ -10,11 +10,11 @@ import styles from '../../page.module.css';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 const theme = createTheme({
-    palette: {
-        primary: {
-            main: '#162D4D'
-        }
-    },
+	palette: {
+		primary: {
+			main: '#162D4D',
+		},
+	},
 });
 
 export default function Request() {
@@ -24,53 +24,76 @@ export default function Request() {
 		router.push('/');
 	};
 
-    return (
+	return (
 		<>
-			<br /><br />
-			<Container className={styles.cardContainer} sx={{padding: '2em 3em!important'}}>
+			<br />
+			<br />
+			<Container
+				className={styles.cardContainer}
+				sx={{ padding: '2em 3em!important' }}
+			>
 				<Box display='flex' flexDirection='column' alignItems='center'>
-					<Typography variant="h4">
-						New Provider Request
-					</Typography>
-					
-					<Typography variant="body1" align='center' width='50%'>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc in tempus lacus. Nunc urna nunc, condimentum sit amet egestas a, vestibulum tempus felis. Suspendisse nec purus lacus.
+					<Typography variant='h4'>New Provider Request</Typography>
+
+					<Typography variant='body1' align='center' width='50%'>
+						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+						Nunc in tempus lacus. Nunc urna nunc, condimentum sit
+						amet egestas a, vestibulum tempus felis. Suspendisse nec
+						purus lacus.
 					</Typography>
 				</Box>
 
 				<br />
 
 				<Box
-					component="form"
+					component='form'
 					sx={{
 						'& .MuiTextField-root': { m: 1 },
 					}}
 					noValidate
-					autoComplete="off"
+					autoComplete='off'
 				>
 					<ThemeProvider theme={theme}>
-						<TextField label="Title" variant="standard" color='primary' fullWidth/><br />
-						<TextField label="Request description" variant="standard" color='primary' fullWidth multiline rows={5}/><br />
+						<TextField
+							label='Title'
+							variant='standard'
+							color='primary'
+							fullWidth
+						/>
+						<br />
+						<TextField
+							label='Request description'
+							variant='standard'
+							color='primary'
+							fullWidth
+							multiline
+							rows={5}
+						/>
+						<br />
 					</ThemeProvider>
 
 					<br />
 					<Box display='flex' justifyContent='space-between'>
-						<Button 
-							variant="contained"
-							color="error"
-							sx={{borderRadius: '25px', fontWeight: 'bold' }} 
+						<Button
+							variant='contained'
+							color='error'
+							sx={{ borderRadius: '25px', fontWeight: 'bold' }}
 							endIcon={<NotInterestedIcon />}
-							onClick={ handleCancelClick } 
+							onClick={handleCancelClick}
 							size='large'
 						>
 							Cancel
 						</Button>
-						<Button 
-							variant="contained" 
-							sx={{borderRadius: '25px', fontWeight: 'bold', backgroundColor: '#002A48',
+						<Button
+							variant='contained'
+							sx={{
+								borderRadius: '25px',
+								fontWeight: 'bold',
+								backgroundColor: '#002A48',
 								'&:hover': {
 									backgroundColor: '#012d4d',
-								}}} 
+								},
+							}}
 							endIcon={<AddRoundedIcon />}
 							size='large'
 						>
@@ -80,5 +103,5 @@ export default function Request() {
 				</Box>
 			</Container>
 		</>
-    );
+	);
 }

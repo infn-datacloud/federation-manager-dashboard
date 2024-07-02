@@ -1,10 +1,10 @@
 .user {
-    display: flex;
-    align-items: center;
-    color: #162D4D75;
-    cursor: pointer;
+	display: flex;
+	align-items: center;
+	color: #162d4d75;
+	cursor: pointer;
 }
 
 .user:hover > p {
-    text-decoration: underline;
+	text-decoration: underline;
 }

@@ -1,3 +1,4 @@
 {
-  "extends": "next/core-web-vitals"
+  "plugins": ["sonarjs"],
+  "extends": ["eslint:recommended", "plugin:security/recommended-legacy", "plugin:sonarjs/recommended-legacy", "next/core-web-vitals"]
 }

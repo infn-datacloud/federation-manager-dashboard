@@ -1,16 +1,16 @@
 .navbarLogoImg {
-    image-rendering: smooth;
-    cursor: pointer;
+	image-rendering: smooth;
+	cursor: pointer;
 }
 
 .navbarLogoText {
-    cursor: pointer;
-    color: white;
-    text-transform: none;
+	cursor: pointer;
+	color: white;
+	text-transform: none;
 }
 
 .navbarNotification {
-    width: 100%;
-    max-width: 360px;
-    text-wrap: 'wrap';
+	width: 100%;
+	max-width: 360px;
+	text-wrap: 'wrap';
 }

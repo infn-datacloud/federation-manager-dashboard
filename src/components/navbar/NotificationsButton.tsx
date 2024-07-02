@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import * as React from 'react';
 
@@ -24,22 +24,22 @@ export default function NotificationsButton() {
 	return (
 		<>
 			<IconButton
-				size="large"
-				aria-label="Show 2 new notifications"
-				color="inherit"
-				id="basic-button"
+				size='large'
+				aria-label='Show 2 new notifications'
+				color='inherit'
+				id='basic-button'
 				aria-controls={open ? 'basic-menu' : undefined}
-				aria-haspopup="true"
+				aria-haspopup='true'
 				aria-expanded={open ? 'true' : undefined}
 				onClick={handleClick}
 			>
-				<Badge badgeContent={2} color="error">
+				<Badge badgeContent={2} color='error'>
 					<NotificationsIcon />
 				</Badge>
 			</IconButton>
 
 			<Menu
-				id="basic-menu"
+				id='basic-menu'
 				anchorEl={anchorEl}
 				open={open}
 				onClose={handleClose}
@@ -48,41 +48,81 @@ export default function NotificationsButton() {
 				}}
 				sx={{ maxHeight: '40%' }}
 			>
-				<Typography variant="h5" gutterBottom sx={{ padding: '0.2rem 1rem', display: 'flex', alignItems: 'center', color: '#162D4D' }}>
-					<NotificationsIcon />&nbsp;Notifications
+				<Typography
+					variant='h5'
+					gutterBottom
+					sx={{
+						padding: '0.2rem 1rem',
+						display: 'flex',
+						alignItems: 'center',
+						color: '#162D4D',
+					}}
+				>
+					<NotificationsIcon />
+					&nbsp;Notifications
 				</Typography>
 
-				<Divider sx={{ margin: '8px 0' }}/>
-				
-				<MenuItem onClick={handleClose} sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', textWrap: 'wrap', color: '#162D4D' }}>
-					<Typography
-						component="span"
-						variant="body2"
-					>
-						<FiberManualRecordIcon sx={{ fontSize: 10 }} color="error" />&nbsp;
+				<Divider sx={{ margin: '8px 0' }} />
+
+				<MenuItem
+					onClick={handleClose}
+					sx={{
+						width: '100%',
+						maxWidth: 360,
+						bgcolor: 'background.paper',
+						textWrap: 'wrap',
+						color: '#162D4D',
+					}}
+				>
+					<Typography component='span' variant='body2'>
+						<FiberManualRecordIcon
+							sx={{ fontSize: 10 }}
+							color='error'
+						/>
+						&nbsp;
 						<b>Lorem ipsum</b> dolor sit amet.
 					</Typography>
 				</MenuItem>
 
 				<Divider />
 
-				<MenuItem onClick={handleClose} sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', textWrap: 'wrap', color: '#162D4D' }}>
-					<Typography
-						component="span"
-						variant="body2"
-					>
-						<FiberManualRecordIcon sx={{ fontSize: 10 }} color="error" />&nbsp;
-						<b>Lorem ipsum</b> dolor sit amet, consectetur adipiscing elit.
+				<MenuItem
+					onClick={handleClose}
+					sx={{
+						width: '100%',
+						maxWidth: 360,
+						bgcolor: 'background.paper',
+						textWrap: 'wrap',
+						color: '#162D4D',
+					}}
+				>
+					<Typography component='span' variant='body2'>
+						<FiberManualRecordIcon
+							sx={{ fontSize: 10 }}
+							color='error'
+						/>
+						&nbsp;
+						<b>Lorem ipsum</b> dolor sit amet, consectetur
+						adipiscing elit.
 					</Typography>
 				</MenuItem>
 
 				<Divider />
 
-				<MenuItem onClick={handleClose} sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper', textWrap: 'wrap', color: '#162D4D' }}>
+				<MenuItem
+					onClick={handleClose}
+					sx={{
+						width: '100%',
+						maxWidth: 360,
+						bgcolor: 'background.paper',
+						textWrap: 'wrap',
+						color: '#162D4D',
+					}}
+				>
 					<Typography
-						component="span"
-						color="text.disabled"
-						variant="body2"
+						component='span'
+						color='text.disabled'
+						variant='body2'
 					>
 						<b>Lorem ipsum</b> dolor sit amet.
 					</Typography>
