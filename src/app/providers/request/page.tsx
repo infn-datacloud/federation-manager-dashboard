@@ -5,8 +5,9 @@ import { useRouter } from 'next/navigation';
 import { Container, Typography, Box, Button } from "@mui/material"
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import InputText from '@/components/utilities/inputs/InputText';
 
-import styles from '../../page.module.css'
+import styles from '../../page.module.css';
 
 export default function Request() {
 	const router = useRouter();
@@ -29,11 +30,11 @@ export default function Request() {
 					</Typography>
 				</Box>
 
+				<br />
+
 				<form>
-					<input type="text" /><br />
-					<input type="text" /><br />
-					<input type="text" /><br />
-					<input type="text" /><br />
+					<InputText label='Title' sx={{marginBottom: '1em'}}/>
+					<InputText label='Request motivation' rows={5} sx={{marginBottom: '1em'}}/>
 					<br />
 					<Box display='flex' justifyContent='space-between'>
 						<Button 
@@ -42,6 +43,7 @@ export default function Request() {
 							sx={{borderRadius: '25px', fontWeight: 'bold' }} 
 							endIcon={<NotInterestedIcon />}
 							onClick={ handleCancelClick } 
+							size='large'
 						>
 							Cancel
 						</Button>
@@ -52,6 +54,7 @@ export default function Request() {
 									backgroundColor: '#012d4d',
 								}}} 
 							endIcon={<AddRoundedIcon />}
+							size='large'
 						>
 							Create
 						</Button>

@@ -33,7 +33,7 @@ export default function TimelineBox() {
                 alignItems='center'
                 justifyContent='space-between'
             >
-                <InputText label='Add a comment' fullWidth={true}/>
+                <InputText label='Add a comment'/>
                 &nbsp;
                 <Button 
                     variant="contained" 
@@ -42,12 +42,11 @@ export default function TimelineBox() {
                             backgroundColor: '#012d4d',
                         }}
                     } 
+                    size='large'
                 >
                     Add +
                 </Button>
             </Box>
-
-            <br />
 
             {/* TIMELINE */}
             <Timeline sx={{

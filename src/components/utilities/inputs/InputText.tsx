@@ -2,10 +2,19 @@ import { ForkLeft, Height } from "@mui/icons-material";
 import { TextField } from "@mui/material";
 import { styled } from '@mui/material/styles';
 
-export default function InputText(params: {
+interface Props {
     label: string,
-    fullWidth: boolean
-}) {
+    fullWidth?: boolean,
+    rows?: number,
+    sx?: object,
+}
+
+export default function InputText({
+    label,
+    fullWidth=true,
+    rows=1,
+    sx={}
+}: Props) {
     const CssTextField = styled(TextField)({
         '& label.Mui-focused': {
             color: '#162D4D'
@@ -29,7 +38,7 @@ export default function InputText(params: {
 
     return (
         <>
-            <CssTextField fullWidth={params.fullWidth} label={params.label} />
+            <CssTextField fullWidth={fullWidth} label={label} rows={rows} multiline={rows > 1} sx={sx} />
         </>
     )
 }
