@@ -1,7 +1,6 @@
-import { Accordion, AccordionSummary, AccordionDetails, Typography, Box, Button } from '@mui/material';
+import { Typography, Box, Button } from '@mui/material';
 
 import SubjectRoundedIcon from '@mui/icons-material/SubjectRounded';
-import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 
 import CollapsingBox from '@/components/utilities/CollapsingBox';

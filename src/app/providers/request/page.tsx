@@ -2,12 +2,20 @@
 
 import { useRouter } from 'next/navigation';
 
-import { Container, Typography, Box, Button } from "@mui/material"
+import { Container, Typography, Box, Button, TextField } from "@mui/material"
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import InputText from '@/components/utilities/inputs/InputText';
 
 import styles from '../../page.module.css';
+
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#162D4D'
+        }
+    },
+});
 
 export default function Request() {
 	const router = useRouter();
@@ -32,9 +40,19 @@ export default function Request() {
 
 				<br />
 
-				<form>
-					<InputText label='Title' sx={{marginBottom: '1em'}}/>
-					<InputText label='Request motivation' rows={5} sx={{marginBottom: '1em'}}/>
+				<Box
+					component="form"
+					sx={{
+						'& .MuiTextField-root': { m: 1 },
+					}}
+					noValidate
+					autoComplete="off"
+				>
+					<ThemeProvider theme={theme}>
+						<TextField label="Title" variant="standard" color='primary' fullWidth/><br />
+						<TextField label="Request description" variant="standard" color='primary' fullWidth multiline rows={5}/><br />
+					</ThemeProvider>
+
 					<br />
 					<Box display='flex' justifyContent='space-between'>
 						<Button 
@@ -59,7 +77,7 @@ export default function Request() {
 							Create
 						</Button>
 					</Box>
-				</form>
+				</Box>
 			</Container>
 		</>
     );

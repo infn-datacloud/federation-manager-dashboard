@@ -5,18 +5,26 @@ import TimelineSeparator from '@mui/lab/TimelineSeparator';
 import TimelineConnector from '@mui/lab/TimelineConnector';
 import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineDot from '@mui/lab/TimelineDot';
-import { Typography, Box } from '@mui/material';
+import { Typography, Box, TextField } from '@mui/material';
 import HistoryRoundedIcon from '@mui/icons-material/HistoryRounded';
 import ChatRoundedIcon from '@mui/icons-material/ChatRounded';
 import SecurityRoundedIcon from '@mui/icons-material/SecurityRounded';
 import SettingsRoundedIcon from '@mui/icons-material/SettingsRounded';
 import TimelineOppositeContent, {
-  timelineOppositeContentClasses,
+    timelineOppositeContentClasses,
 } from '@mui/lab/TimelineOppositeContent';
 
 import CollapsingBox from '@/components/utilities/CollapsingBox';
-import InputText from '@/components/utilities/inputs/InputText';
 import { Button } from '@mui/material';
+
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#162D4D'
+        }
+    },
+});
 
 export default function TimelineBox() {
     let title = (
@@ -33,7 +41,10 @@ export default function TimelineBox() {
                 alignItems='center'
                 justifyContent='space-between'
             >
-                <InputText label='Add a comment'/>
+                {/* <InputText label='Add a comment'/> */}
+                <ThemeProvider theme={theme}>
+                    <TextField label="Add a comment" variant="standard" color='primary' fullWidth/>
+                </ThemeProvider>
                 &nbsp;
                 <Button 
                     variant="contained" 
@@ -42,7 +53,6 @@ export default function TimelineBox() {
                             backgroundColor: '#012d4d',
                         }}
                     } 
-                    size='large'
                 >
                     Add +
                 </Button>

@@ -30,7 +30,7 @@ export default function CollapsingBox(params: {
                         { params.title }
                     </Typography>
                 </AccordionSummary>
-                <AccordionDetails sx={{padding: '1em 3em'}}>
+                <AccordionDetails sx={{padding: '0em 3em 2em'}}>
                     { params.body }
                 </AccordionDetails>
             </Accordion>
