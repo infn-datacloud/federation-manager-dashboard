@@ -8,6 +8,7 @@
 	margin-bottom: 24px;
 	cursor: pointer;
 	background-color: white;
+	transition: 0.4s;
 }
 
 .providerContainer:hover {

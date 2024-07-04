@@ -59,6 +59,7 @@ export default function Request() {
 							variant='standard'
 							color='primary'
 							fullWidth
+							autoFocus
 						/>
 						<br />
 						<TextField

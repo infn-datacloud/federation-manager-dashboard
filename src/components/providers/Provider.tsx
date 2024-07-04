@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import PersonIcon from '@mui/icons-material/Person';
 import PersonOutlineRoundedIcon from '@mui/icons-material/PersonOutlineRounded';
+import AdminPanelSettingsRoundedIcon from '@mui/icons-material/AdminPanelSettingsRounded';
 
 import { useRouter } from 'next/navigation';
 import ProviderStatus from './ProviderStatus';
@@ -51,42 +52,58 @@ export default function Provider(
 				alignItems='center'
 				width='33%'
 				color='#162D4D75'
-			>
-				{user_icon()}
+			>	
+			    <Box className={page_styles.textEllipsis}>
+					{user_icon()}
+				</Box>
 			</Box>
 			<ProviderStatus status={props.status} />
 		</Box>
 	);
 
 	function user_icon() {
+		let users = [
+			<Box display='flex' alignItems='center' key='0'>
+				<AdminPanelSettingsRoundedIcon />
+				&nbsp;
+				<Typography
+					fontWeight={'600'}
+					className={page_styles.textEllipsis}
+				>
+					Admin
+				</Typography>
+			</Box>,
+		];
+
 		if (props.user !== '') {
-			return (
-				<>
+			users.push(
+				<Box display='flex' alignItems='center' key='1'>
 					<PersonIcon />
 					&nbsp;
 					<Typography
-						lineHeight={'unset'}
 						fontWeight={'600'}
 						className={page_styles.textEllipsis}
 					>
 						{props.user}
 					</Typography>
-				</>
+				</Box>
+			);
+		} else {
+			users.push(
+				<Box display='flex' alignItems='center' key='2'>
+					<PersonOutlineRoundedIcon />
+					&nbsp;
+					<Typography
+						fontWeight={'600'}
+						className={page_styles.textEllipsis}
+					>
+						No user
+					</Typography>
+				</Box>
 			);
 		}
 
-		return (
-			<>
-				<PersonOutlineRoundedIcon />
-				&nbsp;
-				<Typography
-					lineHeight={'unset'}
-					fontWeight={'600'}
-					className={page_styles.textEllipsis}
-				>
-					No user
-				</Typography>
-			</>
-		);
+
+		return users;
 	}
 }

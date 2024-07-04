@@ -6,6 +6,9 @@ import { useRouter } from 'next/navigation';
 import Typography from '@mui/material/Typography';
 import { Box, Button } from '@mui/material';
 
+import styles from './request.module.css';
+import page_styles from '@/app/page.module.css';
+
 export default function NewRequestButton() {
 	const router = useRouter();
 
@@ -23,22 +26,16 @@ export default function NewRequestButton() {
 			<Button
 				size='large'
 				onClick={handleClick}
+				className={styles.requestButton}
 				sx={{
 					backgroundColor: '#002A48',
 					padding: '1.5em 3em',
 					color: 'white',
-					fontWeight: 'bold',
-					boxShadow: 'rgb(38, 57, 77) 0px 15px 30px -10px',
-					borderRadius: '16px',
-					'&:hover': {
-						backgroundColor: '#012d4d',
-						transform: 'scale(1.01)',
-						boxShadow: 'rgb(38, 57, 77) 0px 20px 30px -10px',
-					},
+					borderRadius: '50px'
 				}}
 				variant='text'
 			>
-				<Typography fontSize='24px' fontWeight='bold'>
+				<Typography fontSize='24px' fontWeight='bold' className={page_styles.textEllipsis}>
 					+ New Request
 				</Typography>
 			</Button>

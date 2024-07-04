@@ -8,13 +8,36 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 export default function RolesButton() {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+	const [currentRole, setCurrentRole] = React.useState('Tester');
 	const open = Boolean(anchorEl);
+
 	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
 		setAnchorEl(event.currentTarget);
 	};
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
+
+	const handleChange = () => {
+		handleClose();
+
+		if (currentRole == 'Tester') {
+			setCurrentRole('Site Admin');
+		} else if (currentRole == 'Site Admin') {
+			setCurrentRole('Tester');
+		}
+	};
+
+	const roles = ['Site Admin', 'Tester'];
+	let rolesList = [];
+
+	for ( let count in roles ) {
+		let role = roles[count];
+
+		if (role != currentRole ) {
+			rolesList.push(<MenuItem onClick={handleChange} key={role.replaceAll(' ', '_')}>{role}</MenuItem>)
+		}
+	}
 
 	return (
 		<>
@@ -27,7 +50,7 @@ export default function RolesButton() {
 				sx={{ color: 'white', fontWeight: 'bold', marginRight: '10px' }}
 				endIcon={<ArrowDropDownIcon />}
 			>
-				Tester
+				{ currentRole }
 			</Button>
 			<Menu
 				id='basic-menu'
@@ -38,7 +61,7 @@ export default function RolesButton() {
 					'aria-labelledby': 'basic-button',
 				}}
 			>
-				<MenuItem onClick={handleClose}>Site admin</MenuItem>
+				{ rolesList }
 			</Menu>
 		</>
 	);
