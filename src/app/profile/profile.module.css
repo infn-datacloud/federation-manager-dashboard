@@ -1,0 +1,9 @@
+.profileContainer {
+    margin-top: 6em;
+}
+
+@media only screen and (max-width: 768px) {
+	.profileContainer {
+        margin-top: 8em;
+    }
+}

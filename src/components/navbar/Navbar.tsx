@@ -10,22 +10,28 @@ import RolesButton from '@/components/navbar/RolesButton';
 import NotificationsButton from '@/components/navbar/NotificationsButton';
 import ProfileButton from '@/components/navbar/ProfileButton';
 
+import styles from './navbar.module.css';
+
 export default function Navbar() {
 	return (
 		<Box sx={{ flexGrow: 1 }}>
 			<AppBar position='fixed' sx={{ backgroundColor: '#002A48' }}>
-				<Toolbar>
+				<Toolbar className={styles.navbarContainer}>
 					{/* Title */}
 					<HomeButton />
 
-					{/* Roles */}
-					<RolesButton />
+					<Box className={ styles.navbarActions }>
+						{/* Roles */}
+						<RolesButton />
 
-					{/* Notifications */}
-					<NotificationsButton />
+						<Box className={ styles.navbarActionsButtons }>
+							{/* Notifications */}
+							<NotificationsButton />
 
-					{/* Account */}
-					<ProfileButton />
+							{/* Account */}
+							<ProfileButton />
+						</Box>
+					</Box>
 				</Toolbar>
 			</AppBar>
 		</Box>

@@ -16,12 +16,13 @@ export default function HomeButton() {
 		router.push('/');
 	};
 
-	const textClasses = page_styles.textEllipsis + ' ' + styles.navbarLogoText;
+	const textClasses =  page_styles.textEllipsis +' '+ styles.navbarLogoText;
 
 	return (
 		<Button
 			onClick={handleClick}
 			sx={{ marginRight: 'auto' }}
+			className={styles.navbarLogo}
 			startIcon={
 				<img
 					src='/logos/infn_logo_white.png'

@@ -8,3 +8,18 @@
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
+@media only screen and (max-width: 768px) {
+	.logoImg {
+		width: 50%;
+		margin-top: 3em;
+	}
+
+	.homeText {
+		width: 100%;
+	}
+
+	.cardContainer {
+		margin-top: 3em;
+	}
+}

@@ -13,18 +13,19 @@ export default function Home() {
 		<>
 			<br />
 			<br />
+			<br />
 			<Container>
 				<Box display='flex' flexDirection='column' alignItems='center'>
 					<img
 						src='/logos/logo_INFN.png'
-						height={150}
+						width='30%'
 						alt='Logo'
 						className={styles.logoImg}
 					/>
 					<br />
-					<Typography variant='h4'>Federation Manager</Typography>
+					<Typography variant='h4' textAlign='center'>Federation Manager</Typography>
 
-					<Typography variant='body1' align='center' width='50%'>
+					<Typography variant='body1' align='center' width='50%' className={styles.homeText}>
 						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 						Nunc in tempus lacus. Nunc urna nunc, condimentum sit
 						amet egestas a, vestibulum tempus felis. Suspendisse nec
@@ -48,10 +49,8 @@ export default function Home() {
 				<br />
 
 				<ProviderList />
-
-				<br />
-				<NewRequestButton />
 			</Container>
+			<NewRequestButton />
 		</>
 	);
 }

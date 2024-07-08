@@ -4,7 +4,8 @@ import { Container, Typography, Box, IconButton } from '@mui/material';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import TuneRoundedIcon from '@mui/icons-material/TuneRounded';
 import NotificationsActiveRoundedIcon from '@mui/icons-material/NotificationsActiveRounded';
-import styles from '../page.module.css';
+import page_styles from '../page.module.css';
+import styles from './profile.module.css';
 import CollapsingBox from '@/components/utilities/CollapsingBox';
 
 import FormControlLabel from '@mui/material/FormControlLabel';
@@ -21,10 +22,10 @@ const theme = createTheme({
 
 export default function Profile() {
 	let title = (
-		<>
+		<span>
 			<TuneRoundedIcon />
-			&nbsp;Settings
-		</>
+			&nbsp;<span className={page_styles.textEllipsis}>Settings</span> 
+		</span>
 	);
 
 	let data = (
@@ -61,14 +62,12 @@ export default function Profile() {
 
 	return (
 		<>
-			<br />
-			<br />
-			<Container>
+			<Container className={styles.profileContainer}>
 				<Box
 					display='flex'
 					alignItems='center'
 					justifyContent='space-between'
-					className={styles.cardContainer}
+					className={page_styles.cardContainer}
 					sx={{ padding: '2em 3em!important' }}
 				>
 					<Typography variant='h4' fontWeight='bold'>

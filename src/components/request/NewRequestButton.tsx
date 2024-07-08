@@ -29,9 +29,10 @@ export default function NewRequestButton() {
 				className={styles.requestButton}
 				sx={{
 					backgroundColor: '#002A48',
-					padding: '1.5em 3em',
+					padding: '1.5em 2em',
 					color: 'white',
-					borderRadius: '50px'
+					borderRadius: '50px',
+					right: '2em'
 				}}
 				variant='text'
 			>

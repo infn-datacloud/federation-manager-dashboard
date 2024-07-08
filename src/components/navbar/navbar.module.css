@@ -9,8 +9,38 @@
 	text-transform: none;
 }
 
+.navbarActions {
+	display: flex!important;
+    flex-direction: row!important;
+    align-items: center;
+    justify-content: space-between;
+	padding: 0px 12px;
+}
+
 .navbarNotification {
 	width: 100%;
 	max-width: 360px;
 	text-wrap: 'wrap';
+}
+
+.notificationsPopover > div {
+	border-radius: 25px;
+	padding: 4px 0;
+}
+
+@media only screen and (max-width: 768px) {
+	.navbarContainer {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+
+	.navbarLogo {
+		margin: 0;
+	}
+
+	.navbarActions {
+		flex-direction: column;
+		align-items: center;
+		width: -webkit-fill-available;
+	}
 }

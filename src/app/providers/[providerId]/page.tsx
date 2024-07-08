@@ -28,14 +28,16 @@ export default function Provider({
 				alignItems='center'
 				marginTop='8em'
 				marginBottom='4em'
+				className={styles.headerContainer}
 			>
-				<Box display='flex' alignItems='center'>
+				<Box display='flex' alignItems='center' width='75%' className={styles.textHeaderContainer}>
 					<Typography
 						variant='h4'
 						className={provider_styles.providerInitials}
-						width='52px!important'
-						height='52px!important'
-						padding='12px'
+						width='72px!important'
+						height='72px!important'
+						boxSizing='border-box'
+						padding='20px'
 						margin='4px 32px 4px 0'
 						sx={{ backgroundColor: 'lightblue' }}
 					>
@@ -46,9 +48,10 @@ export default function Provider({
 						alignItems='flex-start'
 						flexDirection='column'
 						justifyContent='center'
+						className={page_styles.textEllipsis}
 					>
-						<Typography variant='h3' fontWeight={'bold'}>
-							Provider Example {params.providerId}
+						<Typography variant='h3' fontWeight={'bold'} className={page_styles.textEllipsis} maxWidth='100%'>
+						Provider Example Provider Example Provider Example Provider Example Provider Example {params.providerId}
 						</Typography>
 						<Box
 							className={

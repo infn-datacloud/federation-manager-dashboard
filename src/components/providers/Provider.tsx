@@ -53,7 +53,7 @@ export default function Provider(
 				width='33%'
 				color='#162D4D75'
 			>	
-			    <Box className={page_styles.textEllipsis}>
+			    <Box className={page_styles.textEllipsis +' '+ styles.providerUsers}>
 					{user_icon()}
 				</Box>
 			</Box>

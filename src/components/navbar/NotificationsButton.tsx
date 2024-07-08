@@ -10,6 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
+import styles from './navbar.module.css'
 
 export default function NotificationsButton() {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -47,6 +48,7 @@ export default function NotificationsButton() {
 					'aria-labelledby': 'basic-button',
 				}}
 				sx={{ maxHeight: '40%' }}
+				className={styles.notificationsPopover}
 			>
 				<Typography
 					variant='h5'

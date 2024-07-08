@@ -55,3 +55,25 @@
 	background: #de233525;
 	color: #de2335;
 }
+
+
+@media only screen and (max-width: 768px) {
+	.providerContainer {
+		flex-direction: column;
+		align-items: flex-start;
+		padding: 2em;
+	}
+
+	.providerContainer > div {
+		width: 100%;
+	}
+
+	.providerUsers {
+		margin: .5em 1.1em;
+	}
+
+	.statusContainer {
+		width: 50%;
+		margin-top: 24px;
+	}
+}

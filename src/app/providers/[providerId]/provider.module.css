@@ -8,3 +8,9 @@
 .user:hover > p {
 	text-decoration: underline;
 }
+
+@media only screen and (max-width: 768px) {
+	.headerContainer {
+		flex-direction: column;
+	}
+}
