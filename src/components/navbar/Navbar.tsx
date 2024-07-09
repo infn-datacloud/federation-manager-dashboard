@@ -12,41 +12,42 @@ import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
 
 import styles from './navbar.module.css';
 import { useAuth } from 'react-oidc-context';
-import { useState } from 'react';
 
 export default function Navbar() {
 	const auth = useAuth();
-	const [disabledButton, setDisabledButton] = useState(false);
 
 	let buttons;
 
-	if (auth.isAuthenticated) {
-		buttons = (
-			<Box className={styles.navbarActions}>
-				{/* Roles */}
-				<RolesButton />
+	if (!auth.isLoading) {
+		if (auth.isAuthenticated) {
+			buttons = (
+				<Box className={styles.navbarActions}>
+					{/* Roles */}
+					<RolesButton />
 
-				<Box className={styles.navbarActionsButtons}>
-					{/* Notifications */}
-					<NotificationsButton />
+					<Box className={styles.navbarActionsButtons}>
+						{/* Notifications */}
+						<NotificationsButton />
 
-					{/* Account */}
-					<ProfileButton />
+						{/* Account */}
+						<ProfileButton />
+					</Box>
 				</Box>
-			</Box>
-		);
-	} else {
-		buttons = (
-			<Button
-				variant='text'
-				startIcon={<LoginRoundedIcon />}
-				onClick={() => { void auth.signinRedirect(); setDisabledButton(true) }}
-				sx={{ color: 'white!important' }}
-				disabled={disabledButton}
-			>
-				Log in
-			</Button>
-		);
+			);
+		} else {
+			buttons = (
+				<Button
+					variant='text'
+					startIcon={<LoginRoundedIcon />}
+					onClick={() => {
+						void auth.signinRedirect();
+					}}
+					sx={{ color: 'white!important' }}
+				>
+					Log in
+				</Button>
+			);
+		}
 	}
 
 	return (

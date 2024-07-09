@@ -7,12 +7,21 @@ import ProviderList from '@/components/providers/ProviderList';
 import NewRequestButton from '@/components/request/NewRequestButton';
 
 import { useAuth } from 'react-oidc-context';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 
 import Loading from '@/app/loading';
 import PageHeader from '@/components/utilities/PageHeader';
 
 export default function Home() {
 	const auth = useAuth();
+	const router = useRouter();
+
+	useEffect(() => {
+		if (!auth.isAuthenticated && !auth.isLoading) {
+			router.push('/login')
+		}
+	});
 
 	switch (auth.activeNavigator) {
 		case 'signinSilent':

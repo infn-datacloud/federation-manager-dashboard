@@ -14,15 +14,31 @@ import PersonAddAltRoundedIcon from '@mui/icons-material/PersonAddAltRounded';
 import styles from './provider.module.css';
 import page_styles from '@/app/page.module.css';
 import provider_styles from '@/components/providers/providers.module.css';
+
 import { useAuth } from 'react-oidc-context';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+
+import Loading from '@/app/loading';
 
 export default function Provider({
 	params,
 }: Readonly<{
 	params: { providerId: string };
 }>) {
+	const router = useRouter();
 	const auth = useAuth();
-	
+
+	useEffect(() => {
+		if (!auth.isAuthenticated && !auth.isLoading) {
+			router.push('/login');
+		}
+	});
+
+	if (auth.isLoading) {
+		return <Loading />;
+	}
+
 	if (auth.isAuthenticated) {
 		return (
 			<Container>
@@ -34,7 +50,12 @@ export default function Provider({
 					marginBottom='4em'
 					className={styles.headerContainer}
 				>
-					<Box display='flex' alignItems='center' width='75%' className={styles.textHeaderContainer}>
+					<Box
+						display='flex'
+						alignItems='center'
+						width='75%'
+						className={styles.textHeaderContainer}
+					>
 						<Typography
 							variant='h4'
 							className={provider_styles.providerInitials}
@@ -54,8 +75,15 @@ export default function Provider({
 							justifyContent='center'
 							className={page_styles.textEllipsis}
 						>
-							<Typography variant='h3' fontWeight={'bold'} className={page_styles.textEllipsis} maxWidth='100%'>
-							Provider Example Provider Example Provider Example Provider Example Provider Example {params.providerId}
+							<Typography
+								variant='h3'
+								fontWeight={'bold'}
+								className={page_styles.textEllipsis}
+								maxWidth='100%'
+							>
+								Provider Example Provider Example Provider
+								Example Provider Example Provider Example{' '}
+								{params.providerId}
 							</Typography>
 							<Box
 								className={
@@ -68,7 +96,7 @@ export default function Provider({
 					</Box>
 					<ProviderStatus status='Error' />
 				</Box>
-	
+
 				<ErrorBox></ErrorBox>
 				<FormDataBox></FormDataBox>
 				<TimelineBox></TimelineBox>

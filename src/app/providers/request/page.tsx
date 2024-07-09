@@ -1,7 +1,5 @@
 'use client';
 
-import { useRouter } from 'next/navigation';
-
 import { Container, Typography, Box, Button, TextField } from '@mui/material';
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
@@ -10,7 +8,13 @@ import page_styles from '@/app/page.module.css';
 import styles from './request.module.css';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 import { useAuth } from 'react-oidc-context';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+
+import Loading from '@/app/loading';
+
 const theme = createTheme({
 	palette: {
 		primary: {
@@ -26,6 +30,16 @@ export default function Request() {
 	const handleCancelClick = () => {
 		router.push('/');
 	};
+
+	useEffect(() => {
+		if (!auth.isAuthenticated && !auth.isLoading) {
+			router.push('/login');
+		}
+	});
+
+	if (auth.isLoading) {
+		return <Loading />;
+	}
 	
 	if (auth.isAuthenticated) {
 		return (

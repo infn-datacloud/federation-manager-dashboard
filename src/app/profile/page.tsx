@@ -1,6 +1,9 @@
 'use client';
 
 import { useAuth } from 'react-oidc-context';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+
 import { Container, Typography, Box, IconButton } from '@mui/material';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import TuneRoundedIcon from '@mui/icons-material/TuneRounded';
@@ -14,6 +17,8 @@ import Checkbox from '@mui/material/Checkbox';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
+import Loading from '../loading';
+
 const theme = createTheme({
 	palette: {
 		primary: {
@@ -23,7 +28,18 @@ const theme = createTheme({
 });
 
 export default function Profile() {
+	const router = useRouter();
 	const auth = useAuth();
+
+	useEffect(() => {
+		if (!auth.isAuthenticated && !auth.isLoading) {
+			router.push('/login');
+		}
+	});
+
+	if (auth.isLoading) {
+		return <Loading />;
+	}
 
 	let title = (
 		<span>
