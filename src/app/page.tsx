@@ -1,56 +1,62 @@
-import Typography from '@mui/material/Typography';
-import styles from './page.module.css';
+'use client';
 
-import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
+import { Container, Typography } from '@mui/material';
 import CloudRoundedIcon from '@mui/icons-material/CloudRounded';
 
 import ProviderList from '@/components/providers/ProviderList';
 import NewRequestButton from '@/components/request/NewRequestButton';
 
+import { useAuth } from 'react-oidc-context';
+
+import Loading from '@/app/loading';
+import PageHeader from '@/components/utilities/PageHeader';
+
 export default function Home() {
-	return (
-		<>
-			<br />
-			<br />
-			<br />
-			<Container>
-				<Box display='flex' flexDirection='column' alignItems='center'>
-					<img
-						src='/logos/logo_INFN.png'
-						width='30%'
-						alt='Logo'
-						className={styles.logoImg}
-					/>
+	const auth = useAuth();
+
+	switch (auth.activeNavigator) {
+		case 'signinSilent':
+			return <Loading message='Signing you in...' />;
+		case 'signoutRedirect':
+			return <Loading message='Signing you out...' />;
+	}
+
+	if (auth.isLoading) {
+		return <Loading />;
+	}
+
+	if (auth.error) {
+		return <div>Oops... {auth.error.message}</div>;
+	}
+
+	if (auth.isAuthenticated) {
+		return (
+			<>
+				<br />
+				<br />
+				<br />
+				<Container>
+					<PageHeader />
+	
 					<br />
-					<Typography variant='h4' textAlign='center'>Federation Manager</Typography>
-
-					<Typography variant='body1' align='center' width='50%' className={styles.homeText}>
-						Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-						Nunc in tempus lacus. Nunc urna nunc, condimentum sit
-						amet egestas a, vestibulum tempus felis. Suspendisse nec
-						purus lacus.
+					<br />
+	
+					<Typography
+						variant='h5'
+						fontWeight='bold'
+						display='flex'
+						alignItems='center'
+					>
+						<CloudRoundedIcon />
+						&nbsp;Providers
 					</Typography>
-				</Box>
-
-				<br />
-				<br />
-
-				<Typography
-					variant='h5'
-					fontWeight='bold'
-					display='flex'
-					alignItems='center'
-				>
-					<CloudRoundedIcon />
-					&nbsp;Providers
-				</Typography>
-
-				<br />
-
-				<ProviderList />
-			</Container>
-			<NewRequestButton />
-		</>
-	);
+	
+					<br />
+	
+					<ProviderList />
+				</Container>
+				<NewRequestButton />
+			</>
+		);
+	}
 }

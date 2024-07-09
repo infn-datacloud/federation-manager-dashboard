@@ -1,5 +1,6 @@
 'use client';
 
+import { useAuth } from 'react-oidc-context';
 import { Container, Typography, Box, IconButton } from '@mui/material';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 import TuneRoundedIcon from '@mui/icons-material/TuneRounded';
@@ -12,6 +13,7 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 const theme = createTheme({
 	palette: {
 		primary: {
@@ -21,10 +23,12 @@ const theme = createTheme({
 });
 
 export default function Profile() {
+	const auth = useAuth();
+
 	let title = (
 		<span>
 			<TuneRoundedIcon />
-			&nbsp;<span className={page_styles.textEllipsis}>Settings</span> 
+			&nbsp;<span className={page_styles.textEllipsis}>Settings</span>
 		</span>
 	);
 
@@ -60,8 +64,8 @@ export default function Profile() {
 		</>
 	);
 
-	return (
-		<>
+	if (auth.isAuthenticated) {
+		return (
 			<Container className={styles.profileContainer}>
 				<Box
 					display='flex'
@@ -73,15 +77,19 @@ export default function Profile() {
 					<Typography variant='h4' fontWeight='bold'>
 						Ettore Serra
 					</Typography>
-					<IconButton>
+					<IconButton
+						onClick={() => {
+							void auth.removeUser();
+						}}
+					>
 						<LogoutRoundedIcon />
 					</IconButton>
 				</Box>
-
+	
 				<br />
-
+	
 				<CollapsingBox title={title} body={data} />
 			</Container>
-		</>
-	);
+		);
+	}
 }

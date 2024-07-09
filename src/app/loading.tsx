@@ -12,7 +12,13 @@ const theme = createTheme({
 	},
 });
 
-export default function Loading() {
+export default function Loading(
+	props: Readonly<{
+		message?: string;
+	}>
+) {
+	const message = props.message ?? 'Loading...';
+
 	return (
 		<Box
 			width='100%'
@@ -29,7 +35,7 @@ export default function Loading() {
 				<CircularProgress color='primary' />
 			</ThemeProvider>
 			<br />
-			<Typography variant='h6'>Loading...</Typography>
+			<Typography variant='h6'>{message}</Typography>
 		</Box>
 	);
 }
