@@ -20,6 +20,7 @@ export default function HomeButton() {
 
 	return (
 		<Button
+			title='Federation Manager homepage'
 			onClick={handleClick}
 			sx={{ marginRight: 'auto' }}
 			className={styles.navbarLogo}

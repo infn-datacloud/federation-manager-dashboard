@@ -16,6 +16,7 @@ export default function FormDataBox() {
 		button = (
 			<Box display='flex' justifyContent='flex-end' marginTop='1rem'>
 				<Button
+					title='Edit data'
 					variant='outlined'
 					sx={{
 						borderRadius: '25px',

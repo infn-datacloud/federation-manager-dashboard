@@ -16,6 +16,7 @@ export default function ErrorBox() {
 		buttons = (
 			<Box display='flex' justifyContent='flex-end' marginTop='1rem'>
 				<Button
+					title='Edit error'
 					variant='text'
 					color='error'
 					sx={{
@@ -30,6 +31,7 @@ export default function ErrorBox() {
 					Edit
 				</Button>
 				<Button
+					title='Send error'
 					variant='outlined'
 					color='error'
 					sx={{

@@ -37,6 +37,7 @@ export default function Navbar() {
 		} else {
 			buttons = (
 				<Button
+					title='Log in'
 					variant='text'
 					startIcon={<LoginRoundedIcon />}
 					onClick={() => {

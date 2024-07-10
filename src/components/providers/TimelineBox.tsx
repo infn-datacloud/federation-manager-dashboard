@@ -53,6 +53,7 @@ export default function TimelineBox() {
 				</ThemeProvider>
 				&nbsp;
 				<Button
+					title='Add a comment'
 					variant='contained'
 					sx={{
 						borderRadius: '25px',

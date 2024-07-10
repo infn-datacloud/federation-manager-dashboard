@@ -42,10 +42,10 @@ export default function Profile() {
 	}
 
 	let title = (
-		<span>
+		<Box display='flex' alignItems='center'>
 			<TuneRoundedIcon />
 			&nbsp;<span className={page_styles.textEllipsis}>Settings</span>
-		</span>
+		</Box>
 	);
 
 	let data = (
@@ -60,18 +60,21 @@ export default function Profile() {
 					<FormControlLabel
 						control={<Checkbox />}
 						color='primary'
+						title='Toggle Email notifications'
 						label='Email'
 						sx={{ minWidth: '200px' }}
 					/>
 					<FormControlLabel
 						control={<Checkbox />}
 						color='primary'
+						title='Toggle Pop up notifications'
 						label='Pop up'
 						sx={{ minWidth: '200px' }}
 					/>
 					<FormControlLabel
 						control={<Checkbox />}
 						color='primary'
+						title='Toggle Jira Ticket notifications'
 						label='Jira Ticket'
 						sx={{ minWidth: '200px' }}
 					/>
@@ -94,6 +97,7 @@ export default function Profile() {
 						Ettore Serra
 					</Typography>
 					<IconButton
+					    title='Log out'
 						onClick={() => {
 							void auth.removeUser();
 						}}

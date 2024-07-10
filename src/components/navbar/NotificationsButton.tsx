@@ -25,6 +25,7 @@ export default function NotificationsButton() {
 	return (
 		<>
 			<IconButton
+			    title='Show notifications'
 				size='large'
 				aria-label='Show 2 new notifications'
 				color='inherit'
@@ -67,6 +68,7 @@ export default function NotificationsButton() {
 				<Divider sx={{ margin: '8px 0' }} />
 
 				<MenuItem
+				    title='Open notification'
 					onClick={handleClose}
 					sx={{
 						width: '100%',
@@ -89,6 +91,7 @@ export default function NotificationsButton() {
 				<Divider />
 
 				<MenuItem
+				    title='Open notification'
 					onClick={handleClose}
 					sx={{
 						width: '100%',
@@ -112,6 +115,7 @@ export default function NotificationsButton() {
 				<Divider />
 
 				<MenuItem
+				    title='Open notification'
 					onClick={handleClose}
 					sx={{
 						width: '100%',

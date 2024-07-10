@@ -28,7 +28,7 @@ export default function Provider(
 	};
 
 	return (
-		<Box className={styles.providerContainer} onClick={handleClick}>
+		<Box className={styles.providerContainer} onClick={handleClick} title='Show details'>
 			<Box display='flex' alignItems='center' width='33%'>
 				<Typography
 					variant='h5'

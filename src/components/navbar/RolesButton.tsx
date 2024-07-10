@@ -41,6 +41,7 @@ export default function RolesButton() {
 		if (temp_role != context.currentRole) {
 			rolesList.push(
 				<MenuItem
+					title={'Change role to ' + temp_role}
 					onClick={handleChange}
 					key={temp_role.replaceAll(' ', '_')}
 					sx={{ textTransform: 'uppercase'}}
@@ -61,6 +62,7 @@ export default function RolesButton() {
 				onClick={handleClick}
 				sx={{ color: 'white', fontWeight: 'bold', marginRight: '10px' }}
 				endIcon={<ArrowDropDownIcon />}
+				title='Change role'
 			>
 				{context.currentRole}
 			</Button>

@@ -106,27 +106,28 @@ export default function Provider({
 
 	function user_icon() {
 		let user = false;
+		let name = 'Ettore Serra';
 
 		if (user) {
 			return (
-				<>
+				<Box title={'Assigned to ' + name} display='flex' alignItems='center' >
 					<CancelRoundedIcon fontSize='small' />
 					&nbsp;
 					<Typography lineHeight={'unset'} fontWeight={'600'}>
-						Ettore Serra
+						{name}
 					</Typography>
-				</>
+				</Box>
 			);
 		}
 
 		return (
-			<>
+			<Box title='Assign to me' display='flex' alignItems='center'>
 				<PersonAddAltRoundedIcon />
 				&nbsp;
 				<Typography lineHeight={'unset'} fontWeight={'600'}>
 					Assign to me
 				</Typography>
-			</>
+			</Box>
 		);
 	}
 }

@@ -27,6 +27,7 @@ export default function CollapsingBox(
 				}}
 			>
 				<AccordionSummary
+					title='Toggle section'
 					expandIcon={<ArrowDropDownRoundedIcon fontSize='large' />}
 					aria-controls='panel1-content'
 					id='panel1-header'

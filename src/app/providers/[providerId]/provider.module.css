@@ -5,7 +5,7 @@
 	cursor: pointer;
 }
 
-.user:hover > p {
+.user:hover > div > p {
 	text-decoration: underline;
 }
 
