@@ -1,9 +1,7 @@
-
-'use client'
-
-import React from 'react';
+'use client';
 
 /* import type { Metadata } from 'next'; */
+import React, { useState } from 'react';
 import './globals.css';
 
 import '@fontsource/roboto/300.css';
@@ -37,36 +35,59 @@ const oidcConfig = {
 	automaticSilentRenew: true,
 	onSigninCallback: () => {
 		window.history.replaceState(null, '', '/');
-	}
+	},
 };
+
+export const RoleContext = React.createContext({
+	rolesList: ['admin', 'tester'],
+	currentRole: 'admin',
+});
+
+interface RoleManagementValue {
+	rolesList: Array<string>;
+	currentRole: string;
+	setCurrentRole: (newMessage: string) => void;
+}
+
+export const RoleManagement = React.createContext<RoleManagementValue>({
+	rolesList: [],
+	currentRole: '',
+	setCurrentRole: () => {},
+});
 
 export default function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	let rolesList = ['admin', 'tester'];
+	const [currentRole, setCurrentRole] = useState<string>('admin');
+	const value = { currentRole, setCurrentRole, rolesList };
+
 	return (
 		<AuthProvider {...oidcConfig}>
-			<html lang='en'>
-				<head>
-					<meta
-						name='viewport'
-						content='initial-scale=1, width=device-width'
-					/>
-				</head>
-				<body>
-					{/* Navbar */}
-					<header>
-						<Navbar />
-					</header>
+			<RoleManagement.Provider value={value}>
+				<html lang='en'>
+					<head>
+						<meta
+							name='viewport'
+							content='initial-scale=1, width=device-width'
+						/>
+					</head>
+					<body>
+						{/* Navbar */}
+						<header>
+							<Navbar />
+						</header>
 
-					{/* Body */}
-					{children}
+						{/* Body */}
+						{children}
 
-					{/* Footer */}
-					{/* <footer>Footer</footer> */}
-				</body>
-			</html>
+						{/* Footer */}
+						{/* <footer>Footer</footer> */}
+					</body>
+				</html>
+			</RoleManagement.Provider>
 		</AuthProvider>
 	);
 }

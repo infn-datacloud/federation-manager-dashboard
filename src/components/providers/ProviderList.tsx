@@ -45,6 +45,30 @@ export default function ProviderList() {
 				user='Giovanni Savarese'
 				status='Completed'
 			/>
+			<Provider
+				id='provider_6'
+				name='Provider 2'
+				user='Giovanni Savarese'
+				status='Completed'
+			/>
+			<Provider
+				id='provider_6'
+				name='Provider 2'
+				user='Giovanni Savarese'
+				status='Completed'
+			/>
+			<Provider
+				id='provider_6'
+				name='Provider 2'
+				user='Giovanni Savarese'
+				status='Completed'
+			/>
+			<Provider
+				id='provider_6'
+				name='Provider 2'
+				user='Giovanni Savarese'
+				status='Completed'
+			/>
 		</>
 	);
 }

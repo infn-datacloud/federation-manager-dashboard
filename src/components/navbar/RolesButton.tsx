@@ -6,14 +6,19 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
+import { useContext } from 'react';
+import { RoleManagement } from '@/app/layout';
+
 export default function RolesButton() {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-	const [currentRole, setCurrentRole] = React.useState('Tester');
 	const open = Boolean(anchorEl);
+
+	const context = useContext(RoleManagement);
 
 	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
 		setAnchorEl(event.currentTarget);
 	};
+
 	const handleClose = () => {
 		setAnchorEl(null);
 	};
@@ -21,21 +26,28 @@ export default function RolesButton() {
 	const handleChange = () => {
 		handleClose();
 
-		if (currentRole == 'Tester') {
-			setCurrentRole('Site Admin');
-		} else if (currentRole == 'Site Admin') {
-			setCurrentRole('Tester');
+		if (context.currentRole == 'tester') {
+			context.setCurrentRole('admin');
+		} else if (context.currentRole == 'admin') {
+			context.setCurrentRole('tester');
 		}
 	};
 
-	const roles = ['Site Admin', 'Tester'];
 	let rolesList = [];
 
-	for ( let count in roles ) {
-		let role = roles[count];
+	for (let count in context.rolesList) {
+		let temp_role = context.rolesList[count];
 
-		if (role != currentRole ) {
-			rolesList.push(<MenuItem onClick={handleChange} key={role.replaceAll(' ', '_')}>{role}</MenuItem>)
+		if (temp_role != context.currentRole) {
+			rolesList.push(
+				<MenuItem
+					onClick={handleChange}
+					key={temp_role.replaceAll(' ', '_')}
+					sx={{ textTransform: 'uppercase'}}
+				>
+					{temp_role}
+				</MenuItem>
+			);
 		}
 	}
 
@@ -50,7 +62,7 @@ export default function RolesButton() {
 				sx={{ color: 'white', fontWeight: 'bold', marginRight: '10px' }}
 				endIcon={<ArrowDropDownIcon />}
 			>
-				{ currentRole }
+				{context.currentRole}
 			</Button>
 			<Menu
 				id='basic-menu'
@@ -61,7 +73,7 @@ export default function RolesButton() {
 					'aria-labelledby': 'basic-button',
 				}}
 			>
-				{ rolesList }
+				{rolesList}
 			</Menu>
 		</>
 	);

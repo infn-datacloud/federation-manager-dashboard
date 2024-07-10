@@ -1,11 +1,42 @@
+import { useContext } from 'react';
 import { Typography, Box, Button } from '@mui/material';
 
 import SubjectRoundedIcon from '@mui/icons-material/SubjectRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 
+import { RoleManagement } from '@/app/layout';
+
 import CollapsingBox from '@/components/utilities/CollapsingBox';
 
 export default function FormDataBox() {
+	const context = useContext(RoleManagement);
+	let button = <></>;
+
+	if (context.currentRole == 'admin') {
+		button = (
+			<Box display='flex' justifyContent='flex-end' marginTop='1rem'>
+				<Button
+					variant='outlined'
+					sx={{
+						borderRadius: '25px',
+						fontWeight: 'bold',
+						display: 'flex',
+						alignItems: 'center',
+						padding: '5px 32px',
+						color: '#002A48',
+						borderColor: '#002A48',
+						'&:hover': {
+							borderColor: '#002A48',
+						},
+					}}
+					endIcon={<EditRoundedIcon />}
+				>
+					Edit
+				</Button>
+			</Box>
+		);
+	}
+
 	let title = (
 		<>
 			<SubjectRoundedIcon />
@@ -27,26 +58,7 @@ export default function FormDataBox() {
 				eget. <br />
 			</Typography>
 
-			<Box display='flex' justifyContent='flex-end' marginTop='1rem'>
-				<Button
-					variant='outlined'
-					sx={{
-						borderRadius: '25px',
-						fontWeight: 'bold',
-						display: 'flex',
-						alignItems: 'center',
-						padding: '5px 32px',
-						color: '#002A48',
-						borderColor: '#002A48',
-						'&:hover': {
-							borderColor: '#002A48',
-						},
-					}}
-					endIcon={<EditRoundedIcon />}
-				>
-					Edit
-				</Button>
-			</Box>
+			{button}
 		</>
 	);
 
