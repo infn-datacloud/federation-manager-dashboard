@@ -4,7 +4,7 @@ import { Typography, Box, Button } from '@mui/material';
 import SubjectRoundedIcon from '@mui/icons-material/SubjectRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 
-import { RoleManagement } from '@/app/layout';
+import { RoleManagement } from '@/middleware/roles';
 
 import CollapsingBox from '@/components/utilities/CollapsingBox';
 

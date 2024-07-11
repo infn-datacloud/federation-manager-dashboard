@@ -8,7 +8,7 @@ import { Box, Button } from '@mui/material';
 
 import styles from './request.module.css';
 import page_styles from '@/app/page.module.css';
-import { RoleManagement } from '@/app/layout';
+import { RoleManagement } from '@/middleware/roles';
 
 export default function NewRequestButton() {
 	const router = useRouter();

@@ -4,7 +4,7 @@ import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import ShortcutRoundedIcon from '@mui/icons-material/ShortcutRounded';
 
-import { RoleManagement } from '@/app/layout';
+import { RoleManagement } from '@/middleware/roles';
 
 import styles from './providers.module.css';
 

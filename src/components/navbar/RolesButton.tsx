@@ -7,7 +7,7 @@ import MenuItem from '@mui/material/MenuItem';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 import { useContext } from 'react';
-import { RoleManagement } from '@/app/layout';
+import { RoleManagement } from '@/middleware/roles';
 
 export default function RolesButton() {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -44,7 +44,7 @@ export default function RolesButton() {
 					title={'Change role to ' + temp_role}
 					onClick={handleChange}
 					key={temp_role.replaceAll(' ', '_')}
-					sx={{ textTransform: 'uppercase'}}
+					sx={{ textTransform: 'uppercase' }}
 				>
 					{temp_role}
 				</MenuItem>
