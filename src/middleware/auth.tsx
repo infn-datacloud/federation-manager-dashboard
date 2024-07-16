@@ -24,6 +24,5 @@ export default function Authentication({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-
 	return <AuthProvider {...oidcConfig}>{children}</AuthProvider>;
 }

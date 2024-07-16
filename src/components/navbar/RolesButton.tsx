@@ -52,31 +52,33 @@ export default function RolesButton() {
 		}
 	}
 
-	return (
-		<>
-			<Button
-				id='basic-button'
-				aria-controls={open ? 'basic-menu' : undefined}
-				aria-haspopup='true'
-				aria-expanded={open ? 'true' : undefined}
-				onClick={handleClick}
-				sx={{ color: 'white', fontWeight: 'bold', marginRight: '10px' }}
-				endIcon={<ArrowDropDownIcon />}
-				title='Change role'
-			>
-				{context.currentRole}
-			</Button>
-			<Menu
-				id='basic-menu'
-				anchorEl={anchorEl}
-				open={open}
-				onClose={handleClose}
-				MenuListProps={{
-					'aria-labelledby': 'basic-button',
-				}}
-			>
-				{rolesList}
-			</Menu>
-		</>
-	);
+	if (rolesList.length > 0) {
+		return (
+			<>
+				<Button
+					id='basic-button'
+					aria-controls={open ? 'basic-menu' : undefined}
+					aria-haspopup='true'
+					aria-expanded={open ? 'true' : undefined}
+					onClick={handleClick}
+					sx={{ color: 'white', fontWeight: 'bold', marginRight: '10px' }}
+					endIcon={<ArrowDropDownIcon />}
+					title='Change role'
+				>
+					{context.currentRole}
+				</Button>
+				<Menu
+					id='basic-menu'
+					anchorEl={anchorEl}
+					open={open}
+					onClose={handleClose}
+					MenuListProps={{
+						'aria-labelledby': 'basic-button',
+					}}
+					>
+					{rolesList}
+				</Menu>
+			</>
+		);
+	}
 }

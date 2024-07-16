@@ -13,14 +13,19 @@ import Loading from '@/app/loading';
 import PageHeader from '@/components/utilities/PageHeader';
 
 import { useEffect } from 'react';
+import { useRoles } from '@/middleware/roles';
 
 export default function Home() {
 	const auth = useAuth();
 	const router = useRouter();
 
+	/* Set user roles */
+	useRoles();
+
 	useEffect(() => {
 		if (!auth.isAuthenticated && !auth.isLoading) {
-			router.push('/login')
+			/* Go to login page */
+			router.push('/login');
 		}
 	});
 
@@ -47,10 +52,10 @@ export default function Home() {
 				<br />
 				<Container>
 					<PageHeader />
-	
+
 					<br />
 					<br />
-	
+
 					<Typography
 						variant='h5'
 						fontWeight='bold'
@@ -60,9 +65,9 @@ export default function Home() {
 						<CloudRoundedIcon />
 						&nbsp;Providers
 					</Typography>
-	
+
 					<br />
-	
+
 					<ProviderList />
 				</Container>
 				<NewRequestButton />

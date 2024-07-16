@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useEffect, useContext, useState } from 'react';
+import { getRoles } from '@/middleware/connection';
+import { useAuth } from 'react-oidc-context';
 
-const roles = ['admin', 'tester'];
-const role = 'admin';
+const roles: any[] | (() => any[]) = [];
+const role = '';
 
 export const RoleContext = React.createContext({
 	rolesList: roles,
@@ -11,13 +13,15 @@ export const RoleContext = React.createContext({
 interface RoleManagementStructure {
 	rolesList: Array<string>;
 	currentRole: string;
-	setCurrentRole: (newMessage: string) => void;
+	setCurrentRole: (role: string) => void;
+	setRolesList: (roles: Array<string>) => void;
 }
 
 export const RoleManagement = React.createContext<RoleManagementStructure>({
 	rolesList: [],
 	currentRole: '',
 	setCurrentRole: () => {},
+	setRolesList: () => {},
 });
 
 export default function RolesContext({
@@ -25,9 +29,9 @@ export default function RolesContext({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	let rolesList = roles;
+	const [rolesList, setRolesList] = React.useState(roles);
 	const [currentRole, setCurrentRole] = React.useState<string>(role);
-	const value = { currentRole, setCurrentRole, rolesList };
+	const value = { currentRole, setCurrentRole, rolesList, setRolesList };
 
 	return (
 		<RoleManagement.Provider value={value}>
@@ -35,3 +39,30 @@ export default function RolesContext({
 		</RoleManagement.Provider>
 	);
 }
+
+export const useRoles = () => {
+	const auth = useAuth();
+	const context = useContext(RoleManagement);
+
+	const [loading, setLoading] = useState<any>(true);
+	const [error, setError] = useState<any>(null);
+
+	const fetchRoles = async () => {
+		try {
+			const roles = await getRoles();
+			context.setRolesList(roles);
+			context.setCurrentRole(roles[0]);
+			console.log(roles)
+		} catch (err) {
+			setError(err);
+		} finally {
+			setLoading(false);
+		}			
+	};
+	
+	useEffect(() => {
+		if (auth.isAuthenticated) {
+			fetchRoles();
+		}
+	}, [auth.isAuthenticated]);
+};

@@ -23,29 +23,29 @@ export default function RootLayout({
 	children: React.ReactNode;
 }>) {
 	return (
-		<Authentication>
-			<RolesContext>
 				<html lang='en'>
 					<head>
 						<meta
 							name='viewport'
 							content='initial-scale=1, width=device-width'
-						/>
+							/>
 					</head>
-					<body>
-						{/* Navbar */}
-						<header>
-							<Navbar />
-						</header>
+						<body>
+							<Authentication>
+								<RolesContext>
+									{/* Navbar */}
+									<header>
+										<Navbar />
+									</header>
 
-						{/* Body */}
-						{children}
+									{/* Body */}
+									{children}
 
-						{/* Footer */}
-						{/* <footer>Footer</footer> */}
-					</body>
+									{/* Footer */}
+									{/* <footer>Footer</footer> */}
+								</RolesContext>
+							</Authentication>
+						</body>
 				</html>
-			</RolesContext>
-		</Authentication>
 	);
 }
