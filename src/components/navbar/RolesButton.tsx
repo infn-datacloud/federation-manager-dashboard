@@ -8,6 +8,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 import { useContext } from 'react';
 import { RoleManagement } from '@/middleware/roles';
+import Cookies from 'js-cookie';
 
 export default function RolesButton() {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -28,8 +29,10 @@ export default function RolesButton() {
 
 		if (context.currentRole == 'tester') {
 			context.setCurrentRole('admin');
+			Cookies.set('currentRole', 'admin');
 		} else if (context.currentRole == 'admin') {
 			context.setCurrentRole('tester');
+			Cookies.set('currentRole', 'tester');
 		}
 	};
 
@@ -44,7 +47,12 @@ export default function RolesButton() {
 					title={'Change role to ' + temp_role}
 					onClick={handleChange}
 					key={temp_role.replaceAll(' ', '_')}
-					sx={{ textTransform: 'uppercase' }}
+					sx={{
+						textTransform: 'uppercase',
+						fontSize: '14px',
+						fontWeight: 'bold',
+						color: '#162d4d',
+					}}
 				>
 					{temp_role}
 				</MenuItem>
@@ -61,7 +69,11 @@ export default function RolesButton() {
 					aria-haspopup='true'
 					aria-expanded={open ? 'true' : undefined}
 					onClick={handleClick}
-					sx={{ color: 'white', fontWeight: 'bold', marginRight: '10px' }}
+					sx={{
+						color: 'white',
+						fontWeight: 'bold',
+						marginRight: '10px',
+					}}
 					endIcon={<ArrowDropDownIcon />}
 					title='Change role'
 				>
@@ -75,7 +87,7 @@ export default function RolesButton() {
 					MenuListProps={{
 						'aria-labelledby': 'basic-button',
 					}}
-					>
+				>
 					{rolesList}
 				</Menu>
 			</>

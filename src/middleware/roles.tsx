@@ -1,6 +1,7 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { getRoles } from '@/middleware/connection';
 import { useAuth } from 'react-oidc-context';
+import Cookies from 'js-cookie';
 
 const roles: any[] | (() => any[]) = [];
 const role = '';
@@ -51,15 +52,21 @@ export const useRoles = () => {
 		try {
 			const roles = await getRoles();
 			context.setRolesList(roles);
-			context.setCurrentRole(roles[0]);
-			console.log(roles)
+
+			if (Cookies.get('currentRole')?.toString() == 'undefined' || Cookies.get('currentRole') == undefined) {
+				context.setCurrentRole(roles[0]);
+				Cookies.set('currentRole', roles[0]);
+			} else {
+				let currentRole = Cookies.get('currentRole') ?? '';
+				context.setCurrentRole(currentRole);
+			}
 		} catch (err) {
 			setError(err);
 		} finally {
 			setLoading(false);
-		}			
+		}
 	};
-	
+
 	useEffect(() => {
 		if (auth.isAuthenticated) {
 			fetchRoles();
