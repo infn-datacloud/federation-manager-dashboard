@@ -24,16 +24,13 @@ export default function RolesButton() {
 		setAnchorEl(null);
 	};
 
-	const handleChange = () => {
+	const handleChange = (event: React.MouseEvent<any>) => {
 		handleClose();
+		
+		const value = event.currentTarget.getAttribute('value');
 
-		if (context.currentRole == 'tester') {
-			context.setCurrentRole('admin');
-			Cookies.set('currentRole', 'admin');
-		} else if (context.currentRole == 'admin') {
-			context.setCurrentRole('tester');
-			Cookies.set('currentRole', 'tester');
-		}
+		context.setCurrentRole(value);
+		Cookies.set('currentRole', value);
 	};
 
 	let rolesList = [];
@@ -47,6 +44,7 @@ export default function RolesButton() {
 					title={'Change role to ' + temp_role}
 					onClick={handleChange}
 					key={temp_role.replaceAll(' ', '_')}
+					value={temp_role}
 					sx={{
 						textTransform: 'uppercase',
 						fontSize: '14px',
