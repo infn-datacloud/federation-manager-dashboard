@@ -50,7 +50,7 @@ export const useRoles = () => {
 
 	const fetchRoles = async () => {
 		try {
-			const roles = await getRoles();
+			let roles = await getRoles(auth);
 			context.setRolesList(roles);
 
 			if (Cookies.get('currentRole')?.toString() == 'undefined' || Cookies.get('currentRole') == undefined) {

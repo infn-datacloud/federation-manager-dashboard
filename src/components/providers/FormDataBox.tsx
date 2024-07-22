@@ -12,7 +12,7 @@ export default function FormDataBox() {
 	const context = useContext(RoleManagement);
 	let button = <></>;
 
-	if (context.currentRole == 'admin') {
+	if (context.currentRole == 'site admin') {
 		button = (
 			<Box display='flex' justifyContent='flex-end' marginTop='1rem'>
 				<Button

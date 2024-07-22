@@ -9,6 +9,7 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import { useContext } from 'react';
 import { RoleManagement } from '@/middleware/roles';
 import Cookies from 'js-cookie';
+import { Typography } from '@mui/material';
 
 export default function RolesButton() {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -26,7 +27,7 @@ export default function RolesButton() {
 
 	const handleChange = (event: React.MouseEvent<any>) => {
 		handleClose();
-		
+
 		const value = event.currentTarget.getAttribute('value');
 
 		context.setCurrentRole(value);
@@ -89,6 +90,20 @@ export default function RolesButton() {
 					{rolesList}
 				</Menu>
 			</>
+		);
+	} else {
+		return (
+			<Typography
+				sx={{
+					color: 'white',
+					fontWeight: 'bold',
+					fontSize: '0.875rem',
+					marginRight: '10px',
+					textTransform: 'uppercase'
+				}}
+			>
+				{context.currentRole}
+			</Typography>
 		);
 	}
 }

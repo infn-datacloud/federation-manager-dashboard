@@ -12,7 +12,7 @@ export default function ErrorBox() {
 	const context = useContext(RoleManagement);
 	let buttons = <></>;
 
-	if (context.currentRole === 'tester') {
+	if (context.currentRole === 'site tester') {
 		buttons = (
 			<Box display='flex' justifyContent='flex-end' marginTop='1rem'>
 				<Button

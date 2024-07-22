@@ -18,7 +18,7 @@ export default function NewRequestButton() {
 		router.push('/providers/request');
 	};
 
-	if (context.currentRole === 'admin') {
+	if (context.currentRole === 'site admin') {
 		return (
 			<Box
 				display='flex'

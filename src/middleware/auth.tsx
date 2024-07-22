@@ -17,6 +17,7 @@ const oidcConfig = {
 	onSigninCallback: () => {
 		window.history.replaceState(null, '', '/');
 	},
+	scope: "profile openid email offline_access"
 };
 
 export default function Authentication({
