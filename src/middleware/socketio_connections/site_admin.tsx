@@ -33,4 +33,3 @@ export function connectToSiteAdmin(auth: AuthContextProps) {
 
     return socket;
 }
-

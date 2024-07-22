@@ -14,11 +14,13 @@ import PageHeader from '@/components/utilities/PageHeader';
 
 import { useContext, useEffect } from 'react';
 import { RoleManagement } from '@/middleware/roles';
+import { SocketManagement } from '@/middleware/contextes/socket';
 
 export default function Home() {
 	const auth = useAuth();
 	const router = useRouter();
 	const context = useContext(RoleManagement);
+	const socketCtx = useContext(SocketManagement);
 
 	useEffect(() => {
 		if (!auth.isAuthenticated && !auth.isLoading) {
@@ -26,6 +28,20 @@ export default function Home() {
 			router.push('/login');
 		}
 	});
+
+	useEffect(() => {
+		if (socketCtx.socket !== null) {
+			socketCtx.socket.on('list_provider_federation_requests', (res: any) => {
+				console.log('providers_list', res);
+			});
+			
+			socketCtx.socket.emit('list_provider_federation_requests', {});
+
+			return () => {
+				socketCtx.socket.off('list_provider_federation_requests');
+			}
+		}
+	}, [socketCtx.socket]);
 
 	switch (auth.activeNavigator) {
 		case 'signinSilent':

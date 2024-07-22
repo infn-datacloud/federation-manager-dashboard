@@ -11,7 +11,8 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import { useAuth } from 'react-oidc-context';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useContext } from 'react';
+import { SocketManagement } from '@/middleware/contextes/socket';
 
 import Loading from '@/app/loading';
 
@@ -26,6 +27,7 @@ const theme = createTheme({
 export default function Request() {
 	const router = useRouter();
 	const auth = useAuth();
+	const socketCtx = useContext(SocketManagement);
 
 	const handleCancelClick = () => {
 		router.push('/');
@@ -37,10 +39,24 @@ export default function Request() {
 		}
 	});
 
+	useEffect(() => {
+		if (socketCtx.socket !== null) {
+			socketCtx.socket.on('get_form', (res: any) => {
+				console.log('Form', res);
+			});
+			
+			socketCtx.socket.emit('get_form');
+
+			return () => {
+				socketCtx.socket.off('get_form');
+			}
+		}
+	}, []);
+
 	if (auth.isLoading) {
 		return <Loading />;
 	}
-	
+
 	if (auth.isAuthenticated) {
 		return (
 			<>
@@ -51,20 +67,30 @@ export default function Request() {
 						className={page_styles.cardContainer}
 						sx={{ padding: '2em 3em!important', marginTop: '4em' }}
 					>
-	
-						<Box display='flex' flexDirection='column' alignItems='center'>
-							<Typography variant='h4'>New Provider Request</Typography>
-	
-							<Typography variant='body1' align='center' width='50%' className={styles.requestText}>
-								Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-								Nunc in tempus lacus. Nunc urna nunc, condimentum sit
-								amet egestas a, vestibulum tempus felis. Suspendisse nec
-								purus lacus.
+						<Box
+							display='flex'
+							flexDirection='column'
+							alignItems='center'
+						>
+							<Typography variant='h4'>
+								New Provider Request
+							</Typography>
+
+							<Typography
+								variant='body1'
+								align='center'
+								width='50%'
+								className={styles.requestText}
+							>
+								Lorem ipsum dolor sit amet, consectetur
+								adipiscing elit. Nunc in tempus lacus. Nunc urna
+								nunc, condimentum sit amet egestas a, vestibulum
+								tempus felis. Suspendisse nec purus lacus.
 							</Typography>
 						</Box>
-	
+
 						<br />
-	
+
 						<Box
 							component='form'
 							sx={{
@@ -92,13 +118,16 @@ export default function Request() {
 								/>
 								<br />
 							</ThemeProvider>
-	
+
 							<br />
 							<Box display='flex' justifyContent='space-between'>
 								<Button
 									variant='contained'
 									color='error'
-									sx={{ borderRadius: '25px', fontWeight: 'bold' }}
+									sx={{
+										borderRadius: '25px',
+										fontWeight: 'bold',
+									}}
 									endIcon={<NotInterestedIcon />}
 									onClick={handleCancelClick}
 									size='large'
