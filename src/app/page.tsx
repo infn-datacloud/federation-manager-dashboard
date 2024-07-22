@@ -13,25 +13,12 @@ import Loading from '@/app/loading';
 import PageHeader from '@/components/utilities/PageHeader';
 
 import { useContext, useEffect } from 'react';
-import { useRoles } from '@/middleware/roles';
-import { connectToSiteAdmin } from '@/middleware/socketio_connections/site_admin';
-import { SocketManagement } from '@/middleware/contextes/socket';
+import { RoleManagement } from '@/middleware/roles';
 
 export default function Home() {
 	const auth = useAuth();
 	const router = useRouter();
-
-	/* Set user roles */
-	useRoles();
-
-	// Set socket context
-	const ctx = useContext(SocketManagement);
-	useEffect(() => {
-		if (auth.isAuthenticated) {
-            ctx.setSocket(connectToSiteAdmin(auth))
-        }
-	}, [auth.isAuthenticated])
-
+	const context = useContext(RoleManagement);
 
 	useEffect(() => {
 		if (!auth.isAuthenticated && !auth.isLoading) {
@@ -53,6 +40,11 @@ export default function Home() {
 
 	if (auth.error) {
 		return <div>Oops... {auth.error.message}</div>;
+	}
+
+	let newRequestButton;
+	if (context.currentRole === 'site admin') {
+		newRequestButton = <NewRequestButton />;
 	}
 
 	if (auth.isAuthenticated) {
@@ -81,7 +73,7 @@ export default function Home() {
 
 					<ProviderList />
 				</Container>
-				<NewRequestButton />
+				{newRequestButton}
 			</>
 		);
 	}

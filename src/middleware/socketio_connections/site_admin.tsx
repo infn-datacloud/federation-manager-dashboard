@@ -19,10 +19,7 @@ export function connectToSiteAdmin(auth: AuthContextProps) {
         console.log('Socket disconnected');
     });
 
-    /* socket.on('roles', (roles) => {
-        resolve(roles);
-    });
-
+    /* 
     socket.on('connect_error', (error) => {
         console.error('Connection error:', error);
         reject(error);
@@ -31,7 +28,8 @@ export function connectToSiteAdmin(auth: AuthContextProps) {
     socket.on('error', (error) => {
         console.error('Socket error:', error);
         reject(error);
-    }); */
+    });
+    */
 
     return socket;
 }

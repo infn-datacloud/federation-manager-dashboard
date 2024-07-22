@@ -5,17 +5,18 @@ import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-
-import { useContext } from 'react';
-import { RoleManagement } from '@/middleware/roles';
 import Cookies from 'js-cookie';
 import { Typography } from '@mui/material';
 
-export default function RolesButton() {
+export default function RolesButton(
+	props: Readonly<{
+		rolesList: Array<string>;
+		currentRole: string;
+		handleRoleChange: (role: string) => void;
+	}>
+) {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 	const open = Boolean(anchorEl);
-
-	const context = useContext(RoleManagement);
 
 	const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
 		setAnchorEl(event.currentTarget);
@@ -30,22 +31,20 @@ export default function RolesButton() {
 
 		const value = event.currentTarget.getAttribute('value');
 
-		context.setCurrentRole(value);
+		props.handleRoleChange(value);
 		Cookies.set('currentRole', value);
 	};
 
-	let rolesList = [];
+	let itemsList = [];
 
-	for (let count in context.rolesList) {
-		let temp_role = context.rolesList[count];
-
-		if (temp_role != context.currentRole) {
-			rolesList.push(
+	for (let role of props.rolesList) {
+		if (role != props.currentRole) {
+			itemsList.push(
 				<MenuItem
-					title={'Change role to ' + temp_role}
+					title={'Change role to ' + role}
 					onClick={handleChange}
-					key={temp_role.replaceAll(' ', '_')}
-					value={temp_role}
+					key={role.replaceAll(' ', '_')}
+					value={role}
 					sx={{
 						textTransform: 'uppercase',
 						fontSize: '14px',
@@ -53,13 +52,13 @@ export default function RolesButton() {
 						color: '#162d4d',
 					}}
 				>
-					{temp_role}
+					{role}
 				</MenuItem>
 			);
 		}
 	}
 
-	if (rolesList.length > 0) {
+	if (itemsList.length > 0) {
 		return (
 			<>
 				<Button
@@ -76,7 +75,7 @@ export default function RolesButton() {
 					endIcon={<ArrowDropDownIcon />}
 					title='Change role'
 				>
-					{context.currentRole}
+					{props.currentRole}
 				</Button>
 				<Menu
 					id='basic-menu'
@@ -87,7 +86,7 @@ export default function RolesButton() {
 						'aria-labelledby': 'basic-button',
 					}}
 				>
-					{rolesList}
+					{itemsList}
 				</Menu>
 			</>
 		);
@@ -99,10 +98,10 @@ export default function RolesButton() {
 					fontWeight: 'bold',
 					fontSize: '0.875rem',
 					marginRight: '10px',
-					textTransform: 'uppercase'
+					textTransform: 'uppercase',
 				}}
 			>
-				{context.currentRole}
+				{props.currentRole}
 			</Typography>
 		);
 	}

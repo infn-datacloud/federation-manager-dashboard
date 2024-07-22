@@ -17,9 +17,10 @@ import provider_styles from '@/components/providers/providers.module.css';
 
 import { useAuth } from 'react-oidc-context';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 
 import Loading from '@/app/loading';
+import { RoleManagement } from '@/middleware/roles';
 
 export default function Provider({
 	params,
@@ -28,6 +29,7 @@ export default function Provider({
 }>) {
 	const router = useRouter();
 	const auth = useAuth();
+	const context = useContext(RoleManagement);
 
 	useEffect(() => {
 		if (!auth.isAuthenticated && !auth.isLoading) {
@@ -97,9 +99,9 @@ export default function Provider({
 					<ProviderStatus status='Error' />
 				</Box>
 
-				<ErrorBox></ErrorBox>
-				<FormDataBox></FormDataBox>
-				<TimelineBox></TimelineBox>
+				<ErrorBox showButtons={context.currentRole == 'site tester'} />
+				<FormDataBox showButtons={context.currentRole == 'site admin'} />
+				<TimelineBox />
 			</Container>
 		);
 	}

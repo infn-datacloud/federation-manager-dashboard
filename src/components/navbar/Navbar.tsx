@@ -12,9 +12,38 @@ import LoginRoundedIcon from '@mui/icons-material/LoginRounded';
 
 import styles from './navbar.module.css';
 import { useAuth } from 'react-oidc-context';
+import { useRoles, RoleManagement } from '@/middleware/roles';
+import { useContext, useEffect } from 'react';
+import { connectToSiteAdmin } from '@/middleware/socketio_connections/site_admin';
+import { SocketManagement } from '@/middleware/contextes/socket';
+import { connectToSiteTester } from '@/middleware/socketio_connections/site_tester';
 
 export default function Navbar() {
 	const auth = useAuth();
+
+	/* Set user roles */
+	useRoles();
+	const roleCtx = useContext(RoleManagement);
+
+	// Set socket context
+	const socketCtx = useContext(SocketManagement);
+	useEffect(() => {
+		if (socketCtx.socket !== null) {
+			socketCtx.socket.disconnect();
+			socketCtx.setSocket(null);
+		}
+		if (auth.isAuthenticated) {
+			switch (roleCtx.currentRole) {
+				case 'site admin':
+					socketCtx.setSocket(connectToSiteAdmin(auth));
+					break;
+
+				case 'site tester':
+					socketCtx.setSocket(connectToSiteTester(auth));
+					break;
+			}
+		}
+	}, [auth.isAuthenticated, roleCtx.currentRole]);
 
 	let buttons;
 
@@ -23,7 +52,11 @@ export default function Navbar() {
 			buttons = (
 				<Box className={styles.navbarActions}>
 					{/* Roles */}
-					<RolesButton />
+					<RolesButton
+						rolesList={roleCtx.rolesList}
+						currentRole={roleCtx.currentRole}
+						handleRoleChange={roleCtx.setCurrentRole}
+					/>
 
 					<Box className={styles.navbarActionsButtons}>
 						{/* Notifications */}

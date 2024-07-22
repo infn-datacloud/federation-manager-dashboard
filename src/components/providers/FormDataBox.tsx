@@ -1,18 +1,15 @@
-import { useContext } from 'react';
 import { Typography, Box, Button } from '@mui/material';
 
 import SubjectRoundedIcon from '@mui/icons-material/SubjectRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 
-import { RoleManagement } from '@/middleware/roles';
-
 import CollapsingBox from '@/components/utilities/CollapsingBox';
 
-export default function FormDataBox() {
-	const context = useContext(RoleManagement);
-	let button = <></>;
-
-	if (context.currentRole == 'site admin') {
+export default function FormDataBox(props: Readonly<{
+	showButtons: boolean
+}>) {
+	let button;
+	if (props.showButtons) {
 		button = (
 			<Box display='flex' justifyContent='flex-end' marginTop='1rem'>
 				<Button

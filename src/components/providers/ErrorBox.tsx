@@ -1,31 +1,30 @@
-import { useContext } from 'react';
 import { Button, Box, Typography } from '@mui/material';
 import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import ShortcutRoundedIcon from '@mui/icons-material/ShortcutRounded';
 
-import { RoleManagement } from '@/middleware/roles';
-
 import styles from './providers.module.css';
 
-export default function ErrorBox() {
-	const context = useContext(RoleManagement);
-	let buttons = <></>;
+export default function ErrorBox(props: Readonly<{
+	showButtons: boolean
+}>) {
+	const style = {
+		borderRadius: '25px',
+		fontWeight: 'bold',
+		display: 'flex',
+		alignItems: 'center',
+		padding: '5px 32px',
+	};
 
-	if (context.currentRole === 'site tester') {
+	let buttons;
+	if (props.showButtons) {
 		buttons = (
 			<Box display='flex' justifyContent='flex-end' marginTop='1rem'>
 				<Button
 					title='Edit error'
 					variant='text'
 					color='error'
-					sx={{
-						borderRadius: '25px',
-						fontWeight: 'bold',
-						display: 'flex',
-						alignItems: 'center',
-						padding: '5px 32px',
-					}}
+					sx={style}
 					endIcon={<EditRoundedIcon />}
 				>
 					Edit
@@ -34,13 +33,7 @@ export default function ErrorBox() {
 					title='Send error'
 					variant='outlined'
 					color='error'
-					sx={{
-						borderRadius: '25px',
-						fontWeight: 'bold',
-						display: 'flex',
-						alignItems: 'center',
-						padding: '5px 32px',
-					}}
+					sx={style}
 					endIcon={<ShortcutRoundedIcon />}
 				>
 					Send

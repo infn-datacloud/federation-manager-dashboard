@@ -15,7 +15,8 @@ export function getRoles(auth: AuthContextProps): Promise<any> {
 			
 			for (let role in res) {
 				let value = res[role];
-				if(value) {
+				
+				if (value) {
 					roles.push(role.replace('is_', '').replaceAll('_', ' '));
 				}
 			}
