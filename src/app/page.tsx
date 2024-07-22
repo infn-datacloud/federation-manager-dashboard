@@ -12,8 +12,10 @@ import { useRouter } from 'next/navigation';
 import Loading from '@/app/loading';
 import PageHeader from '@/components/utilities/PageHeader';
 
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useRoles } from '@/middleware/roles';
+import { connectToSiteAdmin } from '@/middleware/socketio_connections/site_admin';
+import { SocketManagement } from '@/middleware/contextes/socket';
 
 export default function Home() {
 	const auth = useAuth();
@@ -21,6 +23,15 @@ export default function Home() {
 
 	/* Set user roles */
 	useRoles();
+
+	// Set socket context
+	const ctx = useContext(SocketManagement);
+	useEffect(() => {
+		if (auth.isAuthenticated) {
+            ctx.setSocket(connectToSiteAdmin(auth))
+        }
+	}, [auth.isAuthenticated])
+
 
 	useEffect(() => {
 		if (!auth.isAuthenticated && !auth.isLoading) {

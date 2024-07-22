@@ -6,11 +6,6 @@ import Cookies from 'js-cookie';
 const roles: any[] | (() => any[]) = [];
 const role = '';
 
-export const RoleContext = React.createContext({
-	rolesList: roles,
-	currentRole: role,
-});
-
 interface RoleManagementStructure {
 	rolesList: Array<string>;
 	currentRole: string;

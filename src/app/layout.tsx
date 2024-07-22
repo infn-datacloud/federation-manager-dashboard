@@ -17,35 +17,40 @@ import Authentication from '@/middleware/auth';
 /* Roles management */
 import RolesContext from '@/middleware/roles';
 
+/* Socket management */
+import SocketContext from '@/middleware/contextes/socket';
+
 export default function RootLayout({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
 	return (
-				<html lang='en'>
-					<head>
-						<meta
-							name='viewport'
-							content='initial-scale=1, width=device-width'
-							/>
-					</head>
-						<body>
-							<Authentication>
-								<RolesContext>
-									{/* Navbar */}
-									<header>
-										<Navbar />
-									</header>
+		<html lang='en'>
+			<head>
+				<meta
+					name='viewport'
+					content='initial-scale=1, width=device-width'
+				/>
+			</head>
+			<body>
+				<Authentication>
+					<RolesContext>
+						<SocketContext>
+							{/* Navbar */}
+							<header>
+								<Navbar />
+							</header>
 
-									{/* Body */}
-									{children}
+							{/* Body */}
+							{children}
 
-									{/* Footer */}
-									{/* <footer>Footer</footer> */}
-								</RolesContext>
-							</Authentication>
-						</body>
-				</html>
+							{/* Footer */}
+							{/* <footer>Footer</footer> */}
+						</SocketContext>
+					</RolesContext>
+				</Authentication>
+			</body>
+		</html>
 	);
 }
