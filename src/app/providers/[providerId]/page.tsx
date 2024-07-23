@@ -16,10 +16,8 @@ import page_styles from '@/app/page.module.css';
 import provider_styles from '@/components/providers/providers.module.css';
 
 import { useAuth } from 'react-oidc-context';
-import { useRouter } from 'next/navigation';
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 
-import Loading from '@/app/loading';
 import { RoleManagement } from '@/middleware/roles';
 
 export default function Provider({
@@ -27,19 +25,8 @@ export default function Provider({
 }: Readonly<{
 	params: { providerId: string };
 }>) {
-	const router = useRouter();
 	const auth = useAuth();
 	const context = useContext(RoleManagement);
-
-	useEffect(() => {
-		if (!auth.isAuthenticated && !auth.isLoading) {
-			router.push('/login');
-		}
-	});
-
-	if (auth.isLoading) {
-		return <Loading />;
-	}
 
 	if (auth.isAuthenticated) {
 		return (

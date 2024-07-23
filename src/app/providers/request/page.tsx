@@ -14,8 +14,6 @@ import { useRouter } from 'next/navigation';
 import { useEffect, useContext } from 'react';
 import { SocketManagement } from '@/middleware/contextes/socket';
 
-import Loading from '@/app/loading';
-
 const theme = createTheme({
 	palette: {
 		primary: {
@@ -34,12 +32,6 @@ export default function Request() {
 	};
 
 	useEffect(() => {
-		if (!auth.isAuthenticated && !auth.isLoading) {
-			router.push('/login');
-		}
-	});
-
-	useEffect(() => {
 		if (socketCtx.socket !== null) {
 			socketCtx.socket.on('get_form', (res: any) => {
 				console.log('Form', res);
@@ -52,10 +44,6 @@ export default function Request() {
 			}
 		}
 	}, []);
-
-	if (auth.isLoading) {
-		return <Loading />;
-	}
 
 	if (auth.isAuthenticated) {
 		return (

@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { Suspense } from 'react';
 import './globals.css';
 
 import '@fontsource/roboto/300.css';
@@ -8,10 +8,7 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
-/* Components */
-import Navbar from '@/components/navbar/Navbar';
-
-/* IAM Authentication */
+/* Authentication */
 import Authentication from '@/middleware/auth';
 
 /* Roles management */
@@ -19,6 +16,9 @@ import RolesContext from '@/middleware/roles';
 
 /* Socket management */
 import SocketContext from '@/middleware/contextes/socket';
+
+/* Page content management */
+import PageContent from '@/middleware/page_content';
 
 export default function RootLayout({
 	children,
@@ -37,16 +37,7 @@ export default function RootLayout({
 				<Authentication>
 					<RolesContext>
 						<SocketContext>
-							{/* Navbar */}
-							<header>
-								<Navbar />
-							</header>
-
-							{/* Body */}
-							{children}
-
-							{/* Footer */}
-							{/* <footer>Footer</footer> */}
+							<PageContent>{children}</PageContent>
 						</SocketContext>
 					</RolesContext>
 				</Authentication>

@@ -5,29 +5,17 @@ import CloudRoundedIcon from '@mui/icons-material/CloudRounded';
 
 import ProviderList from '@/components/providers/ProviderList';
 import NewRequestButton from '@/components/request/NewRequestButton';
-
-import { useAuth } from 'react-oidc-context';
-import { useRouter } from 'next/navigation';
-
-import Loading from '@/app/loading';
 import PageHeader from '@/components/utilities/PageHeader';
 
 import { useContext, useEffect } from 'react';
 import { RoleManagement } from '@/middleware/roles';
 import { SocketManagement } from '@/middleware/contextes/socket';
+import { useAuth } from 'react-oidc-context';
 
 export default function Home() {
-	const auth = useAuth();
-	const router = useRouter();
 	const context = useContext(RoleManagement);
 	const socketCtx = useContext(SocketManagement);
-
-	useEffect(() => {
-		if (!auth.isAuthenticated && !auth.isLoading) {
-			/* Go to login page */
-			router.push('/login');
-		}
-	});
+	const auth = useAuth();
 
 	useEffect(() => {
 		if (socketCtx.socket !== null) {
@@ -42,21 +30,6 @@ export default function Home() {
 			}
 		}
 	}, [socketCtx.socket]);
-
-	switch (auth.activeNavigator) {
-		case 'signinSilent':
-			return <Loading message='Signing you in...' />;
-		case 'signoutRedirect':
-			return <Loading message='Signing you out...' />;
-	}
-
-	if (auth.isLoading) {
-		return <Loading />;
-	}
-
-	if (auth.error) {
-		return <div>Oops... {auth.error.message}</div>;
-	}
 
 	let newRequestButton;
 	if (context.currentRole === 'site admin') {

@@ -33,6 +33,6 @@ export default function Login() {
 			);
 		}
 	} else {
-		return <Loading />
+		return <Loading />;
 	}
 }
