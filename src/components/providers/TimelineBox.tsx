@@ -16,15 +16,6 @@ import TimelineOppositeContent, {
 
 import CollapsingBox from '@/components/utilities/CollapsingBox';
 
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-const theme = createTheme({
-	palette: {
-		primary: {
-			main: '#162D4D',
-		},
-	},
-});
-
 export default function TimelineBox() {
 	let title = (
 		<>
@@ -41,16 +32,14 @@ export default function TimelineBox() {
 				alignItems='flex-end'
 				justifyContent='space-between'
 			>
-				<ThemeProvider theme={theme}>
-					<TextField
-						label='Add a comment'
-						variant='standard'
-						color='primary'
-						autoComplete='off'
-						multiline
-						fullWidth
-					/>
-				</ThemeProvider>
+				<TextField
+					label='Add a comment'
+					variant='standard'
+					color='primary'
+					autoComplete='off'
+					multiline
+					fullWidth
+				/>
 				&nbsp;
 				<Button
 					title='Add a comment'

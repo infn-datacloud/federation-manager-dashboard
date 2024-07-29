@@ -6,24 +6,22 @@ import { SocketManagement } from '@/middleware/contextes/socket';
 import { connectToSiteTester } from '@/middleware/socketio_connections/site_tester';
 import { useAuth } from 'react-oidc-context';
 import Navbar from '@/components/navbar/Navbar';
-import Loading from '@/app/loading';
-import { useRouter } from 'next/navigation';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const theme = createTheme({
+	palette: {
+		primary: {
+			main: '#162D4D',
+		},
+	},
+});
 
 export default function PageContent({
 	children,
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
-	const auth = useAuth();
-	let content;
-
-	/* Go to login page if not authenticated */
-	const router = useRouter();
-	useEffect(() => {
-		if (!auth.isAuthenticated && !auth.isLoading) {
-			router.push('/login');
-		}
-	});
+	const oidcAuth = useAuth();
 
 	/* Set user roles */
 	useRoles();
@@ -36,39 +34,25 @@ export default function PageContent({
 			socketCtx.socket.disconnect();
 			socketCtx.setSocket(null);
 		}
-		if (auth.isAuthenticated) {
+		
+		if (oidcAuth.isAuthenticated) {
 			switch (roleCtx.currentRole) {
 				case 'site admin':
-					socketCtx.setSocket(connectToSiteAdmin(auth));
+					socketCtx.setSocket(connectToSiteAdmin(oidcAuth));
 					break;
 
 				case 'site tester':
-					socketCtx.setSocket(connectToSiteTester(auth));
+					socketCtx.setSocket(connectToSiteTester(oidcAuth));
 					break;
 			}
 		}
-	}, [auth.isAuthenticated, roleCtx.currentRole]);
-
-	/* Don't show content if page is loading */
-	if (auth.isLoading) {
-		content = <Loading />;
-	} else {
-		content = children;
-	}
-
-	/* Manage auth errors */
-	if (auth.error) {
-		return <div>Oops... {auth.error.message}</div>;
-	}
+	}, [roleCtx.currentRole]);
 
 	return (
-		<>
+		<ThemeProvider theme={theme}>
 			{/* Navbar */}
 			<header>
 				<Navbar
-					isAuthenticated={auth.isAuthenticated}
-					isLoading={auth.isLoading}
-					login={auth.signinRedirect}
 					rolesList={roleCtx.rolesList}
 					currentRole={roleCtx.currentRole}
 					setCurrentRole={roleCtx.setCurrentRole}
@@ -76,10 +60,10 @@ export default function PageContent({
 			</header>
 
 			{/* Body */}
-			{content}
+			{children}
 
 			{/* Footer */}
 			{/* <footer>Footer</footer> */}
-		</>
+		</ThemeProvider>
 	);
 }

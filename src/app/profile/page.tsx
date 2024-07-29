@@ -1,9 +1,4 @@
-'use client';
-
-import { useAuth } from 'react-oidc-context';
-
-import { Container, Typography, Box, IconButton } from '@mui/material';
-import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
+import { Container, Typography, Box } from '@mui/material';
 import TuneRoundedIcon from '@mui/icons-material/TuneRounded';
 import NotificationsActiveRoundedIcon from '@mui/icons-material/NotificationsActiveRounded';
 import page_styles from '../page.module.css';
@@ -13,19 +8,9 @@ import CollapsingBox from '@/components/utilities/CollapsingBox';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-
-const theme = createTheme({
-	palette: {
-		primary: {
-			main: '#162D4D',
-		},
-	},
-});
+import { SignOutButton } from '@/components/auth/SignOutButton';
 
 export default function Profile() {
-	const auth = useAuth();
-
 	let title = (
 		<Box display='flex' alignItems='center'>
 			<TuneRoundedIcon />
@@ -40,61 +25,50 @@ export default function Profile() {
 				&nbsp;Notifications
 			</Typography>
 
-			<ThemeProvider theme={theme}>
-				<Box display='flex' flexWrap='wrap'>
-					<FormControlLabel
-						control={<Checkbox />}
-						color='primary'
-						title='Toggle Email notifications'
-						label='Email'
-						sx={{ minWidth: '200px' }}
-					/>
-					<FormControlLabel
-						control={<Checkbox />}
-						color='primary'
-						title='Toggle Pop up notifications'
-						label='Pop up'
-						sx={{ minWidth: '200px' }}
-					/>
-					<FormControlLabel
-						control={<Checkbox />}
-						color='primary'
-						title='Toggle Jira Ticket notifications'
-						label='Jira Ticket'
-						sx={{ minWidth: '200px' }}
-					/>
-				</Box>
-			</ThemeProvider>
+			<Box display='flex' flexWrap='wrap'>
+				<FormControlLabel
+					control={<Checkbox />}
+					color='primary'
+					title='Toggle Email notifications'
+					label='Email'
+					sx={{ minWidth: '200px' }}
+				/>
+				<FormControlLabel
+					control={<Checkbox />}
+					color='primary'
+					title='Toggle Pop up notifications'
+					label='Pop up'
+					sx={{ minWidth: '200px' }}
+				/>
+				<FormControlLabel
+					control={<Checkbox />}
+					color='primary'
+					title='Toggle Jira Ticket notifications'
+					label='Jira Ticket'
+					sx={{ minWidth: '200px' }}
+				/>
+			</Box>
 		</>
 	);
 
-	if (auth.isAuthenticated) {
-		return (
-			<Container className={styles.profileContainer}>
-				<Box
-					display='flex'
-					alignItems='center'
-					justifyContent='space-between'
-					className={page_styles.cardContainer}
-					sx={{ padding: '2em 3em!important' }}
-				>
-					<Typography variant='h4' fontWeight='bold'>
-						Ettore Serra
-					</Typography>
-					<IconButton
-					    title='Log out'
-						onClick={() => {
-							void auth.removeUser();
-						}}
-					>
-						<LogoutRoundedIcon />
-					</IconButton>
-				</Box>
-	
-				<br />
-	
-				<CollapsingBox title={title} body={data} />
-			</Container>
-		);
-	}
+	return (
+		<Container className={styles.profileContainer}>
+			<Box
+				display='flex'
+				alignItems='center'
+				justifyContent='space-between'
+				className={page_styles.cardContainer}
+				sx={{ padding: '2em 3em!important' }}
+			>
+				<Typography variant='h4' fontWeight='bold'>
+					Ettore Serra
+				</Typography>
+				<SignOutButton />
+			</Box>
+
+			<br />
+
+			<CollapsingBox title={title} body={data} />
+		</Container>
+	);
 }

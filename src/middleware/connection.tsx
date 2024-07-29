@@ -1,7 +1,9 @@
-import { AuthContextProps } from 'react-oidc-context';
+'use server'
+import { auth } from "../../auth";
 
-export function getRoles(auth: AuthContextProps): Promise<any> {
-	let token = auth.user?.access_token;
+export async function getRoles(): Promise<any> {
+	let session = await auth();
+	let token = (session as any).accessToken.toString();
 
 	return fetch('http://localhost:8000/roles', {
 		method: 'GET',

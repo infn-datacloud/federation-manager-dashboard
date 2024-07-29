@@ -3,15 +3,6 @@
 import { Box, Typography } from '@mui/material';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-const theme = createTheme({
-	palette: {
-		primary: {
-			main: '#162D4D',
-		},
-	},
-});
-
 export default function Loading(
 	props: Readonly<{
 		message?: string;
@@ -31,9 +22,7 @@ export default function Loading(
 			<br />
 			<br />
 			<br />
-			<ThemeProvider theme={theme}>
-				<CircularProgress color='primary' />
-			</ThemeProvider>
+			<CircularProgress color='primary' />
 			<br />
 			<Typography variant='h6'>{message}</Typography>
 		</Box>

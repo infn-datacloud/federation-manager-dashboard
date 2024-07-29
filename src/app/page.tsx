@@ -10,12 +10,10 @@ import PageHeader from '@/components/utilities/PageHeader';
 import { useContext, useEffect } from 'react';
 import { RoleManagement } from '@/middleware/roles';
 import { SocketManagement } from '@/middleware/contextes/socket';
-import { useAuth } from 'react-oidc-context';
 
 export default function Home() {
 	const context = useContext(RoleManagement);
 	const socketCtx = useContext(SocketManagement);
-	const auth = useAuth();
 
 	useEffect(() => {
 		if (socketCtx.socket !== null) {
@@ -36,34 +34,32 @@ export default function Home() {
 		newRequestButton = <NewRequestButton />;
 	}
 
-	if (auth.isAuthenticated) {
-		return (
-			<>
+	return (
+		<>
+			<br />
+			<br />
+			<br />
+			<Container>
+				<PageHeader />
+
 				<br />
 				<br />
+
+				<Typography
+					variant='h5'
+					fontWeight='bold'
+					display='flex'
+					alignItems='center'
+				>
+					<CloudRoundedIcon />
+					&nbsp;Providers
+				</Typography>
+
 				<br />
-				<Container>
-					<PageHeader />
 
-					<br />
-					<br />
-
-					<Typography
-						variant='h5'
-						fontWeight='bold'
-						display='flex'
-						alignItems='center'
-					>
-						<CloudRoundedIcon />
-						&nbsp;Providers
-					</Typography>
-
-					<br />
-
-					<ProviderList />
-				</Container>
-				{newRequestButton}
-			</>
-		);
-	}
+				<ProviderList />
+			</Container>
+			{newRequestButton}
+		</>
+	);
 }
