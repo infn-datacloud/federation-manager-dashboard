@@ -28,7 +28,11 @@ export default function Provider(
 	};
 
 	return (
-		<Box className={styles.providerContainer} onClick={handleClick} title='Show details'>
+		<Box
+			className={styles.providerContainer}
+			onClick={handleClick}
+			title='Show details'
+		>
 			<Box display='flex' alignItems='center' width='33%'>
 				<Typography
 					variant='h5'
@@ -52,8 +56,12 @@ export default function Provider(
 				alignItems='center'
 				width='33%'
 				color='#162D4D75'
-			>	
-			    <Box className={page_styles.textEllipsis +' '+ styles.providerUsers}>
+			>
+				<Box
+					className={
+						page_styles.textEllipsis + ' ' + styles.providerUsers
+					}
+				>
 					{user_icon()}
 				</Box>
 			</Box>
@@ -102,7 +110,6 @@ export default function Provider(
 				</Box>
 			);
 		}
-
 
 		return users;
 	}

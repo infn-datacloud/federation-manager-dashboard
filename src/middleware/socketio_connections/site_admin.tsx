@@ -1,25 +1,26 @@
-import { AuthContextProps } from "react-oidc-context";
-import io from "socket.io-client"
+import io from 'socket.io-client';
 
-export function connectToSiteAdmin(auth: AuthContextProps) {
+export function connectToSiteAdmin() {
+	let token = '';
+    
 	const socket = io('ws://localhost:8000/site_admin', {
-        reconnectionAttempts: 2,
-        reconnectionDelay: 1000,
-        transports: ['websocket', 'polling'],
-        auth: {
-            token: auth.user?.access_token
-        }
-    });
+		reconnectionAttempts: 2,
+		reconnectionDelay: 1000,
+		transports: ['websocket', 'polling'],
+		auth: {
+			token: token,
+		},
+	});
 
-    socket.on('connect', () => {
-        console.log('Socket connected');
-    });
+	socket.on('connect', () => {
+		console.log('Socket connected');
+	});
 
-    socket.on('disconnect', () => {
-        console.log('Socket disconnected');
-    });
+	socket.on('disconnect', () => {
+		console.log('Socket disconnected');
+	});
 
-    /* 
+	/* 
     socket.on('connect_error', (error) => {
         console.error('Connection error:', error);
         reject(error);
@@ -31,5 +32,5 @@ export function connectToSiteAdmin(auth: AuthContextProps) {
     });
     */
 
-    return socket;
+	return socket;
 }

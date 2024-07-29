@@ -14,7 +14,7 @@ export default function Navbar(
 	props: Readonly<{
 		rolesList: Array<string>;
 		currentRole: string;
-		setCurrentRole: (role: string) => void;
+		setCurrentRole: () => void;
 	}>
 ) {
 	return (

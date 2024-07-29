@@ -1,3 +1,4 @@
+import React from 'react';
 import { AuthProvider } from 'react-oidc-context';
 
 const base_url = 'https://iam.cloud.infn.it';

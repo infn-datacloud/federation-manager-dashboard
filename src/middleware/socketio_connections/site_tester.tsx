@@ -1,13 +1,14 @@
-import { AuthContextProps } from 'react-oidc-context';
 import io from 'socket.io-client';
 
-export function connectToSiteTester(auth: AuthContextProps) {
+export function connectToSiteTester() {
+	let token = '';
+
 	const socket = io('ws://localhost:8000/site_tester', {
 		reconnectionAttempts: 2,
 		reconnectionDelay: 1000,
 		transports: ['websocket', 'polling'],
 		auth: {
-			token: auth.user?.access_token,
+			token: token,
 		},
 	});
 

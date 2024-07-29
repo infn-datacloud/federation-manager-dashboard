@@ -1,9 +1,10 @@
-'use server'
-import { auth } from "../../auth";
+'use server';
+
+import { auth } from '../../auth';
 
 export async function getRoles(): Promise<any> {
 	let session = await auth();
-	let token = (session as any).accessToken.toString();
+	let token = (session as any)?.accessToken.toString();
 
 	return fetch('http://localhost:8000/roles', {
 		method: 'GET',
@@ -14,15 +15,13 @@ export async function getRoles(): Promise<any> {
 		.then((res) => res.json())
 		.then((res) => {
 			let roles = [];
-			
+
 			for (let role in res) {
-				let value = res[role];
-				
-				if (value) {
+				if (res[role]) {
 					roles.push(role.replace('is_', '').replaceAll('_', ' '));
 				}
 			}
-			
+
 			return roles;
 		});
 }

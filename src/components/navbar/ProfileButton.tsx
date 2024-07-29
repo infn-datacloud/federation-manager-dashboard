@@ -14,7 +14,7 @@ export default function ProfileButton() {
 
 	return (
 		<IconButton
-		    title='Profile'
+			title='Profile'
 			size='large'
 			edge='end'
 			aria-label='Account of current user'

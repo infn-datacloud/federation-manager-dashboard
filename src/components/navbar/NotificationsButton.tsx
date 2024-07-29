@@ -10,7 +10,7 @@ import IconButton from '@mui/material/IconButton';
 import FiberManualRecordIcon from '@mui/icons-material/FiberManualRecord';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
-import styles from './navbar.module.css'
+import styles from './navbar.module.css';
 
 export default function NotificationsButton() {
 	const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -22,10 +22,18 @@ export default function NotificationsButton() {
 		setAnchorEl(null);
 	};
 
+	const notificationStyle = {
+		width: '100%',
+		maxWidth: 360,
+		bgcolor: 'background.paper',
+		textWrap: 'wrap',
+		color: '#162D4D',
+	};
+
 	return (
 		<>
 			<IconButton
-			    title='Show notifications'
+				title='Show notifications'
 				size='large'
 				aria-label='Show 2 new notifications'
 				color='inherit'
@@ -68,15 +76,9 @@ export default function NotificationsButton() {
 				<Divider sx={{ margin: '8px 0' }} />
 
 				<MenuItem
-				    title='Open notification'
+					title='Open notification'
 					onClick={handleClose}
-					sx={{
-						width: '100%',
-						maxWidth: 360,
-						bgcolor: 'background.paper',
-						textWrap: 'wrap',
-						color: '#162D4D',
-					}}
+					sx={notificationStyle}
 				>
 					<Typography component='span' variant='body2'>
 						<FiberManualRecordIcon
@@ -91,15 +93,9 @@ export default function NotificationsButton() {
 				<Divider />
 
 				<MenuItem
-				    title='Open notification'
+					title='Open notification'
 					onClick={handleClose}
-					sx={{
-						width: '100%',
-						maxWidth: 360,
-						bgcolor: 'background.paper',
-						textWrap: 'wrap',
-						color: '#162D4D',
-					}}
+					sx={notificationStyle}
 				>
 					<Typography component='span' variant='body2'>
 						<FiberManualRecordIcon
@@ -115,15 +111,9 @@ export default function NotificationsButton() {
 				<Divider />
 
 				<MenuItem
-				    title='Open notification'
+					title='Open notification'
 					onClick={handleClose}
-					sx={{
-						width: '100%',
-						maxWidth: 360,
-						bgcolor: 'background.paper',
-						textWrap: 'wrap',
-						color: '#162D4D',
-					}}
+					sx={notificationStyle}
 				>
 					<Typography
 						component='span'

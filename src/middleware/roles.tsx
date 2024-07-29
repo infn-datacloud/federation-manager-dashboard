@@ -38,15 +38,15 @@ export default function RolesContext({
 export const useRoles = () => {
 	const context = useContext(RoleManagement);
 
-	const [loading, setLoading] = useState<any>(true);
-	const [error, setError] = useState<any>(null);
-
 	const fetchRoles = async () => {
 		try {
 			let roles = await getRoles();
 			context.setRolesList(roles);
 
-			if (Cookies.get('currentRole')?.toString() == 'undefined' || Cookies.get('currentRole') == undefined) {
+			if (
+				Cookies.get('currentRole')?.toString() == 'undefined' ||
+				Cookies.get('currentRole') == undefined
+			) {
 				context.setCurrentRole(roles[0]);
 				Cookies.set('currentRole', roles[0]);
 			} else {
@@ -54,9 +54,7 @@ export const useRoles = () => {
 				context.setCurrentRole(currentRole);
 			}
 		} catch (err) {
-			setError(err);
-		} finally {
-			setLoading(false);
+			
 		}
 	};
 

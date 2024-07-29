@@ -18,9 +18,6 @@ const IamProvider: OIDCConfig<any> = {
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	providers: [IamProvider],
 	callbacks: {
-		authorized({ request, auth }) {
-			return true;
-		},
 		async jwt({ token, user, account }) {
 			return { ...token, ...account, ...user };
 		},
