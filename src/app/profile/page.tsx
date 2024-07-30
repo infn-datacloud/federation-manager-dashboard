@@ -63,7 +63,7 @@ export default function Profile() {
 				<Typography variant='h4' fontWeight='bold'>
 					Ettore Serra
 				</Typography>
-				<SignOutButton />
+				<SignOutButton text={false} />
 			</Box>
 
 			<br />

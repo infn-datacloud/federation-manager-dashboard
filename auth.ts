@@ -21,11 +21,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 		async jwt({ token, user, account }) {
 			return { ...token, ...account, ...user };
 		},
-
 		async session({ session, token, user }) {
 			(session as any).accessToken = token.access_token;
 
 			return session;
 		},
+		/* authorized: async ({ auth }) => {
+			// Logged in users are authenticated, otherwise redirect to login page
+			return !!auth;
+		}, */
+	},
+	pages: {
+		signIn: '/login',
 	},
 });

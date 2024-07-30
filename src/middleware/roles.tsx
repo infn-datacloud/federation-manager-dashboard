@@ -59,6 +59,7 @@ export const useRoles = () => {
 	};
 
 	useEffect(() => {
+		/* TODO: get roles solo se autenticato */
 		fetchRoles();
 	}, []);
 };

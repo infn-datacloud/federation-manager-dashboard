@@ -1,7 +1,6 @@
-import React from 'react';
 import { useRoles } from './roles';
 import { RoleManagement } from '@/middleware/roles';
-import { useContext, useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { connectToSiteAdmin } from '@/middleware/socketio_connections/site_admin';
 import { SocketManagement } from '@/middleware/contextes/socket';
 import { connectToSiteTester } from '@/middleware/socketio_connections/site_tester';
@@ -34,15 +33,15 @@ export default function PageContent({
 		}
 		
 		/* TODO: pass access_token to groups connection */
-		switch (roleCtx.currentRole) {
-			case 'site admin':
-				socketCtx.setSocket(connectToSiteAdmin());
-				break;
+		// switch (roleCtx.currentRole) {
+		// 	case 'site admin':
+		// 		socketCtx.setSocket(connectToSiteAdmin());
+		// 		break;
 
-			case 'site tester':
-				socketCtx.setSocket(connectToSiteTester());
-				break;
-		}
+		// 	case 'site tester':
+		// 		socketCtx.setSocket(connectToSiteTester());
+		// 		break;
+		// }
 	}, [roleCtx.currentRole]);
 
 	return (
