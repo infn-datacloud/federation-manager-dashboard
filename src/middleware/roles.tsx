@@ -43,15 +43,17 @@ export const useRoles = () => {
 			let roles = await getRoles();
 			context.setRolesList(roles);
 
-			if (
-				Cookies.get('currentRole')?.toString() == 'undefined' ||
-				Cookies.get('currentRole') == undefined
-			) {
-				context.setCurrentRole(roles[0]);
-				Cookies.set('currentRole', roles[0]);
-			} else {
-				let currentRole = Cookies.get('currentRole') ?? '';
-				context.setCurrentRole(currentRole);
+			if (roles.length > 0) {
+				if (
+					Cookies.get('currentRole')?.toString() == 'undefined' ||
+					Cookies.get('currentRole') == undefined
+				) {
+					context.setCurrentRole(roles[0]);
+					Cookies.set('currentRole', roles[0]);
+				} else {
+					let currentRole = Cookies.get('currentRole') ?? '';
+					context.setCurrentRole(currentRole);
+				}
 			}
 		} catch (err) {
 			
@@ -59,7 +61,6 @@ export const useRoles = () => {
 	};
 
 	useEffect(() => {
-		/* TODO: get roles solo se autenticato */
 		fetchRoles();
 	}, []);
 };
