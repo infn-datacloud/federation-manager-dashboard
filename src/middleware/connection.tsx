@@ -1,6 +1,6 @@
 'use server';
 
-import { auth } from '../../auth';
+import { auth } from '@/auth';
 
 export async function getRoles(): Promise<any> {
 	let session = await auth();
@@ -16,13 +16,15 @@ export async function getRoles(): Promise<any> {
 			.then((res) => res.json())
 			.then((res) => {
 				let roles = [];
-	
+
 				for (let role in res) {
 					if (res[role]) {
-						roles.push(role.replace('is_', '').replaceAll('_', ' '));
+						roles.push(
+							role.replace('is_', '').replaceAll('_', ' ')
+						);
 					}
 				}
-	
+
 				return roles;
 			});
 	} else {

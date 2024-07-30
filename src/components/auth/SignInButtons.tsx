@@ -1,5 +1,5 @@
 import { Box, Button, Typography } from '@mui/material';
-import { signIn, auth } from '../../../auth';
+import { signIn, auth } from '@/auth';
 import { SignOutButton } from './SignOutButton';
 
 export async function SignInButtons() {
@@ -32,7 +32,10 @@ export async function SignInButtons() {
 	} else {
 		return (
 			<Box display='flex' flexDirection='column' alignItems='center'>
-				<Typography variant='h5' sx={{marginTop: '2em', marginBottom: '1em'}}>
+				<Typography
+					variant='h5'
+					sx={{ marginTop: '2em', marginBottom: '1em' }}
+				>
 					You are already signed in as <b>{session.user.name}</b>.
 				</Typography>
 				<SignOutButton text={true} />

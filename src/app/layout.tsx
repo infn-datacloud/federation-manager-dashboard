@@ -8,9 +8,6 @@ import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 
-/* Authentication */
-import Authentication from '@/middleware/auth';
-
 /* Roles management */
 import RolesContext from '@/middleware/roles';
 
@@ -34,13 +31,11 @@ export default function RootLayout({
 				/>
 			</head>
 			<body>
-				<Authentication>
-					<RolesContext>
-						<SocketContext>
-							<PageContent>{children}</PageContent>
-						</SocketContext>
-					</RolesContext>
-				</Authentication>
+				<RolesContext>
+					<SocketContext>
+						<PageContent>{children}</PageContent>
+					</SocketContext>
+				</RolesContext>
 			</body>
 		</html>
 	);

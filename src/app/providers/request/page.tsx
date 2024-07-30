@@ -31,7 +31,7 @@ export default function Request() {
 				socketCtx.socket.off('get_form');
 			}
 		}
-	}, []);
+	}, [socketCtx.socket]);
 
 	return (
 		<>

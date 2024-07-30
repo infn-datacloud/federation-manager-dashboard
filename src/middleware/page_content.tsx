@@ -31,17 +31,20 @@ export default function PageContent({
 			socketCtx.socket.disconnect();
 			socketCtx.setSocket(null);
 		}
-		
-		/* TODO: pass access_token to groups connection */
-		// switch (roleCtx.currentRole) {
-		// 	case 'site admin':
-		// 		socketCtx.setSocket(connectToSiteAdmin());
-		// 		break;
 
-		// 	case 'site tester':
-		// 		socketCtx.setSocket(connectToSiteTester());
-		// 		break;
-		// }
+		switch (roleCtx.currentRole) {
+			case 'site admin':
+				Promise.resolve(connectToSiteAdmin()).then((socket) => {
+					socketCtx.setSocket(socket);
+				});
+				break;
+
+			case 'site tester':
+				Promise.resolve(connectToSiteTester()).then((socket) => {
+					socketCtx.setSocket(socket);
+				});
+				break;
+		}
 	}, [roleCtx.currentRole]);
 
 	return (

@@ -1,36 +1,31 @@
 import io from 'socket.io-client';
+import getToken from '../token';
 
-export function connectToSiteTester() {
-	let token = '';
+export async function connectToSiteTester() {
+	let tokenPromise = Promise.resolve(getToken());
 
-	const socket = io('ws://localhost:8000/site_tester', {
-		reconnectionAttempts: 2,
-		reconnectionDelay: 1000,
-		transports: ['websocket', 'polling'],
-		auth: {
-			token: token,
-		},
+	return tokenPromise.then((token) => {
+		if (!token) {
+			return null;
+		}
+
+		const socket = io('ws://localhost:8000/site_tester', {
+			reconnectionAttempts: 2,
+			reconnectionDelay: 1000,
+			transports: ['websocket', 'polling'],
+			auth: {
+				token: token,
+			},
+		});
+
+		socket.on('connect', () => {
+			console.log('Socket connected');
+		});
+
+		socket.on('disconnect', () => {
+			console.log('Socket disconnected');
+		});
+
+		return socket;
 	});
-
-	socket.on('connect', () => {
-		console.log('Socket connected');
-	});
-
-	socket.on('disconnect', () => {
-		console.log('Socket disconnected');
-	});
-
-	/* 
-    socket.on('connect_error', (error) => {
-        console.error('Connection error:', error);
-        reject(error);
-    });
-
-    socket.on('error', (error) => {
-        console.error('Socket error:', error);
-        reject(error);
-    });
-    */
-
-	return socket;
 }

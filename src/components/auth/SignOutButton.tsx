@@ -1,4 +1,4 @@
-import { signOut } from '../../../auth';
+import { signOut } from '@/auth';
 import { Button, IconButton } from '@mui/material';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 
@@ -15,7 +15,11 @@ export async function SignOutButton(
 					await signOut({ redirectTo: '/login' });
 				}}
 			>
-				<Button endIcon={<LogoutRoundedIcon />} variant='contained' type='submit'>
+				<Button
+					endIcon={<LogoutRoundedIcon />}
+					variant='contained'
+					type='submit'
+				>
 					Log Out
 				</Button>
 			</form>

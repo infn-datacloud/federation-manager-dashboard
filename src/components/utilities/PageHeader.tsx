@@ -1,5 +1,6 @@
 import { Box, Typography } from '@mui/material';
 import page_styles from '@/app/page.module.css'
+import Image from 'next/image';
 
 export default function PageHeader() {
 
@@ -10,9 +11,10 @@ export default function PageHeader() {
             alignItems='center'
             marginTop='4em'
         >
-            <img
+            <Image
                 src='/logos/logo_INFN.png'
-                width='30%'
+                height={206}
+                width={400}
                 alt='Logo'
                 className={page_styles.logoImg}
             />

@@ -11,7 +11,8 @@
 
 @media only screen and (max-width: 768px) {
 	.logoImg {
-		width: 50%;
+		width: 200px;
+		height: auto;
 		margin-top: 3em;
 	}
 

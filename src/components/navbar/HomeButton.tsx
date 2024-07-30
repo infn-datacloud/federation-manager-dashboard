@@ -2,7 +2,8 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import Button from '@mui/material/Button';
+import { Button } from '@mui/material';
+import Image from 'next/image';
 
 import Typography from '@mui/material/Typography';
 
@@ -25,9 +26,10 @@ export default function HomeButton() {
 			sx={{ marginRight: 'auto' }}
 			className={styles.navbarLogo}
 			startIcon={
-				<img
+				<Image
 					src='/logos/infn_logo_white.png'
 					height={50}
+					width={82}
 					alt='Logo'
 					className={styles.navbarLogoImg}
 				/>

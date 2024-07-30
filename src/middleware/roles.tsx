@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useState } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { getRoles } from '@/middleware/connection';
 import Cookies from 'js-cookie';
 
@@ -56,7 +56,7 @@ export const useRoles = () => {
 				}
 			}
 		} catch (err) {
-			
+			console.error(err);
 		}
 	};
 
