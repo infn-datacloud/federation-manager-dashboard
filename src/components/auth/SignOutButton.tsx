@@ -1,41 +1,30 @@
-import { signOut } from '@/auth';
+'use client';
+
+import { signOut } from 'next-auth/react';
 import { Button, IconButton } from '@mui/material';
 import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 
-export async function SignOutButton(
+export function SignOutButton(
 	props: Readonly<{
 		text?: boolean;
 	}>
 ) {
 	if (props.text) {
 		return (
-			<form
-				action={async () => {
-					'use server';
-					await signOut({ redirectTo: '/login' });
-				}}
+			<Button
+				endIcon={<LogoutRoundedIcon />}
+				variant='contained'
+				title='Log out'
+				onClick={() => signOut()}
 			>
-				<Button
-					endIcon={<LogoutRoundedIcon />}
-					variant='contained'
-					type='submit'
-				>
-					Log Out
-				</Button>
-			</form>
+				Log Out
+			</Button>
 		);
 	} else {
 		return (
-			<form
-				action={async () => {
-					'use server';
-					await signOut({ redirectTo: '/login' });
-				}}
-			>
-				<IconButton title='Log out' type='submit'>
-					<LogoutRoundedIcon />
-				</IconButton>
-			</form>
+			<IconButton title='Log out' onClick={() => signOut()}>
+				<LogoutRoundedIcon />
+			</IconButton>
 		);
 	}
 }
