@@ -50,11 +50,11 @@ found at `.env.local`
 
 `AUTH_SECRET`: secret to encrypt session cookies (see below)
 
-`IAM_AUTHORITY_URL`: INDIGO IAM endpoint
-
 `IAM_CLIENT_ID`: INDIGO IAM client ID
 
 `IAM_CLIENT_SECRET`: INDIGO IAM client secret
+
+`IAM_AUTHORITY_URL`: INDIGO IAM endpoint
 
 `IAM_SCOPE`: must be exactly `profile openid email offline_access`
 
