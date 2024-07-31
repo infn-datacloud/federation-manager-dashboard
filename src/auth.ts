@@ -5,6 +5,7 @@ import NextAuth, { DefaultSession } from 'next-auth';
 declare module 'next-auth' {
 	interface Session extends DefaultSession {
 		accessToken: any;
+		expires: any;
 	}
 }
 
@@ -27,12 +28,17 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 	callbacks: {
 		async jwt({ token, account }) {
 			if (account) {
-				token.accessToken = account.access_token;
-			}
+				token.accessToken = account?.access_token;
+				token.expiresAt = account?.expires_at;
+            }
+
 			return token;
 		},
 		async session({ session, token }) {
-			session.accessToken = token.accessToken;
+			session.accessToken = token?.accessToken;
+
+			const expiration = Number(token?.expiresAt ?? 0);
+			session.expires = new Date(expiration * 1000);
 
 			return session;
 		},
