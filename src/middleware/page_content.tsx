@@ -6,6 +6,7 @@ import { SocketManagement } from '@/middleware/contextes/socket';
 import { connectToSiteTester } from '@/middleware/socketio_connections/site_tester';
 import Navbar from '@/components/navbar/Navbar';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { useSession } from 'next-auth/react';
 
 const theme = createTheme({
 	palette: {
@@ -24,6 +25,10 @@ export default function PageContent({
 	useRoles();
 	const roleCtx = useContext(RoleManagement);
 
+	/* Set token */
+	const session = useSession();
+	const token = session?.data?.accessToken;
+
 	/*  Set socket context */
 	const socketCtx = useContext(SocketManagement);
 	useEffect(() => {
@@ -34,15 +39,11 @@ export default function PageContent({
 
 		switch (roleCtx.currentRole) {
 			case 'site admin':
-				Promise.resolve(connectToSiteAdmin()).then((socket) => {
-					socketCtx.setSocket(socket);
-				});
+				socketCtx.setSocket(connectToSiteAdmin(token));
 				break;
 
 			case 'site tester':
-				Promise.resolve(connectToSiteTester()).then((socket) => {
-					socketCtx.setSocket(socket);
-				});
+				socketCtx.setSocket(connectToSiteTester(token));
 				break;
 		}
 	}, [roleCtx.currentRole]);

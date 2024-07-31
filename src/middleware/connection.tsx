@@ -4,7 +4,7 @@ import { auth } from '@/auth';
 
 export async function getRoles(): Promise<any> {
 	let session = await auth();
-	let token = (session as any)?.accessToken.toString();
+	let token = session?.accessToken;
 
 	if (session?.user) {
 		return fetch('http://localhost:8000/roles', {

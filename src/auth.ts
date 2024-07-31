@@ -1,5 +1,12 @@
-import NextAuth from 'next-auth';
 import type { OIDCConfig } from 'next-auth/providers';
+
+import NextAuth, { DefaultSession } from 'next-auth';
+
+declare module 'next-auth' {
+	interface Session extends DefaultSession {
+		accessToken: any;
+	}
+}
 
 const IamProvider: OIDCConfig<any> = {
 	id: 'indigo-iam',
@@ -18,11 +25,14 @@ const IamProvider: OIDCConfig<any> = {
 export const { handlers, signIn, signOut, auth } = NextAuth({
 	providers: [IamProvider],
 	callbacks: {
-		async jwt({ token, user, account }) {
-			return { ...token, ...account, ...user };
+		async jwt({ token, account }) {
+			if (account) {
+				token.accessToken = account.access_token;
+			}
+			return token;
 		},
 		async session({ session, token }) {
-			(session as any).accessToken = token.access_token;
+			session.accessToken = token.accessToken;
 
 			return session;
 		},

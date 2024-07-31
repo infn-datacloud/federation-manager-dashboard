@@ -17,6 +17,9 @@ import SocketContext from '@/middleware/contextes/socket';
 /* Page content management */
 import PageContent from '@/middleware/page_content';
 
+/* Session management client side */
+import { SessionProvider } from 'next-auth/react';
+
 export default function RootLayout({
 	children,
 }: Readonly<{
@@ -31,11 +34,13 @@ export default function RootLayout({
 				/>
 			</head>
 			<body>
-				<RolesContext>
-					<SocketContext>
-						<PageContent>{children}</PageContent>
-					</SocketContext>
-				</RolesContext>
+				<SessionProvider>
+					<RolesContext>
+						<SocketContext>
+							<PageContent>{children}</PageContent>
+						</SocketContext>
+					</RolesContext>
+				</SessionProvider>
 			</body>
 		</html>
 	);
