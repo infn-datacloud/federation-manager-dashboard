@@ -45,8 +45,8 @@ In the Scopes tab, assure that the following scopes are enabled:
 In the Grant Types tab, enable `authorization_code`, `client_credentials` and `refresh_token`.
 
 ## Configuration
-Before start the application, an environment file is needed. An example can be
-found at `.env.local`
+Before start the application, an environment file is needed. Create a `.env.local` file. An example can be
+found at `.env.example`
 
 `AUTH_SECRET`: secret to encrypt session cookies (see below)
 
