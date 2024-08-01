@@ -1,4 +1,4 @@
-import { auth, signOut } from '@/auth';
+import { auth } from '@/auth';
 import { NextResponse } from 'next/server';
 export const config = {
 	matcher:
@@ -19,10 +19,14 @@ export default auth((req) => {
 	const now = new Date();
 	const sessionExpired = expiration < now;
 
-	if (sessionExpired && req.nextUrl.pathname !== '/login') {
+	if (
+		sessionExpired &&
+		req.nextUrl.pathname !== '/login' &&
+		req.nextUrl.pathname !== '/logout'
+	) {
 		console.log('access keys expired, logging out');
-		signOut({ redirectTo: '/login' });
-		return;
+		const newUrl = new URL('/logout', req.nextUrl.origin);
+		return Response.redirect(newUrl);
 	}
 
 	return NextResponse.next();
