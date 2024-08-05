@@ -1,6 +1,6 @@
 'use client';
 
-import { Container, Typography, Box, Button, TextField } from '@mui/material';
+import { Container, Typography, Box, Button, Skeleton } from '@mui/material';
 import NotInterestedIcon from '@mui/icons-material/NotInterested';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
@@ -8,28 +8,70 @@ import page_styles from '@/app/page.module.css';
 import styles from './request.module.css';
 
 import { useRouter } from 'next/navigation';
-import { useEffect, useContext } from 'react';
+import { useEffect, useContext, useState } from 'react';
 import { SocketManagement } from '@/middleware/contextes/socket';
+import CreateForm from '@/components/form/Form';
+import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 
 export default function Request() {
 	const router = useRouter();
 	const socketCtx = useContext(SocketManagement);
+	const [formData, setFormData] = useState<any>(null);
 
-	const handleCancelClick = () => {
-		router.push('/');
-	};
+	let description;
+	let body;
+	let buttons;
+
+	if (formData == null) {
+		description = <Skeleton variant='text' />;
+
+		body = (
+			<Skeleton
+				variant='rectangular'
+				height={250}
+				sx={{ borderRadius: '15px' }}
+			/>
+		);
+
+		buttons = (
+			<Box
+				sx={{
+					marginTop: '2em',
+					display: 'flex',
+					justifyContent: 'space-between',
+				}}
+			>
+				<Skeleton
+					variant='rectangular'
+					height={50}
+					width={130}
+					sx={{ borderRadius: '25px' }}
+				/>
+				<Skeleton
+					variant='rectangular'
+					height={50}
+					width={130}
+					sx={{ borderRadius: '25px' }}
+				/>
+			</Box>
+		);
+	} else {
+		body = <CreateForm structure={formData.items.properties} onChange={() => {}} value='' />;
+		buttons = getButtons(router);
+		description = formData.description;
+	}
 
 	useEffect(() => {
 		if (socketCtx.socket !== null) {
 			socketCtx.socket.on('get_form', (res: any) => {
-				console.log('Form', res);
+				setFormData(res.provider);
 			});
-			
+
 			socketCtx.socket.emit('get_form');
 
 			return () => {
 				socketCtx.socket.off('get_form');
-			}
+			};
 		}
 	}, [socketCtx.socket]);
 
@@ -47,7 +89,7 @@ export default function Request() {
 						flexDirection='column'
 						alignItems='center'
 					>
-						<Typography variant='h4'>
+						<Typography variant='h4' textAlign='center'>
 							New Provider Request
 						</Typography>
 
@@ -57,10 +99,7 @@ export default function Request() {
 							width='50%'
 							className={styles.requestText}
 						>
-							Lorem ipsum dolor sit amet, consectetur
-							adipiscing elit. Nunc in tempus lacus. Nunc urna
-							nunc, condimentum sit amet egestas a, vestibulum
-							tempus felis. Suspendisse nec purus lacus.
+							{description}
 						</Typography>
 					</Box>
 
@@ -74,57 +113,51 @@ export default function Request() {
 						noValidate
 						autoComplete='off'
 					>
-						<TextField
-							label='Title'
-							variant='standard'
-							color='primary'
-							fullWidth
-							autoFocus
-						/>
-						<br />
-						<TextField
-							label='Request description'
-							variant='standard'
-							color='primary'
-							fullWidth
-							multiline
-							rows={5}
-						/>
-						<br />
-						<br />
-						<Box display='flex' justifyContent='space-between'>
-							<Button
-								variant='contained'
-								color='error'
-								sx={{
-									borderRadius: '25px',
-									fontWeight: 'bold',
-								}}
-								endIcon={<NotInterestedIcon />}
-								onClick={handleCancelClick}
-								size='large'
-							>
-								Cancel
-							</Button>
-							<Button
-								variant='contained'
-								sx={{
-									borderRadius: '25px',
-									fontWeight: 'bold',
-									backgroundColor: '#002A48',
-									'&:hover': {
-										backgroundColor: '#012d4d',
-									},
-								}}
-								endIcon={<AddRoundedIcon />}
-								size='large'
-							>
-								Create
-							</Button>
-						</Box>
+						{body}
+
+						{buttons}
 					</Box>
 				</Box>
 			</Container>
 		</>
+	);
+}
+
+function getButtons(router: AppRouterInstance | string[]) {
+	const handleCancelClick = () => {
+		router.push('/');
+	};
+
+	return (
+		<Box display='flex' justifyContent='space-between' marginTop='2em'>
+			<Button
+				variant='contained'
+				color='error'
+				sx={{
+					borderRadius: '25px',
+					fontWeight: 'bold',
+				}}
+				endIcon={<NotInterestedIcon />}
+				onClick={handleCancelClick}
+				size='large'
+			>
+				Cancel
+			</Button>
+			<Button
+				variant='contained'
+				sx={{
+					borderRadius: '25px',
+					fontWeight: 'bold',
+					backgroundColor: '#002A48',
+					'&:hover': {
+						backgroundColor: '#012d4d',
+					},
+				}}
+				endIcon={<AddRoundedIcon />}
+				size='large'
+			>
+				Create
+			</Button>
+		</Box>
 	);
 }

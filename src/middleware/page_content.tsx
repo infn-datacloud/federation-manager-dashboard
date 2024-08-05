@@ -14,6 +14,39 @@ const theme = createTheme({
 			main: '#162D4D',
 		},
 	},
+	components: {
+		MuiButton: {
+			styleOverrides: {
+				root: {
+					borderRadius: '25px'
+				}
+			},
+		},
+		MuiInputBase: {
+			styleOverrides: {
+				root: {
+					borderRadius: '25px!important'
+				},
+				input: {
+					padding: '16.5px 24px!important'
+				}
+			}
+		},
+		MuiOutlinedInput: {
+			styleOverrides: {
+				notchedOutline: {
+					padding: '16px!important'
+				}
+			}
+		},
+		MuiFormLabel: {
+			styleOverrides: {
+				root: {
+					left: '9px!important'
+				},
+			}
+		},
+	},
 });
 
 export default function PageContent({
