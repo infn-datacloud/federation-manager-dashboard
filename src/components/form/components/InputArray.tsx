@@ -122,7 +122,7 @@ export default function InputArray(
 	const defaultObj = {
 		type: props.elem.items.type,
 		format: props.elem.items.format,
-		items: {...props.elem.items},
+		items: props.elem.items,
 		value: '',
 		identifier: '',
 	};
