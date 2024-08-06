@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import Box from '@mui/material/Box';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
@@ -15,9 +15,10 @@ interface InputSelectObject {
 export default function InputSelect(
 	props: Readonly<{
 		elem: InputSelectObject;
+		name: string;
 	}>
 ) {
-	const [value, setValue] = React.useState(props.elem.default);
+	const [value, setValue] = useState(props.elem.default);
 	let items = [];
 
 	const handleChange = (e: SelectChangeEvent) => {
@@ -33,13 +34,14 @@ export default function InputSelect(
 	}
 
 	return (
-		<Box sx={{ minWidth: 120 }}>
-			<FormControl fullWidth>
+		<Box sx={{ minWidth: 120, margin: '0 0 1em 0' }}>
+			<FormControl fullWidth sx={{ margin: '0' }}>
 				<InputLabel>{props.elem.description}</InputLabel>
 				<Select
 					value={value}
 					label={props.elem.description}
 					onChange={handleChange}
+					name={props.name}
 				>
 					{items}
 				</Select>

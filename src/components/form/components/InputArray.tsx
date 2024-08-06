@@ -1,9 +1,10 @@
-import { Box, Button, IconButton, TextField, Typography } from '@mui/material';
+import { Box, Button, IconButton, Typography } from '@mui/material';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import CreateForm from '../Form';
 
 import { useEffect, useState } from 'react';
+import InputText from './InputText';
 
 interface InputArrayObject {
 	description: string;
@@ -15,28 +16,26 @@ interface InputArrayObject {
 function SingleItem(
 	props: Readonly<{
 		type: any;
-		format: any;
-		value: any;
 		onChange: any;
 		items: any;
-		identifier: any;
 		onRemove: any;
 		canRemove: boolean;
+		name: string;
+		value: string;
 	}>
 ) {
 	if (props.items.type == 'string') {
 		return (
-			<Box display='flex' alignItems='center'>
-				<TextField
-					label='test1'
-					type='text'
-					variant='outlined'
-					color='primary'
-					value={props.value}
-					onChange={(e) => {
-						props.onChange(e, e.target.value);
+			<Box display='flex' alignItems='center' sx={{ position: 'relative' }}>
+				<InputText
+					name={props.name}
+					elem={{
+						description: props.items.description,
+						required: props.items.required,
+						format: props.items.format,
 					}}
-					fullWidth
+					onChange={props.onChange}
+					value={props.value}
 				/>
 				<Box
 					sx={{
@@ -44,6 +43,9 @@ function SingleItem(
 						border: '1px solid #d32f2f',
 						borderRadius: '50%',
 						display: !props.canRemove ? 'none' : undefined,
+						position: 'absolute',
+						right: '0px',
+						top: '-10px',
 					}}
 				>
 					<IconButton
@@ -64,8 +66,8 @@ function SingleItem(
 				sx={{
 					border: '1px solid #162d4d99',
 					borderRadius: '25px',
-					padding: '1em',
-					margin: '24px 8px 0',
+					padding: '1em 1em 0 1em',
+					margin: '0 0 1em 0',
 					position: 'relative',
 				}}
 			>
@@ -77,7 +79,7 @@ function SingleItem(
 						alignItems: 'center',
 						justifyContent: 'space-between',
 						height: '28px',
-						width: '95%',
+						width: '98%',
 						position: 'absolute',
 						top: '-14px',
 					}}
@@ -107,7 +109,6 @@ function SingleItem(
 				<CreateForm
 					structure={props.items.properties}
 					onChange={props.onChange}
-					value={props.value}
 				/>
 			</Box>
 		);
@@ -117,14 +118,17 @@ function SingleItem(
 export default function InputArray(
 	props: Readonly<{
 		elem: InputArrayObject;
+		name: string;
 	}>
 ) {
+	const tempItems = JSON.parse(JSON.stringify(props.elem.items));
+
 	const defaultObj = {
 		type: props.elem.items.type,
 		format: props.elem.items.format,
-		items: props.elem.items,
+		items: tempItems,
 		value: '',
-		identifier: '',
+		index: 0
 	};
 
 	let itemsList = [];
@@ -135,50 +139,64 @@ export default function InputArray(
 	const [items, setItems] = useState(itemsList);
 	const [canRemove, setCanRemove] = useState(false);
 
-	const handleChange = (e: any, idx: number, value: any) => {
+	const handleChange = (e: any, index: number) => {
 		let newItems = [...items];
-		if (newItems[idx].items.type == 'string') {
-			newItems[idx].value = value;
+		let name = e.target.name;
+		let value = e.target.value;
+
+		if (newItems[index].items.type == 'string') {
+			newItems[index].value = value;
+		} else {
+			newItems[index].items.properties[name].value = value;
+		}
+
+		setItems(newItems);
+
+		/* let newItems = [...items];
+		if (newItems[index].items.type == 'string') {
+			newItems[index].value = value;
 		} else {
 			let name = e.target.name.split('_');
 			name.pop();
 			name = name.join('_');
 
-			let elem = newItems[idx].items.properties[name];
+			let elem = newItems[index].items.properties[name];
 			if (elem) {
 				elem.value = value;
 			}
 		}
 
-		setItems(newItems);
+		setItems(newItems); */
 	};
 
-	const handleRemove = (idx: number) => {
+	const handleRemove = (index: number) => {
 		if (canRemove) {
 			let newItems = [...items];
-			newItems.splice(idx, 1);
+			newItems.splice(index, 1);
 			setItems(newItems);
 		}
 	};
 
 	useEffect(() => {
 		setCanRemove(items.length > props.elem.minItems);
+
+		items.map((item, i) => {
+			item.index = i;
+			return item;
+		})
+
+		console.log(items)
 	}, [items]);
 
 	let components = [];
 
 	for (let i in items) {
-		items[i].identifier = i;
-
-		for (let key in items[i].items.properties) {
-			items[i].items.properties[key].identifier = i;
-		}
-
 		components.push(
 			<SingleItem
 				key={i}
-				onChange={(e: any, value: any) =>
-					handleChange(e, Number(i), value)
+				name={props.name + '_' + i}
+				onChange={(e: any) =>
+					handleChange(e, Number(i))
 				}
 				onRemove={() => handleRemove(Number(i))}
 				canRemove={canRemove}
@@ -187,15 +205,13 @@ export default function InputArray(
 		);
 	}
 
-	//console.log(items);
-
 	return (
 		<Box
 			sx={{
 				border: '2px solid #162d4d99',
 				borderRadius: '25px',
-				padding: '1em',
-				margin: '2em 0 1.5em 0',
+				padding: '1.5em 1em 1em',
+				margin: '0 0 1em 0',
 				position: 'relative',
 			}}
 		>
@@ -216,13 +232,9 @@ export default function InputArray(
 				<Button
 					variant='outlined'
 					startIcon={<AddRoundedIcon />}
-					sx={{ margin: '1em 8px 0' }}
 					onClick={() => {
-						console.log(items)
 						let newItems = [...items];
-
-						newItems.push({...defaultObj});
-						console.log(newItems)
+						newItems.push({ ...defaultObj });
 						setItems(newItems);
 					}}
 				>

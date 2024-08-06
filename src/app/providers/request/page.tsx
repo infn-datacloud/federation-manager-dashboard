@@ -56,7 +56,7 @@ export default function Request() {
 			</Box>
 		);
 	} else {
-		body = <CreateForm structure={formData.items.properties} onChange={() => {}} value='' />;
+		body = <CreateForm structure={formData.items.properties} />;
 		buttons = getButtons(router);
 		description = formData.description;
 	}

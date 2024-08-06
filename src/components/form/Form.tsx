@@ -5,8 +5,7 @@ import InputArray from './components/InputArray';
 
 export default function CreateForm(props: {
 	structure: any;
-	onChange: any;
-	value: string;
+	onChange?: () => {};
 }) {
 	let form = [];
 
@@ -18,34 +17,28 @@ export default function CreateForm(props: {
 		let jsxElement;
 		switch (elem.type) {
 			case 'string':
-				jsxElement = (
-					<InputText
-						key={key + '_' + elem.identifier}
-						name={key + '_' + elem.identifier}
-						elem={elem}
-						onChange={props.onChange}
-						value={props.value}
-					/>
-				);
+				jsxElement = <InputText key={key} name={key} elem={elem} onChange={props.onChange} value={elem.value} />;
 				break;
 
 			case 'select':
-				jsxElement = <InputSelect key={key} elem={elem} />;
+				jsxElement = <InputSelect key={key} name={key} elem={elem} />;
 				break;
 
 			case 'boolean':
-				jsxElement = <InputCheckbox key={key} elem={elem} />;
+				jsxElement = <InputCheckbox key={key} name={key} elem={elem} />;
 				break;
 
 			case 'array':
-				jsxElement = <InputArray key={key} elem={elem} />;
+				jsxElement = <InputArray key={key} name={key} elem={elem} />;
 				break;
 
 			case 'object':
 				break;
 		}
 
-		form.push(jsxElement);
+		if (jsxElement) {
+			form.push(jsxElement);
+		}
 	}
 
 	return form;
