@@ -10,7 +10,7 @@ export default function InputText(props: Readonly<{
 	elem: InputTextObject
 	value: string
 	name: string
-	onChange: (value: string) => void
+	onChange: (e: any, value: string) => void
 }>) {
 	return (
 		<TextField

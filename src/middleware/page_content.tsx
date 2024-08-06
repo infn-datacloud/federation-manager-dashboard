@@ -46,6 +46,13 @@ const theme = createTheme({
 				},
 			}
 		},
+		MuiFormControl: {
+			styleOverrides: {
+				root: {
+					marginTop: '1em'
+				}
+			}
+		},
 	},
 });
 

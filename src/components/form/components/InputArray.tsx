@@ -187,7 +187,7 @@ export default function InputArray(
 		);
 	}
 
-	console.log(items);
+	//console.log(items);
 
 	return (
 		<Box
