@@ -122,7 +122,7 @@ export default function InputArray(
 	const defaultObj = {
 		type: props.elem.items.type,
 		format: props.elem.items.format,
-		items: props.elem.items,
+		items: {...props.elem.items},
 		value: '',
 		identifier: '',
 	};
@@ -170,7 +170,7 @@ export default function InputArray(
 	for (let i in items) {
 		items[i].identifier = i;
 
-		for (const key in items[i].items.properties) {
+		for (let key in items[i].items.properties) {
 			items[i].items.properties[key].identifier = i;
 		}
 
@@ -218,8 +218,11 @@ export default function InputArray(
 					startIcon={<AddRoundedIcon />}
 					sx={{ margin: '1em 8px 0' }}
 					onClick={() => {
+						console.log(items)
 						let newItems = [...items];
-						newItems.push(defaultObj);
+
+						newItems.push({...defaultObj});
+						console.log(newItems)
 						setItems(newItems);
 					}}
 				>
