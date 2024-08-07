@@ -121,26 +121,26 @@ export default function InputArray(
 		name: string;
 	}>
 ) {
-	const tempItems = JSON.parse(JSON.stringify(props.elem.items));
+	let newItems = JSON.parse(JSON.stringify(props.elem.items));
 
 	const defaultObj = {
 		type: props.elem.items.type,
 		format: props.elem.items.format,
-		items: tempItems,
+		items: newItems,
 		value: '',
 		index: 0
 	};
-
+	
 	let itemsList = [];
 	for (let i = 0; i < props.elem.minItems; i++) {
-		itemsList.push(defaultObj);
+		itemsList.push({...JSON.parse(JSON.stringify(defaultObj)), index: i});
 	}
 
 	const [items, setItems] = useState(itemsList);
 	const [canRemove, setCanRemove] = useState(false);
 
 	const handleChange = (e: any, index: number) => {
-		let newItems = [...items];
+		let newItems = JSON.parse(JSON.stringify(items));
 		let name = e.target.name;
 		let value = e.target.value;
 
@@ -171,7 +171,7 @@ export default function InputArray(
 
 	const handleRemove = (index: number) => {
 		if (canRemove) {
-			let newItems = [...items];
+			let newItems = JSON.parse(JSON.stringify(items));
 			newItems.splice(index, 1);
 			setItems(newItems);
 		}
@@ -182,10 +182,8 @@ export default function InputArray(
 
 		items.map((item, i) => {
 			item.index = i;
-			return item;
+			return JSON.parse(JSON.stringify(item));
 		})
-
-		console.log(items)
 	}, [items]);
 
 	let components = [];
@@ -200,7 +198,7 @@ export default function InputArray(
 				}
 				onRemove={() => handleRemove(Number(i))}
 				canRemove={canRemove}
-				{...items[i]}
+				{...JSON.parse(JSON.stringify(items[i]))}
 			/>
 		);
 	}
@@ -233,7 +231,7 @@ export default function InputArray(
 					variant='outlined'
 					startIcon={<AddRoundedIcon />}
 					onClick={() => {
-						let newItems = [...items];
+						let newItems = JSON.parse(JSON.stringify(items));
 						newItems.push({ ...defaultObj });
 						setItems(newItems);
 					}}
