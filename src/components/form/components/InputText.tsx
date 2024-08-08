@@ -16,6 +16,12 @@ export default function InputText(
 	}>
 ) {
 	const [value, setValue] = useState('');
+	let tempValue = props.value ?? '';
+
+	// call this set only if the parent is a InputArray (props.onChange !== undefined condition) 
+	if(tempValue !== value && props.onChange !== undefined) {
+		setValue(tempValue)
+	}
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		setValue(e.target.value);
