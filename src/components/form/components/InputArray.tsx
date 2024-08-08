@@ -185,9 +185,9 @@ export default function InputArray(
 			return JSON.parse(JSON.stringify(item));
 		})
 	}, [items]);
-
+	
 	let components = [];
-
+	
 	for (let i in items) {
 		components.push(
 			<SingleItem

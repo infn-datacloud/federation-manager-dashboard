@@ -16,11 +16,6 @@ export default function InputText(
 	}>
 ) {
 	const [value, setValue] = useState('');
-	let tempValue = props.value ?? '';
-
-	if(tempValue !== value) {
-		setValue(tempValue)
-	}
 
 	const handleChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
 		setValue(e.target.value);

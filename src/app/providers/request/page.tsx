@@ -105,18 +105,11 @@ export default function Request() {
 
 					<br />
 
-					<Box
-						component='form'
-						sx={{
-							'& .MuiTextField-root': { m: 1 },
-						}}
-						noValidate
-						autoComplete='off'
-					>
+					<form method='post' action='/'>
 						{body}
 
 						{buttons}
-					</Box>
+					</form>
 				</Box>
 			</Container>
 		</>
@@ -145,6 +138,7 @@ function getButtons(router: AppRouterInstance | string[]) {
 			</Button>
 			<Button
 				variant='contained'
+				type='submit'
 				sx={{
 					borderRadius: '25px',
 					fontWeight: 'bold',

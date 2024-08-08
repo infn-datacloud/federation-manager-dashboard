@@ -10,14 +10,22 @@ export default function CreateForm(props: {
 	let form = [];
 
 	/* Iterate every element in the structure */
-	for (const key in props.structure) {
+	for (let key in props.structure) {
 		let elem = props.structure[key];
 
 		/* Create the element based on type */
 		let jsxElement;
 		switch (elem.type) {
 			case 'string':
-				jsxElement = <InputText key={key} name={key} elem={elem} onChange={props.onChange} value={elem.value} />;
+				jsxElement = (
+					<InputText
+						key={key}
+						name={key}
+						elem={elem}
+						onChange={props.onChange}
+						value={elem.value}
+					/>
+				);
 				break;
 
 			case 'select':
