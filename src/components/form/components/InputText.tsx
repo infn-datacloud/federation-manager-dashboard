@@ -12,6 +12,7 @@ export default function InputText(
 		elem: InputTextObject;
 		name: string;
 		value?: string;
+		type?: string; // default is 'text'
 		onChange?: (e: any) => void
 	}>
 ) {
@@ -34,7 +35,7 @@ export default function InputText(
 		<TextField
 			label={props.elem?.description ?? formatUppercase ?? ''}
 			required={props.elem?.required ?? false}
-			type='text'
+			type={props.type ? props.type : 'text'}
 			variant='outlined'
 			color='primary'
 			sx={{ margin: '0 0 1em 0!important' }}

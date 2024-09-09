@@ -2,6 +2,7 @@ import InputText from './components/InputText';
 import InputSelect from './components/InputSelect';
 import InputCheckbox from './components/InputCheckbox';
 import InputArray from './components/InputArray';
+import InputObject from './components/InputObject';
 
 export default function CreateForm(props: {
 	structure: any;
@@ -27,6 +28,19 @@ export default function CreateForm(props: {
 					/>
 				);
 				break;
+			
+			case 'number':
+				jsxElement = (
+					<InputText
+						key={key}
+						name={key}
+						elem={elem}
+						onChange={props.onChange}
+						value={elem.value}
+						type='number'
+					/>
+				);
+				break;
 
 			case 'select':
 				jsxElement = <InputSelect key={key} name={key} elem={elem} />;
@@ -41,6 +55,7 @@ export default function CreateForm(props: {
 				break;
 
 			case 'object':
+				jsxElement = <InputObject key={key} elem={elem.properties} description={elem.description}/>
 				break;
 		}
 

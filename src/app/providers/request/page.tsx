@@ -18,6 +18,28 @@ export default function Request() {
 	const socketCtx = useContext(SocketManagement);
 	const [formData, setFormData] = useState<any>(null);
 
+	const handleSubmit = async (event: any) => {
+		event.preventDefault();
+
+		const submittedFormData = new FormData(event.target);
+		const data = Object.fromEntries(submittedFormData.entries());
+
+		console.log('Form Data:', data);
+
+		const res = await fetch('/api/submit', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+			body: JSON.stringify(data),
+		});
+
+		console.log('Initial data', formData.items.properties)
+
+		// const result = await res.json();
+		// console.log('Response:', result);
+	};
+
 	let description;
 	let body;
 	let buttons;
@@ -105,7 +127,7 @@ export default function Request() {
 
 					<br />
 
-					<form method='post' action='/'>
+					<form onSubmit={handleSubmit}>
 						{body}
 
 						{buttons}

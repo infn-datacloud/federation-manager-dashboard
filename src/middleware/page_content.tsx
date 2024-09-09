@@ -25,7 +25,8 @@ const theme = createTheme({
 		MuiInputBase: {
 			styleOverrides: {
 				root: {
-					borderRadius: '25px!important'
+					borderRadius: '25px!important',
+					background: 'white'
 				},
 				input: {
 					padding: '16.5px 24px!important'
