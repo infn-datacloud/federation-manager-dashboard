@@ -24,6 +24,9 @@ function SingleItem(
 		value: string;
 	}>
 ) {
+
+	//console.log(props)
+
 	if (props.items.type == 'string') {
 		return (
 			<Box display='flex' alignItems='center' sx={{ position: 'relative' }}>
@@ -107,6 +110,7 @@ function SingleItem(
 					</Box>
 				</Typography>
 				<CreateForm
+					name={props.name}
 					structure={props.items.properties}
 					onChange={props.onChange}
 				/>
@@ -147,26 +151,11 @@ export default function InputArray(
 		if (newItems[index].items.type == 'string') {
 			newItems[index].value = value;
 		} else {
-			newItems[index].items.properties[name].value = value;
+			let generic_name = name.split('+').pop();
+			newItems[index].items.properties[generic_name].value = value;
 		}
 
 		setItems(newItems);
-
-		/* let newItems = [...items];
-		if (newItems[index].items.type == 'string') {
-			newItems[index].value = value;
-		} else {
-			let name = e.target.name.split('_');
-			name.pop();
-			name = name.join('_');
-
-			let elem = newItems[index].items.properties[name];
-			if (elem) {
-				elem.value = value;
-			}
-		}
-
-		setItems(newItems); */
 	};
 
 	const handleRemove = (index: number) => {
@@ -192,7 +181,7 @@ export default function InputArray(
 		components.push(
 			<SingleItem
 				key={i}
-				name={props.name + '_' + i}
+				name={props.name +'+'+ i}
 				onChange={(e: any) =>
 					handleChange(e, Number(i))
 				}

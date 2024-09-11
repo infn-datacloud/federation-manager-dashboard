@@ -4,11 +4,10 @@ import CreateForm from '../Form';
 export default function InputObject(
 	props: Readonly<{
 		elem: any;
+		name: string;
 		description: string;
 	}>
 ) {
-	console.log(props.description, props.elem);
-
 	if (Object.keys(props.elem).length <= 0) {
 		return;
 	}
@@ -25,13 +24,13 @@ export default function InputObject(
 			<Typography
 				variant='subtitle2'
 				sx={{
-					marginBottom: '1em'
+					marginBottom: '1em',
 				}}
 			>
 				{props.description}
 			</Typography>
 			<Box>
-				<CreateForm structure={props.elem} />
+				<CreateForm structure={props.elem} name={props.name} />
 			</Box>
 		</Box>
 	);

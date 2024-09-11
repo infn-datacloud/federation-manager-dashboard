@@ -12,6 +12,7 @@ import { useEffect, useContext, useState } from 'react';
 import { SocketManagement } from '@/middleware/contextes/socket';
 import CreateForm from '@/components/form/Form';
 import { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
+import dataFormatter from './dataFormatter';
 
 export default function Request() {
 	const router = useRouter();
@@ -22,9 +23,11 @@ export default function Request() {
 		event.preventDefault();
 
 		const submittedFormData = new FormData(event.target);
-		const data = Object.fromEntries(submittedFormData.entries());
+		const data: any = Object.fromEntries(submittedFormData.entries());
+		
+		const formattedData = dataFormatter(data);
 
-		console.log('Form Data:', data);
+		console.log('Form Data:', formattedData, data);
 
 		const res = await fetch('/api/submit', {
 			method: 'POST',
@@ -33,8 +36,6 @@ export default function Request() {
 			},
 			body: JSON.stringify(data),
 		});
-
-		console.log('Initial data', formData.items.properties)
 
 		// const result = await res.json();
 		// console.log('Response:', result);
