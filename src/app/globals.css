@@ -43,16 +43,22 @@
   }
 }
 
+@layer utilities {
+  .btn-bold {
+    @apply btn font-bold uppercase border-3;
+  }
+}
+
 @utility btn {
-  @apply flex min-w-fit gap-2 rounded-md p-1 px-2 text-base font-medium text-nowrap transition ease-out dark:font-normal;
+  @apply flex min-w-fit gap-2 p-1 cursor-pointer rounded-4xl px-5 text-base font-medium text-nowrap transition ease-out dark:font-normal;
 }
 
 @utility btn-primary {
-  @apply btn text-secondary disabled:border-primary/50 disabled:bg-primary/50 dark:border-secondary/30 dark:text-secondary border bg-slate-700 hover:bg-slate-600 active:bg-slate-800 dark:border-none dark:bg-sky-600 dark:hover:bg-sky-700 dark:disabled:bg-sky-600/30 dark:disabled:text-white/40;
+  @apply btn text-secondary disabled:border-primary/50 disabled:bg-primary/50 dark:border-secondary/30 dark:text-secondary border bg-infn hover:bg-infn-hover active:bg-infn/85 dark:border-none dark:bg-sky-600 dark:hover:bg-sky-700 dark:disabled:bg-sky-600/30 dark:disabled:text-white/40;
 }
 
 @utility btn-secondary {
-  @apply btn border-primary/30 text-primary hover:bg-primary/5 disabled:border-primary/50 disabled:bg-secondary/50 disabled:text-primary/50 dark:border-secondary/20 dark:text-secondary/90 active:bg-primary/10 dark:disabled:bg-light-gray/30 dark:disabled:text-secondary/50 border bg-gray-100 dark:bg-slate-700 dark:hover:bg-slate-600 dark:active:bg-slate-500;
+  @apply btn border-infn hover:bg-infn hover:text-secondary active:bg-infn/85 disabled:border-primary/50 disabled:bg-secondary/50 disabled:text-primary/50 dark:border-secondary/20 dark:text-secondary/90 dark:disabled:bg-light-gray/30 dark:disabled:text-secondary/50 border dark:bg-slate-700 dark:hover:bg-slate-600 dark:active:bg-slate-500;
 }
 
 @utility btn-tertiary {
@@ -64,7 +70,7 @@
 }
 
 @utility btn-danger-secondary {
-  @apply btn border-danger bg-secondary text-danger hover:bg-danger hover:text-secondary disabled:border-danger/50 disabled:hover:bg-danger/50 dark:bg-primary border;
+  @apply btn border-danger text-danger hover:bg-danger hover:text-secondary disabled:border-danger/50 disabled:hover:bg-danger/50 dark:bg-primary border;
 }
 
 @utility btn-danger-tertiary {
@@ -81,4 +87,8 @@
 
 @utility panel {
   @apply dark:bg-dark border-light-gray rounded-lg bg-gray-50 p-4 shadow-md sm:p-8 dark:border dark:border-slate-600;
+}
+
+html {
+  color: var(--color-infn);
 }
