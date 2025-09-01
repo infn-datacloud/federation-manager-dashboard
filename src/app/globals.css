@@ -47,6 +47,14 @@
   .btn-bold {
     @apply btn font-bold uppercase border-3;
   }
+
+  .box {
+    @apply bg-white p-8 shadow-[-3px_3px_8px_rgba(0,0,0,0.1)] rounded-3xl mt-6;
+  }
+
+  .clickable {
+    @apply cursor-pointer transform transition-transform duration-200 hover:scale-105 pointer-events-auto;
+  }
 }
 
 @utility btn {

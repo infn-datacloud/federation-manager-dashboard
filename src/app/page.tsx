@@ -8,11 +8,11 @@ export default function Home() {
 			<Header
 				logo='/logos/infn_logo.png'
 				title='Federation Manager'
-				subtitle='Federation Manager: seamlessly integrating providers and communities into DataCloud with simplicity, security, and automated resource management.'
+				subtitle='Seamlessly integrating providers and communities into DataCloud with simplicity, security, and automated resource management.'
 			/>
 			<Box
 				title='Providers'
-				subtitle='Short definition of Providers'
+				subtitle='Logical resource collector with zones, projects, quotas, and IdPs'
 				type='small'
 				btnText='Show All'
 				btnHref='/providers'
@@ -20,7 +20,7 @@ export default function Home() {
 			/>
 			<Box
 				title='Identity Providers'
-				subtitle='Short definition of Identity Providers'
+				subtitle='Service that authenticates users and issues trusted credentials'
 				type='small'
 				btnText='Show All'
 				btnHref='/idps'
@@ -28,7 +28,7 @@ export default function Home() {
 			/>
 			<Box
 				title='SLAs'
-				subtitle='Short definition of SLAs'
+				subtitle='Document formalizing resource usage agreement'
 				type='small'
 				btnText='Show All'
 				btnHref='/slas'
