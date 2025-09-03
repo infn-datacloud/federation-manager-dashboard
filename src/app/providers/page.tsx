@@ -3,20 +3,15 @@
 import { Button } from '@/components/buttons';
 import Header from '@/components/header';
 import List from '@/components/list';
-import { Modal, ModalBody, ModalFooter } from '@/components/modal';
+import { Modal, ModalBody } from '@/components/modal';
 import { useState } from 'react';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import {
 	Checkbox,
-	Description,
-	DropdownList,
 	Field,
 	Form,
-	Label,
-	Select,
-	SelectOption,
 } from '@/components/form';
-import { Input, InputList, InputSearch } from '@/components/inputs';
+import { Input, InputList } from '@/components/inputs';
 
 export default function Providers() {
 	const items = [
@@ -141,8 +136,8 @@ export default function Providers() {
 				}}
 				title={
 					<div className='flex items-center'>
-						<PlusIcon className='size-10' />
-						&nbsp;Create Provider
+						<PlusIcon className='size-8' />
+						&nbsp;Create New Provider
 					</div>
 				}
 			>
@@ -202,7 +197,7 @@ export default function Providers() {
 								originalItems={[]}
 							></InputList>
 						</Field>
-						<div className='flex justify-between w-full pt-8'>
+						<div className='flex justify-between w-full pt-4'>
 							<Button
 								className='btn btn-bold btn-danger'
 								onClick={() => {
