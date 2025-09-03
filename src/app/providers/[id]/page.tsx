@@ -1,9 +1,7 @@
-interface ProviderPageProps {
-	params: { id: string };
-}
+type ProviderPageProps = Promise<{ id: string }>;
 
-export default function Provider({ params }: ProviderPageProps) {
-	const { id } = params;
-    
+export  default async function Provider({ params }: { params: ProviderPageProps }) {
+	const { id } = await params;
+
 	return <div>Provider Page {id}</div>;
 }
