@@ -149,18 +149,37 @@ export default function Providers() {
 				<ModalBody>
 					<Form>
 						<Field>
-							<Input label='Name' name='name' required />
+							<Input
+								label='Name'
+								name='name'
+								placeholder='Provider Example'
+								required
+							/>
 						</Field>
 						<Field>
-							<Input label='Auth URL' name='auth-url' required />
+							<Input
+								label='Auth URL'
+								name='auth-url'
+								placeholder='https://auth.example.infn.it'
+								required
+							/>
 						</Field>
 						<Field>
 							<Checkbox name='checkbox' label='Is public' />
 						</Field>
 						<Field>
+							<Input
+								label='Provider type'
+								name='provider-type'
+								placeholder='OpenStack'
+								required
+							/>
+						</Field>
+						<Field>
 							<InputList
 								label='Image tags'
 								name='image-tags'
+								placeholder='infn-cloud'
 								required
 								originalItems={[]}
 							></InputList>
@@ -169,6 +188,7 @@ export default function Providers() {
 							<InputList
 								label='Network tags'
 								name='network-tags'
+								placeholder='infn-cloud'
 								required
 								originalItems={[]}
 							></InputList>
@@ -177,6 +197,7 @@ export default function Providers() {
 							<InputList
 								label='Support Emails'
 								name='support-emails'
+								placeholder='example@infn.it'
 								required
 								originalItems={[]}
 							></InputList>
