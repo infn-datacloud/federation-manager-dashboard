@@ -219,9 +219,9 @@ export default function ProviderCarousel() {
 
 						{/* IDP */}
 						<div className='w-full mt-12 mb-8'>
-							<div className='flex flex-col md:flex-row justify-between items-start'>
-								<div className='flex items-center text-2xl font-black uppercase'>
-									<IdentificationIcon className='size-8' />
+							<div className='flex flex-col md:flex-row justify-between items-start md:items-center'>
+								<div className='flex items-center font-black uppercase'>
+									<IdentificationIcon className='size-6' />
 									&nbsp;Identity Providers
 								</div>
 
@@ -260,9 +260,9 @@ export default function ProviderCarousel() {
 
 						{/* Regions */}
 						<div className='w-full mt-12 mb-8'>
-							<div className='flex flex-col md:flex-row justify-between items-start'>
-								<div className='flex items-center text-2xl font-black uppercase'>
-									<MapIcon className='size-8' />
+							<div className='flex flex-col md:flex-row justify-between items-start md:items-center'>
+								<div className='flex items-center font-black uppercase'>
+									<MapIcon className='size-6' />
 									&nbsp;Regions
 								</div>
 
@@ -299,9 +299,9 @@ export default function ProviderCarousel() {
 
 						{/* Projects */}
 						<div className='w-full mt-12 mb-8'>
-							<div className='flex flex-col md:flex-row justify-between items-start'>
-								<div className='flex items-center text-2xl font-black uppercase'>
-									<ClipboardDocumentIcon className='size-8' />
+							<div className='flex flex-col md:flex-row justify-between items-start md:items-center'>
+								<div className='flex items-center font-black uppercase'>
+									<ClipboardDocumentIcon className='size-6' />
 									&nbsp;Projects
 								</div>
 
