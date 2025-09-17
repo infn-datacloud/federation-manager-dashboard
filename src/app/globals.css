@@ -52,25 +52,29 @@
     @apply bg-white p-8 shadow-[-3px_3px_8px_rgba(0,0,0,0.1)] rounded-3xl mt-6;
   }
 
+  .box-sm {
+    @apply bg-white p-6 shadow-[-3px_3px_6px_rgba(0,0,0,0.1)] rounded-3xl mt-3;
+  }
+
   .clickable {
     @apply cursor-pointer transform transition-transform duration-200 hover:scale-105 pointer-events-auto;
   }
 }
 
 @utility btn {
-  @apply flex min-w-fit gap-2 p-1 cursor-pointer rounded-4xl px-5 text-base font-medium text-nowrap transition ease-out dark:font-normal disabled:cursor-not-allowed focus:outline-1;
+  @apply flex min-w-fit gap-2 p-1 cursor-pointer rounded-4xl px-5 text-base font-medium text-nowrap transition ease-out dark:font-normal disabled:cursor-not-allowed;
 }
 
 @utility btn-primary {
-  @apply btn text-secondary disabled:border-infn/50 disabled:bg-infn/50 dark:border-secondary/30 dark:text-secondary border bg-infn hover:bg-infn-hover border-infn active:bg-infn/85 dark:border-none dark:bg-sky-600 dark:hover:bg-sky-700 dark:disabled:bg-sky-600/30 dark:disabled:text-white/40;
+  @apply btn text-secondary focus:outline-1 disabled:border-infn/50 disabled:bg-infn/50 dark:border-secondary/30 dark:text-secondary border bg-infn hover:bg-infn-hover border-infn active:bg-infn/85 dark:border-none dark:bg-sky-600 dark:hover:bg-sky-700 dark:disabled:bg-sky-600/30 dark:disabled:text-white/40;
 }
 
 @utility btn-secondary {
-  @apply btn border-infn text-infn border-2 hover:bg-infn hover:text-secondary active:bg-infn/85 disabled:border-infn/50 disabled:bg-secondary/50 disabled:text-infn/50 dark:border-secondary/20 dark:text-secondary/90 dark:disabled:bg-light-gray/30 dark:disabled:text-secondary/50 dark:bg-slate-700 dark:hover:bg-slate-600 dark:active:bg-slate-500;
+  @apply btn border-infn text-infn border-2 hover:bg-infn/5 focus:outline-1 active:bg-infn/10 disabled:border-infn/50 disabled:bg-secondary/50 disabled:text-infn/50 dark:border-secondary/20 dark:text-secondary/90 dark:disabled:bg-light-gray/30 dark:disabled:text-secondary/50 dark:bg-slate-700 dark:hover:bg-slate-600 dark:active:bg-slate-500;
 }
 
 @utility btn-tertiary {
-  @apply btn hover:underline active:font-bold active:tracking-tight;
+  @apply btn hover:underline disabled:hover:no-underline disabled:text-infn/50;
 }
 
 @utility btn-danger {
