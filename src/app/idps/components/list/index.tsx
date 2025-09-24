@@ -3,7 +3,7 @@
 // SPDX-License-Identifier: EUPL-1.2
 
 import { Options, Option } from '@/components/options';
-import { InboxIcon } from '@heroicons/react/24/solid';
+import { InboxIcon, TrashIcon, PencilIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 
 type ListProps = {
@@ -34,8 +34,18 @@ export default function List(props: Readonly<ListProps>) {
 			</Link>
 			<div className='flex flex-col'>
 				<Options>
-					<Option data-danger={true}>Delete</Option>
-					<Option>Edit</Option>
+					<Option>
+						<div className='flex items-center'>
+							<PencilIcon className='size-4' />
+							&nbsp;Edit
+						</div>
+					</Option>
+					<Option data-danger={true}>
+						<div className='flex items-center'>
+							<TrashIcon className='size-4' />
+							&nbsp;Delete
+						</div>
+					</Option>
 				</Options>
 			</div>
 		</div>

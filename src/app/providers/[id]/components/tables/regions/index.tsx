@@ -1,6 +1,6 @@
 import Link from '@/components/link';
 import { Options, Option } from '@/components/options';
-import { MapPinIcon } from '@heroicons/react/24/solid';
+import { MapPinIcon, TrashIcon, PencilIcon } from '@heroicons/react/24/solid';
 
 function Row(
 	props: Readonly<{
@@ -43,8 +43,18 @@ function Row(
 			</div>
 			<div className='flex flex-col'>
 				<Options>
-					<Option data-danger={true}>Delete</Option>
-					<Option>Edit</Option>
+					<Option>
+						<div className='flex items-center'>
+							<PencilIcon className='size-4' />
+							&nbsp;Edit
+						</div>
+					</Option>
+					<Option data-danger={true}>
+						<div className='flex items-center'>
+							<TrashIcon className='size-4' />
+							&nbsp;Delete
+						</div>
+					</Option>
 				</Options>
 			</div>
 		</li>
