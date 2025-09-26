@@ -52,6 +52,10 @@
     @apply bg-white p-8 shadow-[-3px_3px_8px_rgba(0,0,0,0.1)] rounded-3xl mt-6;
   }
 
+  .box-sm {
+    @apply bg-white p-6 shadow-[-3px_3px_6px_rgba(0,0,0,0.1)] rounded-3xl mt-3;
+  }
+
   .clickable {
     @apply cursor-pointer transform transition-transform duration-200 hover:scale-105 pointer-events-auto;
   }
@@ -62,15 +66,15 @@
 }
 
 @utility btn-primary {
-  @apply btn text-secondary disabled:border-infn/50 disabled:bg-infn/50 dark:border-secondary/30 dark:text-secondary border bg-infn hover:bg-infn-hover border-infn active:bg-infn/85 dark:border-none dark:bg-sky-600 dark:hover:bg-sky-700 dark:disabled:bg-sky-600/30 dark:disabled:text-white/40;
+  @apply btn text-secondary focus:outline-1 disabled:border-infn/50 disabled:bg-infn/50 dark:border-secondary/30 dark:text-secondary border bg-infn hover:bg-infn-hover border-infn active:bg-infn/85 dark:border-none dark:bg-sky-600 dark:hover:bg-sky-700 dark:disabled:bg-sky-600/30 dark:disabled:text-white/40;
 }
 
 @utility btn-secondary {
-  @apply btn border-infn text-infn border-2 hover:bg-infn hover:text-secondary active:bg-infn/85 disabled:border-infn/50 disabled:bg-secondary/50 disabled:text-infn/50 dark:border-secondary/20 dark:text-secondary/90 dark:disabled:bg-light-gray/30 dark:disabled:text-secondary/50 dark:bg-slate-700 dark:hover:bg-slate-600 dark:active:bg-slate-500;
+  @apply btn border-infn text-infn border-2 hover:bg-infn/5 focus:outline-1 active:bg-infn/10 disabled:border-infn/50 disabled:bg-secondary/50 disabled:text-infn/50 dark:border-secondary/20 dark:text-secondary/90 dark:disabled:bg-light-gray/30 dark:disabled:text-secondary/50 dark:bg-slate-700 dark:hover:bg-slate-600 dark:active:bg-slate-500;
 }
 
 @utility btn-tertiary {
-  @apply btn hover:underline active:font-bold active:tracking-tight;
+  @apply btn hover:underline disabled:hover:no-underline disabled:text-infn/50;
 }
 
 @utility btn-danger {
@@ -86,7 +90,7 @@
 }
 
 @utility iam-input {
-  @apply dark:bg-dark w-full rounded-2xl border border-gray-300 bg-white px-3 py-1 disabled:bg-transparent disabled:text-gray-400 placeholder:disabled:text-gray-400 data-[invalid=true]:outline dark:border-white/30 focus:outline-infn;
+  @apply placeholder:text-infn/30 dark:bg-dark w-full rounded-2xl border border-gray-300 bg-white px-4 py-1 disabled:bg-transparent disabled:text-gray-400 placeholder:disabled:text-gray-400 data-[invalid=true]:outline dark:border-white/30 focus:outline-infn;
 }
 
 @utility iam-list-item {

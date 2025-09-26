@@ -1,6 +1,9 @@
 import Header from '@/components/header';
 import Box from '@/components/box';
-import { CloudIcon, IdentificationIcon, DocumentTextIcon } from '@heroicons/react/16/solid';
+import {
+	CloudIcon,
+	IdentificationIcon,
+} from '@heroicons/react/24/solid';
 
 export default function Home() {
 	return (
@@ -25,14 +28,6 @@ export default function Home() {
 				btnText='Show All'
 				btnHref='/idps'
 				icon={<IdentificationIcon />}
-			/>
-			<Box
-				title='SLAs'
-				subtitle='Document formalizing resource usage agreement'
-				type='small'
-				btnText='Show All'
-				btnHref='/slas'
-				icon={<DocumentTextIcon />}
 			/>
 		</>
 	);
