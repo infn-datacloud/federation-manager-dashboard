@@ -1,16 +1,15 @@
-import { Button } from '@/components/buttons';
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
-import UserGroups from '../components/tables/userGroups';
+import UserGroupsList from './userGroupList';
 import Link from '@/components/link';
+import IdpDetail from './idpDetail';
 
 type IdpPageProps = {
-	searchParams: Promise<{
+	params: Promise<{
 		idpId: string;
 	}>;
 };
 
 export default async function Idp(props: Readonly<IdpPageProps>) {
-	const { idpId } = await props.searchParams;
+	const { idpId } = await props.params;
 
 	const items = [
 		{
@@ -31,6 +30,17 @@ export default async function Idp(props: Readonly<IdpPageProps>) {
 		},
 	];
 
+	// retrieve with a get by ID
+	const idp = {
+		id: '2',
+		name: 'IAM Cloud 2',
+		description: 'INFN-Cloud identity provider',
+		endpoint: 'https://2-iam.cloud.infn.it/',
+		protocol: 'openid',
+		audience: 'aud',
+		groups_claim: 'group',
+	};
+
 	return (
 		<>
 			<div className='mb-12'>
@@ -43,29 +53,13 @@ export default async function Idp(props: Readonly<IdpPageProps>) {
 				</span>
 			</div>
 
-			<h1>IAM Cloud {idpId}</h1>
-			<div className='opacity-80 text-md'>https://auth.cloud.infn.it</div>
-			<div className='mt-4 text-justify'>
-				lorem ipsum dolor sit amet consectetur adipiscing elit sed do
-				eiusmod tempor incididunt ut labore et dolore magna aliqua ut
-				enim ad minim veniam quis nostrud exercitation ullamco laboris
-				nisi ut aliquip ex ea commodo consequat. lorem ipsum dolor sit
-				amet consectetur adipiscing elit sed do eiusmod tempor
-				incididunt ut labore et dolore magna aliqua ut enim ad minim
-				veniam quis nostrud exercitation ullamco laboris nisi ut aliquip
-				ex ea commodo consequat.
-			</div>
-			<div className='flex flex-col md:flex-row gap-4 mt-8'>
-				<Button className='w-full md:w-1/2 btn btn-secondary'>
-					<PencilIcon className='size-4' />
-					Details
-				</Button>
-				<Button className='w-full md:w-1/2 btn btn-danger'>
-					<TrashIcon className='size-4' />
-					Delete
-				</Button>
-			</div>
-			<UserGroups items={items} />
+			<h1>
+				{idp.name} - ID: {idpId}
+			</h1>
+			<div className='opacity-80 text-md'>{idp.endpoint}</div>
+			<div className='mt-4 text-justify'>{idp.description}</div>
+			<IdpDetail item={idp} />
+			<UserGroupsList items={items} />
 		</>
 	);
 }

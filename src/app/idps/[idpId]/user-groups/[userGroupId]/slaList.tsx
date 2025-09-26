@@ -5,29 +5,35 @@
 
 import {
 	InboxIcon,
-	UserGroupIcon,
+	DocumentDuplicateIcon,
 	PlusIcon,
-	TrashIcon,
-	PencilIcon,
 } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { Button } from '@/components/buttons';
 import { useParams } from 'next/navigation';
-import { Options, Option } from '@/components/options';
+import { useState } from 'react';
+import { Modal, ModalBody } from '@/components/modal';
+import { Form } from '@/components/form';
+import SlaForm from './slaForm';
 
 type ListProps = {
 	items: Array<{
 		id: string;
 		name: string;
 		description: string;
+		url: string;
+		startDate: string;
+		endDate: string;
 	}>;
 };
 
-export default function UserGroups(props: Readonly<ListProps>) {
+export default function SlaList(props: Readonly<ListProps>) {
 	const { items } = props;
 
 	const params = useParams();
-	const idpId = params.idpId as string;
+	const { idpId, userGroupId } = params;
+	
+	const [showSlaModal, setShowSlaModal] = useState(false);
 
 	const listItems = items?.map((item) => (
 		<div
@@ -35,7 +41,8 @@ export default function UserGroups(props: Readonly<ListProps>) {
 			className='box w-full flex items-start cursor-pointer clickable'
 		>
 			<Link
-				href={`/idps/${idpId}/user-groups/${item.id}`}
+				href={`/idps/${idpId}/user-groups/${userGroupId}/slas/${item.id}`}
+				key={item.id}
 				className='w-full'
 			>
 				<h3 className='truncate font-black'>{item.name}</h3>
@@ -43,22 +50,6 @@ export default function UserGroups(props: Readonly<ListProps>) {
 					{item.description}
 				</div>
 			</Link>
-			<div className='flex flex-col'>
-				<Options>
-					<Option>
-						<div className='flex items-center'>
-							<PencilIcon className='size-4' />
-							&nbsp;Edit
-						</div>
-					</Option>
-					<Option data-danger={true}>
-						<div className='flex items-center'>
-							<TrashIcon className='size-4' />
-							&nbsp;Delete
-						</div>
-					</Option>
-				</Options>
-			</div>
 		</div>
 	));
 
@@ -66,7 +57,7 @@ export default function UserGroups(props: Readonly<ListProps>) {
 		return (
 			<div className='flex flex-col items-center pt-24 opacity-80'>
 				<InboxIcon className='size-24 opacity-50' />
-				<h2 className='text-center py-4'>No user groups found</h2>
+				<h2 className='text-center py-4'>No SLAs found</h2>
 				<p className='w-2/3 text-center'>
 					Nothing to display at the moment. As soon as items are
 					added, they will be listed here for you to view and manage.
@@ -79,15 +70,54 @@ export default function UserGroups(props: Readonly<ListProps>) {
 		<>
 			<div className='mt-12 flex flex-col md:flex-row md: justify-between'>
 				<div className='text-xl uppercase font-bold flex items-center'>
-					<UserGroupIcon className='size-6' />
-					&nbsp;User Groups
+					<DocumentDuplicateIcon className='size-6' />
+					&nbsp;SLAs
 				</div>
-				<Button className='btn btn-secondary mt-4 md:mt-0'>
+				<Button
+					className='btn btn-secondary mt-4 md:mt-0'
+					onClick={() => {
+						setShowSlaModal(true);
+					}}
+				>
 					<PlusIcon className='size-4' />
-					Add user group
+					Add SLA
 				</Button>
 			</div>
 			{listItems}
+			<Modal
+				show={showSlaModal}
+				onClose={() => {
+					setShowSlaModal(false);
+				}}
+				title={
+					<div className='flex items-center'>
+						<PlusIcon className='size-8' />
+						&nbsp;New SLA
+					</div>
+				}
+			>
+				<ModalBody>
+					<Form>
+						<SlaForm />
+						<div className='flex justify-between w-full pt-4'>
+							<Button
+								className='btn btn-bold btn-danger'
+								onClick={() => {
+									setShowSlaModal(false);
+								}}
+							>
+								Cancel
+							</Button>
+							<Button
+								className='btn btn-bold btn-primary'
+								type='submit'
+							>
+								Save
+							</Button>
+						</div>
+					</Form>
+				</ModalBody>
+			</Modal>
 		</>
 	);
 }

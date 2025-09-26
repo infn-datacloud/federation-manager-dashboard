@@ -1,25 +1,39 @@
-'use client';
-
-import { Button } from '@/components/buttons';
-import { PencilIcon, TrashIcon } from '@heroicons/react/24/solid';
-import Projects from '../../../../../components/tables/projects';
-import { useParams } from 'next/navigation';
+import Projects from './projectList';
 import Link from '@/components/link';
+import SlaDetail from './slaDetail';
 
-export default function Sla() {
-	const params = useParams();
-	const { idpId, userGroupId, slaId } = params;
+type IdpPageProps = {
+	params: Promise<{
+		idpId: string;
+		userGroupId: string;
+		slaId: string;
+	}>;
+};
+
+export default async function Sla(props: Readonly<IdpPageProps>) {
+	const { idpId, userGroupId, slaId } = await props.params;
 
 	const items = [
 		{
 			id: '1',
-			name: 'Intertwin'
+			name: 'Intertwin',
+			provider: 'Provider Test',
 		},
 		{
 			id: '2',
 			name: 'Terabit',
+			provider: 'Provider Test',
 		},
 	];
+
+	const sla = {
+		id: '2',
+		name: 'terabit_sla.pdf',
+		description: 'SLA for the Terabit project',
+		url: 'https://example.com',
+		startDate: '08-11-2025',
+		endDate: '31-12-2025',
+	};
 
 	return (
 		<>
@@ -42,19 +56,10 @@ export default function Sla() {
 			</div>
 
 			<h1>
-				signed_sla.pdf {slaId}, {userGroupId}, {idpId}
+				{sla.name} {slaId}, {userGroupId}, {idpId}
 			</h1>
-			<div className='mt-4 text-justify'>SLA for the Cygno project</div>
-			<div className='flex flex-col md:flex-row gap-4 mt-8'>
-				<Button className='w-full md:w-1/2 btn btn-secondary'>
-					<PencilIcon className='size-4' />
-					Details
-				</Button>
-				<Button className='w-full md:w-1/2 btn btn-danger'>
-					<TrashIcon className='size-4' />
-					Delete
-				</Button>
-			</div>
+			<div className='mt-4 text-justify'>{sla.description}</div>
+			<SlaDetail item={sla} />
 			<Projects items={items} />
 		</>
 	);

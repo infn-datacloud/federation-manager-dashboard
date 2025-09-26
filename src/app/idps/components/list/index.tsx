@@ -2,8 +2,9 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { Options, Option } from '@/components/options';
-import { InboxIcon, TrashIcon, PencilIcon } from '@heroicons/react/24/solid';
+'use client';
+
+import { InboxIcon } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 
 type ListProps = {
@@ -12,6 +13,9 @@ type ListProps = {
 		name: string;
 		description: string;
 		endpoint: string;
+		protocol: string;
+		audience: string;
+		groups_claim: string;
 	}>;
 };
 
@@ -32,22 +36,6 @@ export default function List(props: Readonly<ListProps>) {
 					{item.description}
 				</div>
 			</Link>
-			<div className='flex flex-col'>
-				<Options>
-					<Option>
-						<div className='flex items-center'>
-							<PencilIcon className='size-4' />
-							&nbsp;Edit
-						</div>
-					</Option>
-					<Option data-danger={true}>
-						<div className='flex items-center'>
-							<TrashIcon className='size-4' />
-							&nbsp;Delete
-						</div>
-					</Option>
-				</Options>
-			</div>
 		</div>
 	));
 
@@ -64,5 +52,9 @@ export default function List(props: Readonly<ListProps>) {
 		);
 	}
 
-	return <>{listItems}</>;
+	return (
+		<>
+			{listItems}
+		</>
+	);
 }
