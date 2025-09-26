@@ -39,7 +39,7 @@ export default function ProjectForm(props: Readonly<Item>) {
 				<Input name='id' defaultValue={item?.id} hidden />
 			</Field>
 			<Field>
-				<Label data-required>Projects</Label>
+				<Label data-required>Project</Label>
 				<Select name='project' defaultValue={projects[0]}>
 					{items}
 				</Select>
