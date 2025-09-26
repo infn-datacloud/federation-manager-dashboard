@@ -1,0 +1,7 @@
+services:
+  dashboard:
+    image: harbor.cloud.infn.it/datacloud-middleware/fed-mgr-dashboard:latest
+    container_name: fed-mgr-frontend
+    restart: unless-stopped
+    ports:
+      - 3000:80
