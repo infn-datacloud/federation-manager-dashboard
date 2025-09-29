@@ -10,7 +10,6 @@ import {
 	XMarkIcon,
 } from '@heroicons/react/24/solid';
 import { Button } from '@/components/buttons';
-import { Options, Option } from '@/components/options';
 import { useState } from 'react';
 import { Modal, ModalBody } from '@/components/modal';
 import { Form } from '@/components/form';
