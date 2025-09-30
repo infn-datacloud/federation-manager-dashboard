@@ -61,19 +61,25 @@ function Row(
 	);
 }
 
-type RegionsProps = {
-	data: {
-		id: string;
-		name: string;
-		country: string;
-		site: string;
-		latitude: number;
-		longitude: number;
-	}[];
-};
-
-export default function Regions(props: Readonly<RegionsProps>) {
-	const { data } = props;
+export default function Regions() {
+	const data = [
+		{
+			id: '1',
+			name: 'INFN Bari',
+			country: 'Italia',
+			site: 'Istituto di fisica Enrico Fermi',
+			latitude: 44.123456,
+			longitude: 11.456789,
+		},
+		{
+			id: '2',
+			name: 'INFN Bari',
+			country: 'Italia',
+			site: 'Istituto di fisica Enrico Fermi',
+			latitude: 44.123456,
+			longitude: 11.456789,
+		},
+	];
 
 	if (data.length === 0) {
 		return (
