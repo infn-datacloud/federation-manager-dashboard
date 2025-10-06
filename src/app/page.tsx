@@ -6,7 +6,7 @@ import {
 } from '@heroicons/react/24/solid';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
-import Custom401 from './pages/401';
+import Custom401 from '@/app/pages/401';
 
 export default async function Home() {
 	const session = await auth.api.getSession({
