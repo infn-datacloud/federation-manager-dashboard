@@ -4,8 +4,19 @@ import {
 	CloudIcon,
 	IdentificationIcon,
 } from '@heroicons/react/24/solid';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
+import Custom401 from './pages/401';
 
-export default function Home() {
+export default async function Home() {
+	const session = await auth.api.getSession({
+		headers: await headers(),
+	});
+	if (!session) {
+		// Auth error, show 401 page
+		return <Custom401 />
+	}
+
 	return (
 		<>
 			<Header

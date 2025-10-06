@@ -1,6 +1,9 @@
 import UserGroupsList from './userGroupList';
 import Link from '@/components/link';
 import IdpDetail from './idpDetail';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
+import Custom401 from '@/app/pages/401';
 
 type IdpPageProps = {
 	params: Promise<{
@@ -9,6 +12,14 @@ type IdpPageProps = {
 };
 
 export default async function Idp(props: Readonly<IdpPageProps>) {
+	const session = await auth.api.getSession({
+		headers: await headers(),
+	});
+	if (!session) {
+		// Auth error, show 401 page
+		return <Custom401 />
+	}
+
 	const { idpId } = await props.params;
 
 	const items = [
