@@ -1,9 +1,13 @@
 import { betterAuth } from 'better-auth';
 import { genericOAuth } from 'better-auth/plugins';
+import { getMigrations } from 'better-auth/db';
 import Database from 'better-sqlite3';
 
+// create or open your SQLite DB
+const db = new Database('auth.sqlite');
+
 export const auth = betterAuth({
-	database: new Database('./sqlite.db'),
+	database: db,
 	plugins: [
 		genericOAuth({
 			config: [
@@ -18,3 +22,12 @@ export const auth = betterAuth({
 		}),
 	],
 });
+
+// run migrations
+async function ensureSchema() {
+	const { runMigrations } = await getMigrations(auth.options);
+	await runMigrations();
+}
+
+// On startup or before first use
+await ensureSchema();
