@@ -71,9 +71,8 @@ for authentication. You could generate a secret running:
 openssl rand -base64 32
 ```
 
-:::danger
-This is considered a **sensitive credential** to decrypt session cookies and thus the Access Token. **Do not share** the secret especially the once generated for production deployment.
-:::
+> **Note**<br />
+> This is considered a **sensitive credential** to decrypt session cookies and thus the Access Token. **Do not share** the secret especially the once generated for production deployment.
 
 ### Local development
 
