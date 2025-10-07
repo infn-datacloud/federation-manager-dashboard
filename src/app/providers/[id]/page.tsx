@@ -1,5 +1,8 @@
 import ProviderCarousel from './components/carousel';
 import Status from '@/components/status';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
+import Custom401 from '@/app/pages/401';
 
 
 type ProviderPageProps = {
@@ -9,6 +12,14 @@ type ProviderPageProps = {
 };
 
 export default async function Provider(props: Readonly<ProviderPageProps>) {
+	const session = await auth.api.getSession({
+		headers: await headers(),
+	});
+	if (!session) {
+		// Auth error, show 401 page
+		return <Custom401 />
+	}
+	
 	const { id } = await props.searchParams;
 
 	return (

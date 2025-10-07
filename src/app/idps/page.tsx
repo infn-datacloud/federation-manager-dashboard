@@ -1,6 +1,17 @@
 import IdpList from './idpList';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
+import Custom401 from '@/app/pages/401';
 
-export default function Idps() {
+export default async function Idps() {
+	const session = await auth.api.getSession({
+		headers: await headers(),
+	});
+	if (!session) {
+		// Auth error, show 401 page
+		return <Custom401 />
+	}
+
 	const items = [
 		{
 			id: '1',
