@@ -17,5 +17,5 @@ export async function middleware(request: NextRequest) {
 export const config = {
 	runtime: 'nodejs',
 	// Apply to all routes except static files and Next.js internals
-	matcher: ['/((?!_next/static|_next/image|favicon.ico|login|api/auth).*)'],
+	matcher: ['/((?!_next/static|_next/image|favicon.ico|login|api).*)'],
 };

@@ -7,12 +7,16 @@ export default async function Providers() {
 	const session = await auth.api.getSession({
 		headers: await headers(),
 	});
+
 	if (!session) {
 		// Auth error, show 401 page
 		return <Custom401 />
 	}
 
-	const items = [
+	const providers = await getProviders();
+	const items = providers || [];
+
+	/* const items = [
 		{
 			id: '15',
 			name: 'Provider One',
@@ -104,12 +108,25 @@ export default async function Providers() {
 			user_name: 'Jeff Bezos',
 			href: '/providers',
 		},
-	];
-
+	]; */
 
 	return (
 		<>
 			<ProjectList items={items} />
 		</>
 	);
+
+	async function getProviders() {
+		const apiResponse = await fetch(
+			`${process.env.BASE_URL}/api/providers`,
+			{
+				method: 'GET',
+				headers: await headers(),
+			}
+		);
+
+		const providers = await apiResponse.json();
+		
+		return providers.data;
+	}
 }

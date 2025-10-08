@@ -4,7 +4,7 @@ import { Button } from '@/components/buttons';
 import Header from '@/components/header';
 import List from '@/components/list';
 import { Modal, ModalBody } from '@/components/modal';
-import { useState } from 'react';
+import { useState, FormEvent } from 'react';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import ProjectForm from './projectForm'
 import { Form } from '@/components/form';
@@ -29,6 +29,32 @@ export default function ProjectList(props: Readonly<Items>) {
     const { items } = props;
 
     const [showProviderModal, setShowProviderModal] = useState(false);
+
+	const createProvider = async (
+		e: FormEvent<HTMLFormElement>
+	): Promise<void> => {
+		// Prevent the default form submission (page reload)
+		e.preventDefault();
+
+		const formData = new FormData(e.currentTarget);
+		const body = Object.fromEntries(formData.entries());
+
+		try {
+			const apiResponse = await fetch('/api/providers', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(body),
+			});
+
+			console.log(await apiResponse.json())
+		} catch (err) {
+			console.error('API Error:', err);
+		} finally {
+			return;
+		}
+	};
 
     return (
 		<>
@@ -62,7 +88,7 @@ export default function ProjectList(props: Readonly<Items>) {
 				}
 			>
 				<ModalBody>
-					<Form>
+					<Form onSubmit={createProvider}>
 						<ProjectForm />
 						<div className='flex justify-between w-full pt-4'>
 							<Button
