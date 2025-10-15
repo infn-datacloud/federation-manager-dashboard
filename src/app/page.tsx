@@ -15,6 +15,17 @@ export default async function Home() {
 	if (!session) {
 		// Auth error, show 401 page
 		return <Custom401 />
+	} else {
+		if (session?.user?.email) {
+			await fetch(
+				`${process.env.BASE_URL}/api/users/ensure-user-exists`,
+				{
+					method: 'POST',
+					headers: await headers(),
+					body: JSON.stringify({ email: session?.user.email }),
+				}
+			);
+		}
 	}
 
 	return (
