@@ -30,7 +30,15 @@ import IdentityProvidersTable from '../tables/identityProviders';
 import RegionsTable from '../tables/regions';
 import ProjectsTable from '../tables/projects';
 
-export default function ProviderCarousel() {
+type IDPsProps = Array<{
+	idp_id: string;
+	overrides: {
+		name: string;
+		protocol: string;
+	};
+}>;
+
+export default function ProviderCarousel(params: { idps: IDPsProps }) {
 	const TOTAL_PAGES = 4;
 
 	const [currentPage, setCurrentPage] = useState(0);
@@ -43,6 +51,8 @@ export default function ProviderCarousel() {
 	const back = () => setCurrentPage(Math.max(0, currentPage - 1));
 	const next = () =>
 		setCurrentPage(Math.min(currentPage + 1, TOTAL_PAGES - 1));
+
+	const { idps } = params;
 
 	return (
 		<div className='flex justify-center relative'>
@@ -82,7 +92,7 @@ export default function ProviderCarousel() {
 								</Button>
 							</div>
 						</div>
-						<IdentityProvidersTable />
+						<IdentityProvidersTable idps={idps} />
 					</CarouselPanel>
 
 					{/* STEP 2 */}
@@ -170,7 +180,7 @@ export default function ProviderCarousel() {
 								</Button>
 							</div>
 						</div>
-						<IdentityProvidersTable />
+						<IdentityProvidersTable idps={idps} />
 
 						{/* Regions */}
 						<div className='w-full mt-12 mb-8'>

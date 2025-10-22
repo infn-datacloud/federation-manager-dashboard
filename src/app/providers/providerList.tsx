@@ -2,23 +2,26 @@
 
 import { Button } from '@/components/buttons';
 import Header from '@/components/header';
-import List from '@/components/list';
+import List from './components/list';
 import { Modal, ModalBody } from '@/components/modal';
 import { useState, FormEvent } from 'react';
 import { PlusIcon } from '@heroicons/react/24/solid';
-import ProjectForm from './projectForm'
+import ProjectForm from './providerForm'
 import { Form } from '@/components/form';
+import { PrintFormErrors } from '@/utils';
 
 type Items = {
 	items: Array<{
 		id: string;
 		name: string;
+		description: string;
 		auth_url?: string;
 		is_public?: boolean;
 		provider_type?: string;
 		image_tags?: Array<string>;
 		network_tags?: Array<string>;
 		support_emails?: Array<string>;
+		site_admins?: Array<string>;
 		status: string;
 		user_name: string;
 		href: string;
@@ -37,7 +40,23 @@ export default function ProjectList(props: Readonly<Items>) {
 		e.preventDefault();
 
 		const formData = new FormData(e.currentTarget);
-		const body = Object.fromEntries(formData.entries());
+		const entries = Object.fromEntries(formData.entries());
+
+		const body: Record<string, unknown> = { ...entries };
+
+		for (const key in body) {
+			const value = body[key];
+			if (typeof value === 'string') {
+				try {
+					const parsed = JSON.parse(value);
+					if (Array.isArray(parsed)) {
+						body[key] = parsed;
+					}
+				} catch {
+					// ignore invalid JSON
+				}
+			}
+		}
 
 		try {
 			const apiResponse = await fetch('/api/providers', {
@@ -48,7 +67,15 @@ export default function ProjectList(props: Readonly<Items>) {
 				body: JSON.stringify(body),
 			});
 
-			console.log(await apiResponse.json())
+			const jsonResponse = await apiResponse.json();
+			console.log(jsonResponse)
+
+			if(jsonResponse.id) {
+				setShowProviderModal(false);
+			}
+
+			//PrintFormErrors(jsonResponse);
+
 		} catch (err) {
 			console.error('API Error:', err);
 		} finally {

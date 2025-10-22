@@ -1,4 +1,4 @@
-import ProjectList from "./projectList";
+import ProjectList from "./providerList";
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import Custom401 from '@/app/pages/401';
