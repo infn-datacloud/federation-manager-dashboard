@@ -11,8 +11,10 @@ export default async function Idps() {
 		// Auth error, show 401 page
 		return <Custom401 />
 	}
+	
+	const idps = await getIdentityProviders();
 
-	const items = [
+	/* const items = [
 		{
 			id: '1',
 			name: 'IAM Cloud 1',
@@ -41,9 +43,20 @@ export default async function Idps() {
 			audience: 'aud',
 			groups_claim: 'group',
 		},
-	];
+	]; */
 
 	return (
-		<IdpList items={items} />
+		<IdpList items={idps} />
 	);
+}
+
+async function getIdentityProviders() {
+	const apiResponse = await fetch(`${process.env.BASE_URL}/api/idps`, {
+		method: 'GET',
+		headers: await headers(),
+	});
+
+	const identityProviders = await apiResponse.json();
+
+	return identityProviders.data;
 }

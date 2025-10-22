@@ -4,10 +4,12 @@ import { Button } from '@/components/buttons';
 import Header from '@/components/header';
 import List from './components/list';
 import { Modal, ModalBody } from '@/components/modal';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import { Form } from '@/components/form';
 import IdpForm from './idpForm';
+import { toaster } from '@/components/toaster';
+import { useRouter } from 'next/navigation';
 
 type Items = {
 	items: Array<{
@@ -22,9 +24,60 @@ type Items = {
 };
 
 export default function IdpList(props: Readonly<Items>) {
+	const router = useRouter();
 	const { items } = props;
 
 	const [showIdpModal, setShowIdpModal] = useState(false);
+
+	const createIdentityProvider = async (
+		e: FormEvent<HTMLFormElement>
+	): Promise<void> => {
+		// Prevent the default form submission (page reload)
+		e.preventDefault();
+
+		const formData = new FormData(e.currentTarget);
+		const entries = Object.fromEntries(formData.entries());
+
+		const body: Record<string, unknown> = { ...entries };
+
+		for (const key in body) {
+			const value = body[key];
+			if (typeof value === 'string') {
+				try {
+					const parsed = JSON.parse(value);
+					if (Array.isArray(parsed)) {
+						body[key] = parsed;
+					}
+				} catch {
+					// ignore invalid JSON
+				}
+			}
+		}
+
+		try {
+			const apiResponse = await fetch('/api/idps', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(body),
+			});
+
+			const jsonResponse = await apiResponse.json();
+
+			if (jsonResponse.id) {
+				setShowIdpModal(false);
+				router.refresh();
+				toaster.success('IDP created successfully');
+			}
+
+			//PrintFormErrors(jsonResponse);
+		} catch (err) {
+			console.error('API Error:', err);
+		} finally {
+			return;
+		}
+	};
 
 	return (
 		<>
@@ -56,7 +109,7 @@ export default function IdpList(props: Readonly<Items>) {
 				}
 			>
 				<ModalBody>
-					<Form>
+					<Form onSubmit={createIdentityProvider}>
 						<IdpForm />
 						<div className='flex justify-between w-full pt-4'>
 							<Button

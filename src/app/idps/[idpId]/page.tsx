@@ -41,16 +41,7 @@ export default async function Idp(props: Readonly<IdpPageProps>) {
 		},
 	];
 
-	// retrieve with a get by ID
-	const idp = {
-		id: '2',
-		name: 'IAM Cloud 2',
-		description: 'INFN-Cloud identity provider',
-		endpoint: 'https://2-iam.cloud.infn.it/',
-		protocol: 'openid',
-		audience: 'aud',
-		groups_claim: 'group',
-	};
+	const idp = await getIdentityProvider(idpId);
 
 	return (
 		<>
@@ -65,7 +56,7 @@ export default async function Idp(props: Readonly<IdpPageProps>) {
 			</div>
 
 			<h1>
-				{idp.name} - ID: {idpId}
+				{idp.name}
 			</h1>
 			<div className='opacity-80 text-md'>{idp.endpoint}</div>
 			<div className='mt-4 text-justify'>{idp.description}</div>
@@ -73,4 +64,22 @@ export default async function Idp(props: Readonly<IdpPageProps>) {
 			<UserGroupsList items={items} />
 		</>
 	);
+}
+
+async function getIdentityProvider(id: string) {
+	const url = `${process.env.BASE_URL}/api/idps/${id}`;
+
+	const apiResponse = await fetch(url, {
+		method: 'GET',
+		headers: await headers(),
+	});
+
+	if (!apiResponse.ok) {
+		const errorText = await apiResponse.text();
+		throw new Error(`Failed to fetch provider(s): ${errorText}`);
+	}
+
+	const data = await apiResponse.json();
+
+	return data;
 }

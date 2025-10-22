@@ -68,7 +68,6 @@ export default function ProjectList(props: Readonly<Items>) {
 			});
 
 			const jsonResponse = await apiResponse.json();
-			console.log(jsonResponse)
 
 			if(jsonResponse.id) {
 				setShowProviderModal(false);

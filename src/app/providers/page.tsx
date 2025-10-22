@@ -116,17 +116,18 @@ export default async function Providers() {
 		</>
 	);
 
-	async function getProviders() {
-		const apiResponse = await fetch(
-			`${process.env.BASE_URL}/api/providers`,
-			{
-				method: 'GET',
-				headers: await headers(),
-			}
-		);
+}
 
-		const providers = await apiResponse.json();
-		
-		return providers.data;
-	}
+async function getProviders() {
+	const apiResponse = await fetch(
+		`${process.env.BASE_URL}/api/providers`,
+		{
+			method: 'GET',
+			headers: await headers(),
+		}
+	);
+
+	const providers = await apiResponse.json();
+	
+	return providers.data;
 }
