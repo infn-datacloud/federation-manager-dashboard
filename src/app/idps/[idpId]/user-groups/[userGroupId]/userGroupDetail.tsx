@@ -28,14 +28,14 @@ export default function UserGroupDetail(props: Readonly<ItemProps>) {
 	const { item } = props;
 
 	const params = useParams();
-	const { idpId } = params;
+	const { idpId, userGroupId } = params;
 
 	const [showUserGroupModal, setShowUserGroupModal] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 
 	const deleteUserGroup = async (): Promise<void> => {
 		try {
-			const apiResponse = await fetch(`/api/idps/${idpId}/user-groups/${item.id}`, {
+			const apiResponse = await fetch(`/api/idps/${idpId}/user-groups/${userGroupId}`, {
 				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json',
@@ -88,7 +88,7 @@ export default function UserGroupDetail(props: Readonly<ItemProps>) {
 
 		try {
 			const apiResponse = await fetch(
-				`/api/idps/${idpId}/user-groups/${item.id}`,
+				`/api/idps/${idpId}/user-groups/${userGroupId}`,
 				{
 					method: 'PUT',
 					headers: {

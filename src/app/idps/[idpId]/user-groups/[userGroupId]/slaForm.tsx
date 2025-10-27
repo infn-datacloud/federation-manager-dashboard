@@ -7,8 +7,8 @@ type Item = {
 		name: string;
 		description: string;
 		url: string;
-		startDate: string;
-		endDate: string;
+		start_date: string;
+		end_date: string;
 	};
 };
 
@@ -52,7 +52,7 @@ export default function SlaForm(props: Readonly<Item>) {
 					label='Start Date'
 					name='start_date'
 					placeholder='yyyy-mm-dd'
-					defaultValue={item?.startDate}
+					defaultValue={item?.start_date}
 					required
 				/>
 			</Field>
@@ -61,7 +61,7 @@ export default function SlaForm(props: Readonly<Item>) {
 					label='end Date'
 					name='end_date'
 					placeholder='yyyy-mm-dd'
-					defaultValue={item?.endDate}
+					defaultValue={item?.end_date}
 					required
 				/>
 			</Field>

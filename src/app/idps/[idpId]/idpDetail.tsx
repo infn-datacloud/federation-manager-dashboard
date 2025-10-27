@@ -11,7 +11,7 @@ import { Form } from '@/components/form';
 import IdpForm from '../idpForm';
 import { Button } from '@/components/buttons';
 import ConfirmModal from '@/components/confirm-modal';
-import { useRouter } from 'next/navigation';
+import { useParams, useRouter } from 'next/navigation';
 import { toaster } from '@/components/toaster';
 
 type ItemProps = {
@@ -30,13 +30,16 @@ export default function IdpDetail(props: Readonly<ItemProps>) {
 	const router = useRouter();
 
 	const { item } = props;
+	
+	const params = useParams();
+	const { idpId } = params;
 
 	const [showIdpModal, setShowIdpModal] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
 
 	const deleteIdentityProvider = async (): Promise<void> => {
 		try {
-			const apiResponse = await fetch(`/api/idps/${item.id}`, {
+			const apiResponse = await fetch(`/api/idps/${idpId}`, {
 				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json',
@@ -88,7 +91,7 @@ export default function IdpDetail(props: Readonly<ItemProps>) {
 		}
 
 		try {
-			const apiResponse = await fetch(`/api/idps/${item.id}`, {
+			const apiResponse = await fetch(`/api/idps/${idpId}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',

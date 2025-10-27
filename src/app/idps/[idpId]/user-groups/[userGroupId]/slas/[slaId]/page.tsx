@@ -37,14 +37,8 @@ export default async function Sla(props: Readonly<IdpPageProps>) {
 		},
 	];
 
-	const sla = {
-		id: '2',
-		name: 'terabit_sla.pdf',
-		description: 'SLA for the Terabit project',
-		url: 'https://example.com',
-		startDate: '08-11-2025',
-		endDate: '31-12-2025',
-	};
+	const sla = await getSla(idpId, userGroupId, slaId);
+	// const projects = await getProjects(idpId, userGroupId, slaId);
 
 	return (
 		<>
@@ -67,7 +61,7 @@ export default async function Sla(props: Readonly<IdpPageProps>) {
 			</div>
 
 			<h1>
-				{sla.name} {slaId}, {userGroupId}, {idpId}
+				{sla.name}
 			</h1>
 			<div className='mt-4 text-justify'>{sla.description}</div>
 			<SlaDetail item={sla} />
@@ -75,3 +69,39 @@ export default async function Sla(props: Readonly<IdpPageProps>) {
 		</>
 	);
 }
+
+async function getSla(idpId: string, userGroupId: string, slaId: string) {
+	const url = `${process.env.BASE_URL}/api/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}`;
+
+	const apiResponse = await fetch(url, {
+		method: 'GET',
+		headers: await headers(),
+	});
+
+	if (!apiResponse.ok) {
+		const errorText = await apiResponse.statusText;
+		throw new Error(`Failed to fetch the sla: ${errorText}`);
+	}
+
+	const data = await apiResponse.json();
+
+	return data;
+}
+
+/* async function getProjects(idpId: string, userGroupId: string, slaId: string) {
+	const url = `${process.env.BASE_URL}/api/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`;
+
+	const apiResponse = await fetch(url, {
+		method: 'GET',
+		headers: await headers(),
+	});
+
+	if (!apiResponse.ok) {
+		const errorText = await apiResponse.text();
+		throw new Error(`Failed to fetch the projects: ${errorText}`);
+	}
+
+	const data = await apiResponse.json();
+
+	return data.data;
+} */
