@@ -22,26 +22,8 @@ export default async function Idp(props: Readonly<IdpPageProps>) {
 
 	const { idpId } = await props.params;
 
-	const items = [
-		{
-			id: '1',
-			name: 'Cygno',
-			description:
-				'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-		},
-		{
-			id: '2',
-			name: 'Terabit',
-			description: 'lorem ipsum dolor sit amet consectetur adipiscing',
-		},
-		{
-			id: '3',
-			name: 'ICSC',
-			description: 'lorem ipsum dolor sit amet consectetur adipiscing',
-		},
-	];
-
 	const idp = await getIdentityProvider(idpId);
+	const userGroups = await getUserGroups(idpId);
 
 	return (
 		<>
@@ -55,13 +37,11 @@ export default async function Idp(props: Readonly<IdpPageProps>) {
 				</span>
 			</div>
 
-			<h1>
-				{idp.name}
-			</h1>
+			<h1>{idp.name}</h1>
 			<div className='opacity-80 text-md'>{idp.endpoint}</div>
 			<div className='mt-4 text-justify'>{idp.description}</div>
 			<IdpDetail item={idp} />
-			<UserGroupsList items={items} />
+			<UserGroupsList items={userGroups} />
 		</>
 	);
 }
@@ -76,10 +56,28 @@ async function getIdentityProvider(id: string) {
 
 	if (!apiResponse.ok) {
 		const errorText = await apiResponse.text();
-		throw new Error(`Failed to fetch provider(s): ${errorText}`);
+		throw new Error(`Failed to fetch identity provider: ${errorText}`);
 	}
 
 	const data = await apiResponse.json();
 
 	return data;
+}
+
+async function getUserGroups(id: string) {
+	const url = `${process.env.BASE_URL}/api/idps/${id}/user-groups`;
+
+	const apiResponse = await fetch(url, {
+		method: 'GET',
+		headers: await headers(),
+	});
+
+	if (!apiResponse.ok) {
+		const errorText = await apiResponse.text();
+		throw new Error(`Failed to fetch user groups: ${errorText}`);
+	}
+
+	const data = await apiResponse.json();
+
+	return data.data;
 }

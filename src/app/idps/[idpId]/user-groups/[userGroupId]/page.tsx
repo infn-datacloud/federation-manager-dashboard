@@ -23,32 +23,8 @@ export default async function Idp(props: Readonly<IdpPageProps>) {
 	
 	const { idpId, userGroupId } = await props.params;
 
-	const items = [
-		{
-			id: '1',
-			name: 'signad_sla.pdf',
-			description: 'SLA for the Cygno project',
-			url: 'https://example.com',
-			startDate: '08-11-2025',
-			endDate: '31-12-2025',
-		},
-		{
-			id: '2',
-			name: 'terabit_sla.pdf',
-			description: 'SLA for the Terabit project',
-			url: 'https://example.com',
-			startDate: '08-11-2025',
-			endDate: '31-12-2025',
-		},
-	];
-
-	// retrieve with a get by ID
-	const userGroup = {
-		id: '1',
-		name: 'Cygno',
-		description:
-			'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-	};
+	const userGroup = await getUserGroup(idpId, userGroupId);
+	const slas = await getSlas(idpId, userGroupId);
 
 	return (
 		<>
@@ -66,14 +42,46 @@ export default async function Idp(props: Readonly<IdpPageProps>) {
 				</span>
 			</div>
 
-			<h1>
-				{userGroup.name} - UG: {userGroupId}, ID: {idpId}
-			</h1>
-			<div className='mt-4 text-justify'>
-				{userGroup.description}
-			</div>
+			<h1>{userGroup.name}</h1>
+			<div className='mt-4 text-justify'>{userGroup.description}</div>
 			<UserGroupDetail item={userGroup} />
-			<SlaList items={items} />
+			<SlaList items={slas} />
 		</>
 	);
+}
+
+async function getUserGroup(idpId: string, userGroupId: string) {
+	const url = `${process.env.BASE_URL}/api/idps/${idpId}/user-groups/${userGroupId}`;
+
+	const apiResponse = await fetch(url, {
+		method: 'GET',
+		headers: await headers(),
+	});
+
+	if (!apiResponse.ok) {
+		const errorText = await apiResponse.statusText;
+		throw new Error(`Failed to fetch user group: ${errorText}`);
+	}
+
+	const data = await apiResponse.json();
+
+	return data;
+}
+
+async function getSlas(idpId: string, userGroupId: string) {
+	const url = `${process.env.BASE_URL}/api/idps/${idpId}/user-groups/${userGroupId}/slas`;
+
+	const apiResponse = await fetch(url, {
+		method: 'GET',
+		headers: await headers(),
+	});
+
+	if (!apiResponse.ok) {
+		const errorText = await apiResponse.text();
+		throw new Error(`Failed to fetch user groups: ${errorText}`);
+	}
+
+	const data = await apiResponse.json();
+
+	return data.data;
 }

@@ -50,8 +50,8 @@ export default function SlaForm(props: Readonly<Item>) {
 			<Field>
 				<Input
 					label='Start Date'
-					name='startDate'
-					placeholder='dd-mm-yyyy'
+					name='start_date'
+					placeholder='yyyy-mm-dd'
 					defaultValue={item?.startDate}
 					required
 				/>
@@ -59,8 +59,8 @@ export default function SlaForm(props: Readonly<Item>) {
 			<Field>
 				<Input
 					label='end Date'
-					name='endDate'
-					placeholder='dd-mm-yyyy'
+					name='end_date'
+					placeholder='yyyy-mm-dd'
 					defaultValue={item?.endDate}
 					required
 				/>

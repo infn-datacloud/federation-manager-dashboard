@@ -10,11 +10,12 @@ import {
 } from '@heroicons/react/24/solid';
 import Link from 'next/link';
 import { Button } from '@/components/buttons';
-import { useParams } from 'next/navigation';
-import { useState } from 'react';
+import { useParams, useRouter } from 'next/navigation';
+import { FormEvent, useState } from 'react';
 import { Modal, ModalBody } from '@/components/modal';
 import { Form } from '@/components/form';
 import SlaForm from './slaForm';
+import { toaster } from '@/components/toaster';
 
 type ListProps = {
 	items: Array<{
@@ -28,6 +29,7 @@ type ListProps = {
 };
 
 export default function SlaList(props: Readonly<ListProps>) {
+	const router = useRouter();
 	const { items } = props;
 
 	const params = useParams();
@@ -52,19 +54,44 @@ export default function SlaList(props: Readonly<ListProps>) {
 			</Link>
 		</div>
 	));
+	
+	const createSla = async (
+			e: FormEvent<HTMLFormElement>
+		): Promise<void> => {
+			// Prevent the default form submission (page reload)
+			e.preventDefault();
+	
+			const formData = new FormData(e.currentTarget);
+			const entries = Object.fromEntries(formData.entries());
+	
+			const body: Record<string, unknown> = { ...entries };
+	
+			try {
+				const apiResponse = await fetch(`/api/idps/${idpId}/user-groups/${userGroupId}/slas`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(body),
+				});
+	
+				const jsonResponse = await apiResponse.json();
+	
+				if (jsonResponse.id) {
+					setShowSlaModal(false);
+					router.refresh();
+					toaster.success('User group created successfully');
+				}
 
-	if (!items || items.length === 0) {
-		return (
-			<div className='flex flex-col items-center pt-24 opacity-80'>
-				<InboxIcon className='size-24 opacity-50' />
-				<h2 className='text-center py-4'>No SLAs found</h2>
-				<p className='w-2/3 text-center'>
-					Nothing to display at the moment. As soon as items are
-					added, they will be listed here for you to view and manage.
-				</p>
-			</div>
-		);
-	}
+				console.log(jsonResponse)
+	
+				//PrintFormErrors(jsonResponse);
+			} catch (err) {
+				console.error('API Error:', err);
+			} finally {
+				return;
+			}
+		};
 
 	return (
 		<>
@@ -83,7 +110,19 @@ export default function SlaList(props: Readonly<ListProps>) {
 					Add SLA
 				</Button>
 			</div>
-			{listItems}
+			{!items || items.length == 0 ? (
+				<div className='flex flex-col items-center pt-24 opacity-80'>
+					<InboxIcon className='size-24 opacity-50' />
+					<h2 className='text-center py-4'>No SLAs found</h2>
+					<p className='w-2/3 text-center'>
+						Nothing to display at the moment. As soon as items are
+						added, they will be listed here for you to view and
+						manage.
+					</p>
+				</div>
+			) : (
+				listItems
+			)}
 			<Modal
 				show={showSlaModal}
 				onClose={() => {
@@ -97,7 +136,7 @@ export default function SlaList(props: Readonly<ListProps>) {
 				}
 			>
 				<ModalBody>
-					<Form>
+					<Form onSubmit={createSla}>
 						<SlaForm />
 						<div className='flex justify-between w-full pt-4'>
 							<Button

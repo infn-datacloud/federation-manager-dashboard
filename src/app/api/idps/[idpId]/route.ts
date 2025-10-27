@@ -2,11 +2,11 @@ import { NextResponse } from 'next/server';
 import getAuthToken from '../../utils';
 
 interface Params {
-    params: { id: string };
+    params: { idpId: string };
 }
 
 export async function GET(_: Request, { params }: Params) {
-    const { id } = await params;
+    const { idpId } = await params;
     const accessToken = await getAuthToken();
 
     if (!accessToken) {
@@ -15,7 +15,7 @@ export async function GET(_: Request, { params }: Params) {
 
     try {
         const res = await fetch(
-            `${process.env.API_SERVER_URL}/idps/${id}`,
+            `${process.env.API_SERVER_URL}/idps/${idpId}`,
             {
                 method: 'GET',
                 headers: {
@@ -42,7 +42,7 @@ export async function GET(_: Request, { params }: Params) {
 }
 
 export async function PUT(req: Request, { params }: Params) {
-	const { id } = await params;
+	const { idpId } = await params;
 	const accessToken = await getAuthToken();
 
 	if (!accessToken) {
@@ -50,7 +50,7 @@ export async function PUT(req: Request, { params }: Params) {
 	}
 
 	const body = await req.json();
-	const res = await fetch(`${process.env.API_SERVER_URL}/idps/${id}`, {
+	const res = await fetch(`${process.env.API_SERVER_URL}/idps/${idpId}`, {
 		method: 'PUT',
 		headers: {
 			Authorization: `Bearer ${accessToken}`,
@@ -74,14 +74,14 @@ export async function PUT(req: Request, { params }: Params) {
 }
 
 export async function DELETE(_: Request, { params }: Params) {
-	const { id } = await params;
+	const { idpId } = await params;
 	const accessToken = await getAuthToken();
 
 	if (!accessToken) {
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 	}
 
-	const res = await fetch(`${process.env.API_SERVER_URL}/idps/${id}`, {
+	const res = await fetch(`${process.env.API_SERVER_URL}/idps/${idpId}`, {
 		method: 'DELETE',
 		headers: {
 			Authorization: `Bearer ${accessToken}`,
