@@ -16,7 +16,7 @@ export function LoadingList() {
 				</div>
 				<Button className='btn btn-secondary mt-4 md:mt-0' disabled>
 					<PlusIcon className='size-4' />
-					Connect Project
+					Connect project
 				</Button>
 			</div>
 			{Array.from({ length: 3 }).map((_, index) => {
