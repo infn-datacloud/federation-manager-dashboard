@@ -4,6 +4,9 @@ import IdpDetail from './idpDetail';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import Custom401 from '@/app/pages/401';
+import { Suspense } from 'react';
+import { LoadingDetail, LoadingList } from './loading';
+import { IdentificationIcon } from '@heroicons/react/24/solid';
 
 type IdpPageProps = {
 	params: Promise<{
@@ -22,12 +25,9 @@ export default async function Idp(props: Readonly<IdpPageProps>) {
 
 	const { idpId } = await props.params;
 
-	const idp = await getIdentityProvider(idpId);
-	const userGroups = await getUserGroups(idpId);
-
 	return (
 		<>
-			<div className='mb-12'>
+			<div className='mb-2'>
 				<Link href='/idps' className='opacity-50 hover:opacity-80'>
 					Identity Providers
 				</Link>
@@ -37,13 +37,37 @@ export default async function Idp(props: Readonly<IdpPageProps>) {
 				</span>
 			</div>
 
-			<h1>{idp.name}</h1>
+			<h1 className='mb-6 flex items-center'>
+				<IdentificationIcon className='size-10 mr-4' />
+				Identity Provider
+			</h1>
+
+			<Suspense fallback={<LoadingDetail />}>
+				<Detail idpId={idpId} />
+			</Suspense>
+			<Suspense fallback={<LoadingList />}>
+				<List idpId={idpId} />
+			</Suspense>
+		</>
+	);
+}
+
+async function Detail({ idpId }: { idpId: string }) {
+	const idp = await getIdentityProvider(idpId);
+
+	return (
+		<>
+			<h2>{idp.name}</h2>
 			<div className='opacity-80 text-md'>{idp.endpoint}</div>
 			<div className='mt-4 text-justify'>{idp.description}</div>
 			<IdpDetail item={idp} />
-			<UserGroupsList items={userGroups} />
 		</>
 	);
+}
+
+async function List({ idpId }: { idpId: string }) {
+	const userGroups = await getUserGroups(idpId);
+	return <UserGroupsList items={userGroups} />;
 }
 
 async function getIdentityProvider(id: string) {

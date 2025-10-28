@@ -126,7 +126,7 @@ export default function UserGroupDetail(props: Readonly<ItemProps>) {
 					}}
 				>
 					<PencilIcon className='size-4' />
-					Details
+					Edit
 				</Button>
 				<Button
 					className='w-full md:w-1/2 btn btn-danger'

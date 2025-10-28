@@ -1,9 +1,12 @@
-import Projects from './projectList';
+import ProjectsList from './projectList';
 import Link from '@/components/link';
 import SlaDetail from './slaDetail';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import Custom401 from '@/app/pages/401';
+import { DocumentDuplicateIcon } from '@heroicons/react/24/solid';
+import { Suspense } from 'react';
+import { LoadingDetail, LoadingList } from './loading';
 
 type IdpPageProps = {
 	params: Promise<{
@@ -19,30 +22,14 @@ export default async function Sla(props: Readonly<IdpPageProps>) {
 	});
 	if (!session) {
 		// Auth error, show 401 page
-		return <Custom401 />
+		return <Custom401 />;
 	}
 
 	const { idpId, userGroupId, slaId } = await props.params;
 
-	const items = [
-		{
-			id: '1',
-			name: 'Intertwin',
-			provider: 'Provider Test',
-		},
-		{
-			id: '2',
-			name: 'Terabit',
-			provider: 'Provider Test',
-		},
-	];
-
-	const sla = await getSla(idpId, userGroupId, slaId);
-	// const projects = await getProjects(idpId, userGroupId, slaId);
-
 	return (
 		<>
-			<div className='mb-12'>
+			<div className='mb-2'>
 				<Link href='/idps' className='opacity-50 hover:opacity-80'>
 					Identity Providers
 				</Link>
@@ -60,14 +47,52 @@ export default async function Sla(props: Readonly<IdpPageProps>) {
 				</span>
 			</div>
 
-			<h1>
-				{sla.name}
+			<h1 className='mb-6 flex items-center'>
+				<DocumentDuplicateIcon className='size-10 mr-4' />
+				User Group
 			</h1>
-			<div className='mt-4 text-justify'>{sla.description}</div>
-			<SlaDetail item={sla} />
-			<Projects items={items} />
+
+			<Suspense fallback={<LoadingDetail />}>
+				<Detail idpId={idpId} userGroupId={userGroupId} slaId={slaId} />
+			</Suspense>
+			<Suspense fallback={<LoadingList />}>
+				<List idpId={idpId} userGroupId={userGroupId} slaId={slaId} />
+			</Suspense>
 		</>
 	);
+}
+
+async function Detail({
+	idpId,
+	userGroupId,
+	slaId
+}: {
+	idpId: string;
+	userGroupId: string;
+	slaId: string;
+}) {
+	const sla = await getSla(idpId, userGroupId, slaId);
+
+	return (
+		<>
+			<h2>{sla.name}</h2>
+			<div className='mt-4 text-justify'>{sla.description}</div>
+			<SlaDetail item={sla} />
+		</>
+	);
+}
+
+async function List({
+	idpId,
+	userGroupId,
+	slaId
+}: {
+	idpId: string;
+	userGroupId: string;
+	slaId: string;
+}) {
+	const projects = await getProjects(idpId, userGroupId, slaId);
+	return <ProjectsList items={projects} />;
 }
 
 async function getSla(idpId: string, userGroupId: string, slaId: string) {
@@ -88,7 +113,7 @@ async function getSla(idpId: string, userGroupId: string, slaId: string) {
 	return data;
 }
 
-/* async function getProjects(idpId: string, userGroupId: string, slaId: string) {
+async function getProjects(idpId: string, userGroupId: string, slaId: string) {
 	const url = `${process.env.BASE_URL}/api/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`;
 
 	const apiResponse = await fetch(url, {
@@ -104,4 +129,4 @@ async function getSla(idpId: string, userGroupId: string, slaId: string) {
 	const data = await apiResponse.json();
 
 	return data.data;
-} */
+}

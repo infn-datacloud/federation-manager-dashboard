@@ -24,7 +24,7 @@ type ListProps = {
 	}>;
 };
 
-export default function Projects(props: Readonly<ListProps>) {
+export default function ProjectsList(props: Readonly<ListProps>) {
 	const { items } = props;
 
 	const [showProjectModal, setShowProjectModal] = useState(false);
@@ -44,27 +44,17 @@ export default function Projects(props: Readonly<ListProps>) {
 				<h3 className='w-full truncate font-black'>{item.name}</h3>
 				<div className='w-full truncate'>{item.provider}</div>
 			</div>
-			<Button className='bg-secondary-100 hover:bg-infn/5 w-7 h-7 rounded-full cursor-pointer p-1' onClick={() => {
-				setSelectedItem(item);
-				setShowDeleteModal(true);
-			}}>
+			<Button
+				className='bg-secondary-100 hover:bg-infn/5 w-7 h-7 rounded-full cursor-pointer p-1'
+				onClick={() => {
+					setSelectedItem(item);
+					setShowDeleteModal(true);
+				}}
+			>
 				<XMarkIcon />
 			</Button>
 		</div>
 	));
-
-	if (!items || items.length === 0) {
-		return (
-			<div className='flex flex-col items-center pt-24 opacity-80'>
-				<InboxIcon className='size-24 opacity-50' />
-				<h2 className='text-center py-4'>No projects found</h2>
-				<p className='w-2/3 text-center'>
-					Nothing to display at the moment. As soon as items are
-					added, they will be listed here for you to view and manage.
-				</p>
-			</div>
-		);
-	}
 
 	return (
 		<>
@@ -84,7 +74,19 @@ export default function Projects(props: Readonly<ListProps>) {
 				</Button>
 			</div>
 
-			{listItems}
+			{!items || items.length == 0 ? (
+				<div className='flex flex-col items-center pt-24 opacity-80'>
+					<InboxIcon className='size-24 opacity-50' />
+					<h2 className='text-center py-4'>No projects found</h2>
+					<p className='w-2/3 text-center'>
+						Nothing to display at the moment. As soon as items are
+						added, they will be listed here for you to view and
+						manage.
+					</p>
+				</div>
+			) : (
+				listItems
+			)}
 
 			{/* Details Modal */}
 			<Modal
@@ -94,7 +96,7 @@ export default function Projects(props: Readonly<ListProps>) {
 				}}
 				title={
 					<div className='flex items-center'>
-						<PlusIcon className='size-8' />
+						<PresentationChartLineIcon className='size-6' />
 						&nbsp;Connect Project
 					</div>
 				}
@@ -137,9 +139,10 @@ export default function Projects(props: Readonly<ListProps>) {
 				danger={true}
 			>
 				<p>
-					Are you sure you want to delete the <b>{selectedItem?.name}</b> project?
-					This action is irreversible and you will not be able to
-					retrieve your project anymore.
+					Are you sure you want to delete the{' '}
+					<b>{selectedItem?.name}</b> project? This action is
+					irreversible and you will not be able to retrieve your
+					project anymore.
 				</p>
 			</ConfirmModal>
 		</>

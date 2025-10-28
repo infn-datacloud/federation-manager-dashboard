@@ -130,7 +130,7 @@ export default function SlaList(props: Readonly<ListProps>) {
 				}}
 				title={
 					<div className='flex items-center'>
-						<PlusIcon className='size-8' />
+						<DocumentDuplicateIcon className='size-6' />
 						&nbsp;New SLA
 					</div>
 				}

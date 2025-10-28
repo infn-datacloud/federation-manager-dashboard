@@ -121,7 +121,7 @@ export default function UserGroupsList(props: Readonly<ListProps>) {
 				}}
 				title={
 					<div className='flex items-center'>
-						<PlusIcon className='size-8' />
+						<UserGroupIcon className='size-6' />
 						&nbsp;New User Group
 					</div>
 				}

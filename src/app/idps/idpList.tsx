@@ -1,7 +1,6 @@
 'use client';
 
 import { Button } from '@/components/buttons';
-import Header from '@/components/header';
 import List from './components/list';
 import { Modal, ModalBody } from '@/components/modal';
 import { FormEvent, useState } from 'react';
@@ -81,11 +80,6 @@ export default function IdpList(props: Readonly<Items>) {
 
 	return (
 		<>
-			<Header
-				logo='/logos/infn_logo.png'
-				title='Identity Providers'
-				subtitle='Identity Providers supported by Data Cloud. Resource providers must support at least one of them. Data Cloud users MUST be registered to at least one of those Identity Providers.'
-			/>
 			<List items={items} />
 			<div className='fixed bottom-0 right-0 py-12 px-8 flex items-center justify-center'>
 				<Button
