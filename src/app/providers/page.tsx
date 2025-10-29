@@ -1,7 +1,10 @@
-import ProjectList from "./providerList";
+import ProjectList from './providerList';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import Custom401 from '@/app/pages/401';
+import { Suspense } from 'react';
+import { LoadingList } from './loading';
+import Header from '@/components/header';
 
 export default async function Providers() {
 	const session = await auth.api.getSession({
@@ -10,11 +13,8 @@ export default async function Providers() {
 
 	if (!session) {
 		// Auth error, show 401 page
-		return <Custom401 />
+		return <Custom401 />;
 	}
-
-	const providers = await getProviders();
-	const items = providers || [];
 
 	/* const items = [
 		{
@@ -112,22 +112,43 @@ export default async function Providers() {
 
 	return (
 		<>
-			<ProjectList items={items} />
+			<Header
+				logo='/logos/infn_logo.png'
+				title='Providers'
+				subtitle='A Provider is a logical resource provider with geographical zones that collects Projects for quota federation and supports one or more identity providers (IdPs).'
+			/>
+			<Suspense fallback={<LoadingList />}>
+				<List />
+			</Suspense>
 		</>
 	);
+}
 
+async function List() {
+	const providers = await getProviders();
+	const userId = await getUserId();
+
+	return <ProjectList items={providers} userId={userId} />;
 }
 
 async function getProviders() {
-	const apiResponse = await fetch(
-		`${process.env.BASE_URL}/api/providers`,
-		{
-			method: 'GET',
-			headers: await headers(),
-		}
-	);
+	const apiResponse = await fetch(`${process.env.BASE_URL}/api/providers`, {
+		method: 'GET',
+		headers: await headers(),
+	});
 
 	const providers = await apiResponse.json();
-	
+
 	return providers.data;
+}
+
+async function getUserId() {
+	const apiResponse = await fetch(`${process.env.BASE_URL}/api/users/my-id`, {
+		method: 'GET',
+		headers: await headers(),
+	});
+
+	const id = await apiResponse.json();
+
+	return id;
 }

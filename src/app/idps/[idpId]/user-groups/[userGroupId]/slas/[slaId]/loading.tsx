@@ -1,5 +1,5 @@
 import { Button } from '@/components/buttons';
-import { PlusIcon, DocumentDuplicateIcon } from '@heroicons/react/24/solid';
+import { PlusIcon, PresentationChartLineIcon } from '@heroicons/react/24/solid';
 import LoadingComponent from '@/components/loading/loading';
 
 export default function Loading() {
@@ -11,7 +11,7 @@ export function LoadingList() {
 		<>
 			<div className='mt-12 flex flex-col md:flex-row md: justify-between'>
 				<div className='text-xl uppercase font-bold flex items-center'>
-					<DocumentDuplicateIcon className='size-6' />
+					<PresentationChartLineIcon className='size-6' />
 					&nbsp;Projects
 				</div>
 				<Button className='btn btn-secondary mt-4 md:mt-0' disabled>

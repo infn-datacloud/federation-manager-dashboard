@@ -1,16 +1,16 @@
 'use client';
 
 import { Button } from '@/components/buttons';
-import Header from '@/components/header';
 import List from './components/list';
 import { Modal, ModalBody } from '@/components/modal';
 import { useState, FormEvent } from 'react';
 import { PlusIcon } from '@heroicons/react/24/solid';
-import ProjectForm from './providerForm'
+import ProviderForm from './providerForm';
 import { Form } from '@/components/form';
-import { PrintFormErrors } from '@/utils';
+import { toaster } from '@/components/toaster';
+import { useRouter } from 'next/navigation';
 
-type Items = {
+type ProjectListProps = {
 	items: Array<{
 		id: string;
 		name: string;
@@ -26,12 +26,14 @@ type Items = {
 		user_name: string;
 		href: string;
 	}>;
+	userId: string;
 };
 
-export default function ProjectList(props: Readonly<Items>) {
-    const { items } = props;
+export default function ProjectList(props: Readonly<ProjectListProps>) {
+	const router = useRouter();
+	const { items, userId } = props;
 
-    const [showProviderModal, setShowProviderModal] = useState(false);
+	const [showProviderModal, setShowProviderModal] = useState(false);
 
 	const createProvider = async (
 		e: FormEvent<HTMLFormElement>
@@ -69,12 +71,13 @@ export default function ProjectList(props: Readonly<Items>) {
 
 			const jsonResponse = await apiResponse.json();
 
-			if(jsonResponse.id) {
+			if (jsonResponse.id) {
 				setShowProviderModal(false);
+				router.refresh();
+				toaster.success('IDP created successfully');
 			}
 
 			//PrintFormErrors(jsonResponse);
-
 		} catch (err) {
 			console.error('API Error:', err);
 		} finally {
@@ -82,13 +85,8 @@ export default function ProjectList(props: Readonly<Items>) {
 		}
 	};
 
-    return (
+	return (
 		<>
-			<Header
-				logo='/logos/infn_logo.png'
-				title='Providers'
-				subtitle='A Provider is a logical resource provider with geographical zones that collects Projects for quota federation and supports one or more identity providers (IdPs).'
-			/>
 			<List items={items} />
 			<div className='md:w-full fixed bottom-0 right-0 py-12 px-8 flex items-center justify-center'>
 				<Button
@@ -115,7 +113,7 @@ export default function ProjectList(props: Readonly<Items>) {
 			>
 				<ModalBody>
 					<Form onSubmit={createProvider}>
-						<ProjectForm />
+						<ProviderForm userId={userId} />
 						<div className='flex justify-between w-full pt-4'>
 							<Button
 								className='btn btn-bold btn-danger'
