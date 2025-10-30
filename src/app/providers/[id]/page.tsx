@@ -1,9 +1,8 @@
-import ProviderCarousel from './components/carousel';
+import ProviderCarousel from './providerCarousel';
 import Status from '@/components/status';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import Custom401 from '@/app/pages/401';
-
 
 type ProviderPageProps = {
 	params: {
@@ -11,7 +10,9 @@ type ProviderPageProps = {
 	};
 };
 
-export default async function Provider({ params }: Readonly<ProviderPageProps>) {
+export default async function Provider({
+	params,
+}: Readonly<ProviderPageProps>) {
 	const session = await auth.api.getSession({
 		headers: await headers(),
 	});
@@ -23,7 +24,8 @@ export default async function Provider({ params }: Readonly<ProviderPageProps>) 
 	const { id } = params;
 
 	const provider = await getProvider(id);
-	const idps = await getIdentityProviders(id);
+	const providerIdps = await getProviderIdps(id);
+	const idps = await getIdentityProviders();
 
 	return (
 		<>
@@ -36,11 +38,11 @@ export default async function Provider({ params }: Readonly<ProviderPageProps>) 
 					</div>
 				</div>
 				<div className='w-full md:w-1/4'>
-					<Status status={ provider.status } />
+					<Status status={provider.status} />
 				</div>
 			</div>
 
-			<ProviderCarousel idps={idps} />
+			<ProviderCarousel providerIdps={providerIdps} idps={idps} />
 		</>
 	);
 
@@ -61,9 +63,9 @@ export default async function Provider({ params }: Readonly<ProviderPageProps>) 
 
 		return data;
 	}
-	
-	async function getIdentityProviders(provider_id: string) {
-		const url = `${process.env.BASE_URL}/api/providers/${provider_id}/idps`;
+
+	async function getProviderIdps(providerId: string) {
+		const url = `${process.env.BASE_URL}/api/providers/${providerId}/idps`;
 
 		const apiResponse = await fetch(url, {
 			method: 'GET',
@@ -72,7 +74,29 @@ export default async function Provider({ params }: Readonly<ProviderPageProps>) 
 
 		if (!apiResponse.ok) {
 			const errorText = await apiResponse.text();
-			throw new Error(`Failed to fetch identity provider(s): ${errorText}`);
+			throw new Error(
+				`Failed to fetch provider's identity provider(s): ${errorText}`
+			);
+		}
+
+		const data = await apiResponse.json();
+
+		return data.data;
+	}
+	
+	async function getIdentityProviders() {
+		const url = `${process.env.BASE_URL}/api/idps`;
+
+		const apiResponse = await fetch(url, {
+			method: 'GET',
+			headers: await headers(),
+		});
+
+		if (!apiResponse.ok) {
+			const errorText = await apiResponse.text();
+			throw new Error(
+				`Failed to fetch identity provider(s): ${errorText}`
+			);
 		}
 
 		const data = await apiResponse.json();

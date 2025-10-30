@@ -59,10 +59,10 @@ function Row(
 	);
 }
 
-export default function IdentityProvidersTable(params: { idps: IDPsProps }) {
-	const { idps } = params;
+export default function IdentityProvidersTable(params: { providerIdps: IDPsProps }) {
+	const { providerIdps } = params;
 
-	if (idps.length === 0) {
+	if (providerIdps.length === 0) {
 		return (
 			<p className='text-gray dark:text-secondary/60 p-2 text-center'>
 				This provider has no IDP.
@@ -72,7 +72,7 @@ export default function IdentityProvidersTable(params: { idps: IDPsProps }) {
 
 	return (
 		<ul className='w-full mt-6'>
-			{idps.map((row) => (
+			{providerIdps.map((row) => (
 				<Row key={row.idp_id} data={row} />
 			))}
 		</ul>
