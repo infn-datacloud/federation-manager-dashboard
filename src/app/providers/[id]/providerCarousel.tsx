@@ -27,8 +27,8 @@ import {
 	ClipboardDocumentIcon,
 	TrashIcon,
 	PencilIcon,
+	ShieldCheckIcon,
 } from '@heroicons/react/24/solid';
-import ProjectsTable from './tables/projects';
 import { toaster } from '@/components/toaster';
 import { useParams, useRouter } from 'next/navigation';
 import { Options, Option } from '@/components/options';
@@ -68,14 +68,26 @@ type providerRegionProps = {
 
 type providerRegionsProps = Array<providerRegionProps>;
 
+/* Project */
+type providerProjectProps = {
+	id: string;
+	name: string;
+	description: string;
+	iaas_project_id: string;
+	is_root: boolean;
+};
+
+type providerProjectsProps = Array<providerProjectProps>;
+
 export default function ProviderCarousel(props: {
 	idps: idpsProps;
 	providerIdps: providerIdpsProps;
 	providerRegions: providerRegionsProps;
+	providerProjects: providerProjectsProps;
 }) {
 	const router = useRouter();
 
-	const { providerIdps, providerRegions, idps } = props;
+	const { idps, providerIdps, providerRegions, providerProjects } = props;
 
 	const params = useParams();
 	const { id } = params;
@@ -222,13 +234,16 @@ export default function ProviderCarousel(props: {
 		if (providerRegionData == undefined) {
 			/* CREATE */
 			try {
-				const apiResponse = await fetch(`/api/providers/${id}/regions`, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify(body),
-				});
+				const apiResponse = await fetch(
+					`/api/providers/${id}/regions`,
+					{
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify(body),
+					}
+				);
 
 				const jsonResponse = await apiResponse;
 
@@ -303,7 +318,112 @@ export default function ProviderCarousel(props: {
 		}
 	};
 
-	const [newProjectModal, setNewProjectModal] = useState(false);
+	/* Project */
+	const [showProviderProjectModal, setShowProviderProjectModal] =
+		useState(false);
+	const [showProviderProjectDeleteModal, setShowProviderProjectDeleteModal] =
+		useState(false);
+	const [providerProjectData, setProviderProjectData] = useState<
+		providerProjectProps | undefined
+	>();
+
+	const connectProviderProject = async (
+		e: FormEvent<HTMLFormElement>
+	): Promise<void> => {
+		// Prevent the default form submission (page reload)
+		e.preventDefault();
+
+		const formData = new FormData(e.currentTarget);
+		const entries = Object.fromEntries(formData.entries());
+
+		const body: Record<string, unknown> = { ...entries };
+
+		if (providerProjectData == undefined) {
+			/* CREATE */
+			try {
+				const apiResponse = await fetch(
+					`/api/providers/${id}/projects`,
+					{
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify(body),
+					}
+				);
+
+				const jsonResponse = await apiResponse;
+
+				if (jsonResponse.ok) {
+					setShowProviderProjectModal(false);
+					router.refresh();
+					toaster.success('Project created successfully');
+				}
+			} catch (err) {
+				console.error('API Error:', err);
+			} finally {
+				return;
+			}
+		} else {
+			/* UPDATE */
+			try {
+				const apiResponse = await fetch(
+					`/api/providers/${id}/projects/${providerProjectData.id}`,
+					{
+						method: 'PUT',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify(body),
+					}
+				);
+
+				const jsonResponse = await apiResponse;
+
+				if (jsonResponse.ok) {
+					setShowProviderProjectModal(false);
+					setProviderProjectData(undefined);
+					router.refresh();
+					toaster.success('Project updated successfully');
+				}
+			} catch (err) {
+				console.error('API Error:', err);
+			} finally {
+				return;
+			}
+		}
+	};
+
+	const deleteProviderProject = async (): Promise<void> => {
+		try {
+			const apiResponse = await fetch(
+				`/api/providers/${id}/projects/${providerProjectData?.id}`,
+				{
+					method: 'DELETE',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}
+			);
+
+			const jsonResponse = await apiResponse;
+
+			if (jsonResponse.ok) {
+				setShowProviderProjectDeleteModal(false);
+				router.refresh();
+				toaster.success('Project deleted successfully');
+			} else {
+				toaster.error(
+					'Error deleting project',
+					'Some error occurred while deleting the project. Please try again.'
+				);
+			}
+		} catch (err) {
+			console.error('API Error:', err);
+		} finally {
+			return;
+		}
+	};
 
 	return (
 		<div className='flex justify-center relative'>
@@ -374,7 +494,7 @@ export default function ProviderCarousel(props: {
 						<ProviderRegionTable />
 					</CarouselPanel>
 
-					{/* STEP 3 */}
+					{/* STEP 3 - Project */}
 					<CarouselPanel>
 						<div className='w-full mt-12 mb-8'>
 							<div className='flex flex-col md:flex-row justify-between items-center'>
@@ -390,14 +510,15 @@ export default function ProviderCarousel(props: {
 								<Button
 									className='btn btn-secondary w-full md:w-auto lg:mt-0'
 									onClick={() => {
-										setNewProjectModal(true);
+										setProviderProjectData(undefined);
+										setShowProviderProjectModal(true);
 									}}
 								>
 									Add Project
 								</Button>
 							</div>
 						</div>
-						<ProjectsTable />
+						<ProviderProjectTable />
 					</CarouselPanel>
 
 					{/* STEP 4 */}
@@ -468,14 +589,15 @@ export default function ProviderCarousel(props: {
 								<Button
 									className='btn btn-secondary w-full md:w-auto lg:mt-0'
 									onClick={() => {
-										setNewProjectModal(true);
+										setProviderProjectData(undefined);
+										setShowProviderProjectModal(true);
 									}}
 								>
 									Add Project
 								</Button>
 							</div>
 						</div>
-						<ProjectsTable />
+						<ProviderProjectTable />
 					</CarouselPanel>
 				</CarouselPanels>
 
@@ -490,7 +612,11 @@ export default function ProviderCarousel(props: {
 						currentPage === TOTAL_PAGES - 1 ? 'Submit' : 'Next'
 					}
 					backButtonDisabled={currentPage === 0}
-					nextButtonDisabled={(currentPage == 0 && providerIdps.length == 0) || (currentPage == 1 && providerRegions.length == 0)}
+					nextButtonDisabled={
+						(currentPage == 0 && providerIdps.length == 0) ||
+						(currentPage == 1 && providerRegions.length == 0) ||
+						(currentPage == 2 && providerProjects.length == 0)
+					}
 					className='mt-8'
 				/>
 			</Carousel>
@@ -540,13 +666,37 @@ export default function ProviderCarousel(props: {
 				<p>
 					Are you sure you want to delete the{' '}
 					<b>{providerRegionData?.name}</b> region? This action is
-					irreversible and you will not be able to retrieve your region
-					anymore.
+					irreversible and you will not be able to retrieve your
+					region anymore.
 				</p>
 			</ConfirmModal>
 
-			{/* Project Modal */}
-			<Modal
+			{/* Project */}
+			<ProviderProjectModal />
+
+			{/* Project Delete modal */}
+			<ConfirmModal
+				onConfirm={() => {
+					deleteProviderProject();
+				}}
+				onClose={() => {
+					setShowProviderProjectDeleteModal(false);
+				}}
+				confirmButtonText='Yes, delete'
+				cancelButtonText='Cancel'
+				show={showProviderProjectDeleteModal}
+				title={`Delete ${providerProjectData?.name}`}
+				danger={true}
+			>
+				<p>
+					Are you sure you want to delete the{' '}
+					<b>{providerProjectData?.name}</b> project? This action is
+					irreversible and you will not be able to retrieve your
+					project anymore.
+				</p>
+			</ConfirmModal>
+
+			{/* <Modal
 				show={newProjectModal}
 				onClose={() => {
 					setNewProjectModal(false);
@@ -599,7 +749,7 @@ export default function ProviderCarousel(props: {
 						</div>
 					</Form>
 				</ModalBody>
-			</Modal>
+			</Modal> */}
 		</div>
 	);
 
@@ -687,7 +837,8 @@ export default function ProviderCarousel(props: {
 						<div className='flex items-center'>
 							<IdentificationIcon className='size-8' />
 							&nbsp;
-							{providerIdpData ? 'Edit' : 'Add New'} identity provider
+							{providerIdpData ? 'Edit' : 'Add New'} identity
+							provider
 						</div>
 					}
 				>
@@ -956,6 +1107,181 @@ export default function ProviderCarousel(props: {
 						defaultValue={providerRegionData?.bandwidth_out || 10}
 					/>
 				</Field>
+			</>
+		);
+	}
+
+	/* Project */
+	function editProviderProject(item: providerProjectProps) {
+		setProviderProjectData(item);
+		setShowProviderProjectModal(true);
+	}
+
+	function ProviderProjectTable() {
+		return (
+			<>
+				{providerProjects.length == 0 ? (
+					<p className='text-gray dark:text-secondary/60 p-2 text-center'>
+						This provider has no projects.
+					</p>
+				) : (
+					<ul className='w-full mt-6'>
+						{providerProjects.map((row) => (
+							<li
+								key={row.id}
+								className='flex flex-row justify-between items-start w-full box-sm'
+							>
+								<div className='flex flex-col w-9/10 mr-2'>
+									<div className='flex flex-col lg:flex-row lg:justify-between items-start'>
+										<div>
+											<div className='font-bold text-md truncate'>
+												{row.name}
+											</div>
+											<div className='text-md truncate'>
+												{row.description}
+											</div>
+										</div>
+										{row.is_root ? (
+											<div className='text-xs flex items-center opacity-80 mb-4 lg:mb-0 uppercase font-bold'>
+												<ShieldCheckIcon className='size-3' />
+												&nbsp;Root
+											</div>
+										) : (
+											''
+										)}
+									</div>
+									{/* <div className='text-xs opacity-80 mt-2'>Region Overrides:</div>
+									{row.regionOverrides.map((item) => (
+										<div key={item} className='text-sm '>
+											{item}
+										</div>
+									))} */}
+								</div>
+
+								<div className='flex flex-col'>
+									<Options>
+										<Option
+											onClick={() => {
+												editProviderProject(row);
+											}}
+										>
+											<div className='flex items-center'>
+												<PencilIcon className='size-4' />
+												&nbsp;Edit
+											</div>
+										</Option>
+										<Option
+											data-danger={true}
+											onClick={() => {
+												setProviderProjectData(row);
+												setShowProviderProjectDeleteModal(
+													true
+												);
+											}}
+										>
+											<div className='flex items-center'>
+												<TrashIcon className='size-4' />
+												&nbsp;Delete
+											</div>
+										</Option>
+									</Options>
+								</div>
+							</li>
+						))}
+					</ul>
+				)}
+			</>
+		);
+	}
+
+	function ProviderProjectModal() {
+		return (
+			<>
+				<Modal
+					show={showProviderProjectModal}
+					onClose={() => {
+						setShowProviderProjectModal(false);
+					}}
+					title={
+						<div className='flex items-center'>
+							<MapIcon className='size-8' />
+							&nbsp;
+							{providerProjectData ? 'Edit' : 'Add New'} project
+						</div>
+					}
+				>
+					<ModalBody>
+						<Form onSubmit={connectProviderProject}>
+							<ProviderProjectForm />
+							<div className='flex justify-between w-full'>
+								<Button
+									className='btn btn-bold btn-danger'
+									onClick={() => {
+										setShowProviderProjectModal(false);
+										setProviderProjectData(undefined);
+									}}
+								>
+									Cancel
+								</Button>
+								<Button
+									className='btn btn-bold btn-primary'
+									type='submit'
+								>
+									Save
+								</Button>
+							</div>
+						</Form>
+					</ModalBody>
+				</Modal>
+			</>
+		);
+	}
+
+	function ProviderProjectForm() {
+		const canBeRoot =
+			providerProjects.filter((item) => {
+				return item.is_root == true;
+			}).length == 0;
+
+		return (
+			<>
+				<Field>
+					<Input
+						label='Name'
+						name='name'
+						placeholder='My name'
+						required
+						defaultValue={providerProjectData?.name}
+					/>
+				</Field>
+				<Field>
+					<Input
+						label='Description'
+						name='description'
+						placeholder='My desc'
+						defaultValue={providerProjectData?.description}
+					/>
+				</Field>
+				<Field>
+					<Input
+						label='IAAS Project ID'
+						name='iaas_project_id'
+						placeholder='xxxx-xxxx-xxxx-xxxx'
+						defaultValue={providerProjectData?.iaas_project_id}
+					/>
+				</Field>
+				{canBeRoot || providerProjectData?.is_root ? (
+					<Field className='flex items-center'>
+						<Checkbox
+							id='is_root'
+							name='is_root'
+							defaultChecked={providerProjectData?.is_root}
+						/>
+						<Label>Is Root</Label>
+					</Field>
+				) : (
+					''
+				)}
 			</>
 		);
 	}

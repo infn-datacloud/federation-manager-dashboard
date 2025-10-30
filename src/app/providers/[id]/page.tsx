@@ -25,12 +25,16 @@ export default async function Provider({
 	const provider = await getProvider(id);
 
 	/* IDPs */
-	const providerIdps = await getProviderIdps(id);
 	const idps = await getIdentityProviders();
+	const providerIdps = await getProviderIdps(id);
 
 	/* Regions */
 	const providerRegions = await getProviderRegions(id);
-	console.log(providerRegions)
+	
+	/* Projects */
+	const providerProjects = await getProviderProjects(id);
+
+	console.log(providerProjects)
 
 	return (
 		<>
@@ -48,9 +52,10 @@ export default async function Provider({
 			</div>
 
 			<ProviderCarousel
-				providerIdps={providerIdps}
 				idps={idps}
+				providerIdps={providerIdps}
 				providerRegions={providerRegions}
+				providerProjects={providerProjects}
 			/>
 		</>
 	);
@@ -127,6 +132,27 @@ export default async function Provider({
 			const errorText = await apiResponse.text();
 			throw new Error(
 				`Failed to fetch provider's region(s): ${errorText}`
+			);
+		}
+
+		const data = await apiResponse.json();
+
+		return data.data;
+	}
+
+	/* Projects */
+	async function getProviderProjects(providerId: string) {
+		const url = `${process.env.BASE_URL}/api/providers/${providerId}/projects`;
+
+		const apiResponse = await fetch(url, {
+			method: 'GET',
+			headers: await headers(),
+		});
+
+		if (!apiResponse.ok) {
+			const errorText = await apiResponse.text();
+			throw new Error(
+				`Failed to fetch provider's project(s): ${errorText}`
 			);
 		}
 
