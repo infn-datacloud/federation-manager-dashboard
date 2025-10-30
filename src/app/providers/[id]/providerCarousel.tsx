@@ -12,7 +12,14 @@ import {
 import { Stepper } from '@/components/stepper';
 import { FormEvent, useState } from 'react';
 import { Modal, ModalBody } from '@/components/modal';
-import { Checkbox, Field, Form, Label } from '@/components/form';
+import {
+	Checkbox,
+	Field,
+	Form,
+	Label,
+	Select,
+	SelectOption,
+} from '@/components/form';
 import { Input, InputList } from '@/components/inputs';
 import {
 	IdentificationIcon,
@@ -21,13 +28,11 @@ import {
 	TrashIcon,
 	PencilIcon,
 } from '@heroicons/react/24/solid';
-import IdentityProvidersTable from './tables/identityProviders';
 import RegionsTable from './tables/regions';
 import ProjectsTable from './tables/projects';
 import { toaster } from '@/components/toaster';
 import { useParams, useRouter } from 'next/navigation';
 import { Options, Option } from '@/components/options';
-import ProviderIdpForm from './providerIdpForm';
 import ConfirmModal from '@/components/confirm-modal';
 
 type providerIdpProps = {
@@ -54,31 +59,25 @@ export default function ProviderCarousel(props: {
 	providerIdps: providerIdpsProps;
 	idps: idpsProps;
 }) {
+	const router = useRouter();
+
 	const { providerIdps, idps } = props;
 
 	const params = useParams();
 	const { id } = params;
 
-	const router = useRouter();
-
+	/* Navigator */
 	const TOTAL_PAGES = 4;
-
 	const [currentPage, setCurrentPage] = useState(0);
-
+	const back = () => setCurrentPage(Math.max(0, currentPage - 1));
+	const next = () => setCurrentPage(Math.min(currentPage + 1, TOTAL_PAGES - 1));
+	
+	/* IDP */
 	const [showProviderIdpModal, setShowProviderIdpModal] = useState(false);
 	const [showProviderIdpDeleteModal, setShowProviderIdpDeleteModal] = useState(false);
-	const [providerIdpData, setProviderIdpData] = useState<
-		providerIdpProps | undefined
-	>();
+	const [providerIdpData, setProviderIdpData] = useState<providerIdpProps | undefined>();
 
-	const [newRegionModal, setNewRegionModal] = useState(false);
-	const [newProjectModal, setNewProjectModal] = useState(false);
-
-	const back = () => setCurrentPage(Math.max(0, currentPage - 1));
-	const next = () =>
-		setCurrentPage(Math.min(currentPage + 1, TOTAL_PAGES - 1));
-
-	const connectIdentityProvider = async (
+	const connectProviderIdp = async (
 		e: FormEvent<HTMLFormElement>
 	): Promise<void> => {
 		// Prevent the default form submission (page reload)
@@ -104,15 +103,15 @@ export default function ProviderCarousel(props: {
 					},
 					body: JSON.stringify(structuredBody),
 				});
-	
+
 				const jsonResponse = await apiResponse.json();
-	
+
 				if (jsonResponse == null) {
 					setShowProviderIdpModal(false);
 					router.refresh();
 					toaster.success('IDP connected successfully');
 				}
-	
+
 				//PrintFormErrors(jsonResponse);
 			} catch (err) {
 				console.error('API Error:', err);
@@ -122,13 +121,16 @@ export default function ProviderCarousel(props: {
 		} else {
 			/* UPDATE */
 			try {
-				const apiResponse = await fetch(`/api/providers/${id}/idps/${providerIdpData.idp_id}`, {
-					method: 'PUT',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify(body),
-				});
+				const apiResponse = await fetch(
+					`/api/providers/${id}/idps/${providerIdpData.idp_id}`,
+					{
+						method: 'PUT',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify(body),
+					}
+				);
 
 				const jsonResponse = await apiResponse;
 
@@ -149,35 +151,38 @@ export default function ProviderCarousel(props: {
 	};
 
 	const deleteProviderIdp = async (): Promise<void> => {
-			try {
-				const apiResponse = await fetch(
-					`/api/providers/${id}/idps/${providerIdpData?.idp_id}`,
-					{
-						method: 'DELETE',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-					}
-				);
-	
-				const jsonResponse = await apiResponse; //.json();
-	
-				if (jsonResponse.ok) {
-					setShowProviderIdpDeleteModal(false);
-					router.refresh();
-					toaster.success('IDP deleted successfully');
-				} else {
-					toaster.error(
-						'Error deleting IDP',
-						'Some error occurred while deleting the identity provider. Please try again.'
-					);
+		try {
+			const apiResponse = await fetch(
+				`/api/providers/${id}/idps/${providerIdpData?.idp_id}`,
+				{
+					method: 'DELETE',
+					headers: {
+						'Content-Type': 'application/json',
+					},
 				}
-			} catch (err) {
-				console.error('API Error:', err);
-			} finally {
-				return;
+			);
+
+			const jsonResponse = await apiResponse; //.json();
+
+			if (jsonResponse.ok) {
+				setShowProviderIdpDeleteModal(false);
+				router.refresh();
+				toaster.success('IDP deleted successfully');
+			} else {
+				toaster.error(
+					'Error deleting IDP',
+					'Some error occurred while deleting the identity provider. Please try again.'
+				);
 			}
+		} catch (err) {
+			console.error('API Error:', err);
+		} finally {
+			return;
 		}
+	};
+
+	const [newRegionModal, setNewRegionModal] = useState(false);
+	const [newProjectModal, setNewProjectModal] = useState(false);
 
 	return (
 		<div className='flex justify-center relative'>
@@ -194,7 +199,7 @@ export default function ProviderCarousel(props: {
 					<CarouselTab>STEP 4</CarouselTab>
 				</CarouselList>
 				<CarouselPanels>
-					{/* STEP 1 */}
+					{/* STEP 1 - IDP */}
 					<CarouselPanel>
 						<div className='w-full mt-12 mb-8'>
 							<div className='flex flex-col md:flex-row justify-between items-center'>
@@ -210,6 +215,7 @@ export default function ProviderCarousel(props: {
 								<Button
 									className='btn btn-secondary w-full md:w-auto lg:mt-0'
 									onClick={() => {
+										setProviderIdpData(undefined);
 										setShowProviderIdpModal(true);
 									}}
 								>
@@ -217,66 +223,7 @@ export default function ProviderCarousel(props: {
 								</Button>
 							</div>
 						</div>
-						{providerIdps.length == 0 ? (
-							<p className='text-gray dark:text-secondary/60 p-2 text-center'>
-								This provider has no IDP connected.
-							</p>
-						) : (
-							<ul className='w-full mt-6'>
-								{providerIdps.map((row) => (
-									<li
-										key={row.idp_id}
-										className='flex flex-row justify-between items-start lg:items-center w-full box-sm'
-									>
-										<div className='flex w-9/10 truncate flex-col lg:flex-row'>
-											<div className='font-bold text-md lg:w-1/2 truncate'>
-												{row.overrides.name}
-											</div>
-											<div className='text-sm flex items-center opacity-80 lg:w-1/4'>
-												<IdentificationIcon className='size-4' />
-												&nbsp;
-												<p className='truncate'>
-													{row.idp_id}
-												</p>
-											</div>
-											<div className='text-sm mt-2 lg:mt-0 flex items-center opacity-60 lg:w-1/4'>
-												<p className='truncate'>
-													{row.overrides.protocol}
-												</p>
-											</div>
-										</div>
-										<div className='flex flex-col'>
-											<Options>
-												<Option
-													onClick={() => {
-														editProviderIdp(row);
-													}}
-												>
-													<div className='flex items-center'>
-														<PencilIcon className='size-4' />
-														&nbsp;Edit
-													</div>
-												</Option>
-												<Option
-													data-danger={true}
-													onClick={() => {
-														setProviderIdpData(row);
-														setShowProviderIdpDeleteModal(
-															true
-														);
-													}}
-												>
-													<div className='flex items-center'>
-														<TrashIcon className='size-4' />
-														&nbsp;Delete
-													</div>
-												</Option>
-											</Options>
-										</div>
-									</li>
-								))}
-							</ul>
-						)}
+						<ProviderIdpTable />
 					</CarouselPanel>
 
 					{/* STEP 2 */}
@@ -357,6 +304,7 @@ export default function ProviderCarousel(props: {
 								<Button
 									className='btn btn-secondary w-full md:w-auto lg:mt-0'
 									onClick={() => {
+										setProviderIdpData(undefined);
 										setShowProviderIdpModal(true);
 									}}
 								>
@@ -364,7 +312,7 @@ export default function ProviderCarousel(props: {
 								</Button>
 							</div>
 						</div>
-						<IdentityProvidersTable providerIdps={providerIdps} />
+						<ProviderIdpTable />
 
 						{/* Regions */}
 						<div className='w-full mt-12 mb-8'>
@@ -424,45 +372,10 @@ export default function ProviderCarousel(props: {
 				/>
 			</Carousel>
 
-			{/* IDP Modal */}
-			<Modal
-				show={showProviderIdpModal}
-				onClose={() => {
-					setShowProviderIdpModal(false);
-					setProviderIdpData(undefined);
-				}}
-				title={
-					<div className='flex items-center'>
-						<IdentificationIcon className='size-8' />
-						&nbsp;Connect Identity Provider
-					</div>
-				}
-			>
-				<ModalBody>
-					<Form onSubmit={connectIdentityProvider}>
-						<ProviderIdpForm item={providerIdpData} idps={idps} />
-						<div className='flex justify-between w-full'>
-							<Button
-								className='btn btn-bold btn-danger'
-								onClick={() => {
-									setShowProviderIdpModal(false);
-									setProviderIdpData(undefined);
-								}}
-							>
-								Cancel
-							</Button>
-							<Button
-								className='btn btn-bold btn-primary'
-								type='submit'
-							>
-								Save
-							</Button>
-						</div>
-					</Form>
-				</ModalBody>
-			</Modal>
+			{/* IDP */}
+			<ProviderIdpModal />
 
-			{/* IDP Delete Modal */}
+			{/* Delete modal */}
 			<ConfirmModal
 				onConfirm={() => {
 					deleteProviderIdp();
@@ -483,6 +396,7 @@ export default function ProviderCarousel(props: {
 					anymore.
 				</p>
 			</ConfirmModal>
+
 
 			{/* Region Modal */}
 			<Modal
@@ -622,5 +536,183 @@ export default function ProviderCarousel(props: {
 	function editProviderIdp(item: providerIdpProps) {
 		setProviderIdpData(item);
 		setShowProviderIdpModal(true);
+	}
+
+	function ProviderIdpTable() {
+		return (
+			<>
+				{providerIdps.length == 0 ? (
+					<p className='text-gray dark:text-secondary/60 p-2 text-center'>
+						This provider has no IDP connected.
+					</p>
+				) : (
+					<ul className='w-full mt-6'>
+						{providerIdps.map((row) => (
+							<li
+								key={row.idp_id}
+								className='flex flex-row justify-between items-start lg:items-center w-full box-sm'
+							>
+								<div className='flex w-9/10 truncate flex-col lg:flex-row'>
+									<div className='font-bold text-md lg:w-1/2 truncate'>
+										{row.overrides.name}
+									</div>
+									<div className='text-sm flex items-center opacity-80 lg:w-1/4'>
+										<IdentificationIcon className='size-4' />
+										&nbsp;
+										<p className='truncate'>{row.idp_id}</p>
+									</div>
+									<div className='text-sm mt-2 lg:mt-0 flex items-center opacity-60 lg:w-1/4'>
+										<p className='truncate'>
+											{row.overrides.protocol}
+										</p>
+									</div>
+								</div>
+								<div className='flex flex-col'>
+									<Options>
+										<Option
+											onClick={() => {
+												editProviderIdp(row);
+											}}
+										>
+											<div className='flex items-center'>
+												<PencilIcon className='size-4' />
+												&nbsp;Edit
+											</div>
+										</Option>
+										<Option
+											data-danger={true}
+											onClick={() => {
+												setProviderIdpData(row);
+												setShowProviderIdpDeleteModal(
+													true
+												);
+											}}
+										>
+											<div className='flex items-center'>
+												<TrashIcon className='size-4' />
+												&nbsp;Delete
+											</div>
+										</Option>
+									</Options>
+								</div>
+							</li>
+						))}
+					</ul>
+				)}
+			</>
+		);
+	}
+
+	function ProviderIdpModal() {
+		return (
+			<>
+				<Modal
+					show={showProviderIdpModal}
+					onClose={() => {
+						setShowProviderIdpModal(false);
+						setProviderIdpData(undefined);
+					}}
+					title={
+						<div className='flex items-center'>
+							<IdentificationIcon className='size-8' />
+							&nbsp;Connect Identity Provider
+						</div>
+					}
+				>
+					<ModalBody>
+						<Form onSubmit={connectProviderIdp}>
+							<ProviderIdpForm />
+							<div className='flex justify-between w-full'>
+								<Button
+									className='btn btn-bold btn-danger'
+									onClick={() => {
+										setShowProviderIdpModal(false);
+										setProviderIdpData(undefined);
+									}}
+								>
+									Cancel
+								</Button>
+								<Button
+									className='btn btn-bold btn-primary'
+									type='submit'
+								>
+									Save
+								</Button>
+							</div>
+						</Form>
+					</ModalBody>
+				</Modal>
+			</>
+		);
+	}
+
+	function ProviderIdpForm() {
+		const selectedIdp = providerIdpData?.idp_id
+			? idps.filter((idp) => {
+					return idp.id == providerIdpData?.idp_id;
+			  })[0]
+			: idps[0];
+
+		return (
+			<>
+				<Field hidden={providerIdpData?.idp_id ? true : false}>
+					<Select
+						label='IDP'
+						name='idp'
+						defaultValue={{
+							id: selectedIdp.id,
+							name: selectedIdp.name,
+						}}
+					>
+						{idps.map((providerIdpData, index) => {
+							return (
+								<SelectOption
+									key={index}
+									value={{
+										id: providerIdpData.id,
+										name: providerIdpData.name,
+									}}
+								>
+									{providerIdpData.name}
+								</SelectOption>
+							);
+						})}
+					</Select>
+				</Field>
+				<Field>
+					<Input
+						label='Name'
+						name='name'
+						placeholder='My name'
+						required
+						defaultValue={providerIdpData?.overrides.name}
+					/>
+				</Field>
+				<Field>
+					<Input
+						label='Protocol'
+						name='protocol'
+						placeholder='openid'
+						defaultValue={providerIdpData?.overrides.protocol}
+					/>
+				</Field>
+				<Field>
+					<Input
+						label='Audience'
+						name='audience'
+						placeholder='my-aud'
+						defaultValue={providerIdpData?.overrides.audience}
+					/>
+				</Field>
+				<Field>
+					<Input
+						label='Groups claim'
+						name='groups_claim'
+						placeholder='my-group'
+						defaultValue={providerIdpData?.overrides.groups_claim}
+					/>
+				</Field>
+			</>
+		);
 	}
 }
