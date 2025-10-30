@@ -1133,7 +1133,7 @@ export default function ProviderCarousel(props: {
 							>
 								<div className='flex flex-col w-9/10 mr-2'>
 									<div className='flex flex-col lg:flex-row lg:justify-between items-start'>
-										<div>
+										<div className='w-9/10'>
 											<div className='font-bold text-md truncate'>
 												{row.name}
 											</div>
