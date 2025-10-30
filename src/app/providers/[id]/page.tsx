@@ -22,10 +22,15 @@ export default async function Provider({
 	}
 
 	const { id } = params;
-
 	const provider = await getProvider(id);
+
+	/* IDPs */
 	const providerIdps = await getProviderIdps(id);
 	const idps = await getIdentityProviders();
+
+	/* Regions */
+	const providerRegions = await getProviderRegions(id);
+	console.log(providerRegions)
 
 	return (
 		<>
@@ -42,7 +47,11 @@ export default async function Provider({
 				</div>
 			</div>
 
-			<ProviderCarousel providerIdps={providerIdps} idps={idps} />
+			<ProviderCarousel
+				providerIdps={providerIdps}
+				idps={idps}
+				providerRegions={providerRegions}
+			/>
 		</>
 	);
 
@@ -64,6 +73,7 @@ export default async function Provider({
 		return data;
 	}
 
+	/* IDPs */
 	async function getProviderIdps(providerId: string) {
 		const url = `${process.env.BASE_URL}/api/providers/${providerId}/idps`;
 
@@ -96,6 +106,27 @@ export default async function Provider({
 			const errorText = await apiResponse.text();
 			throw new Error(
 				`Failed to fetch identity provider(s): ${errorText}`
+			);
+		}
+
+		const data = await apiResponse.json();
+
+		return data.data;
+	}
+
+	/* Regions */
+	async function getProviderRegions(providerId: string) {
+		const url = `${process.env.BASE_URL}/api/providers/${providerId}/regions`;
+
+		const apiResponse = await fetch(url, {
+			method: 'GET',
+			headers: await headers(),
+		});
+
+		if (!apiResponse.ok) {
+			const errorText = await apiResponse.text();
+			throw new Error(
+				`Failed to fetch provider's region(s): ${errorText}`
 			);
 		}
 

@@ -28,12 +28,20 @@ import {
 	TrashIcon,
 	PencilIcon,
 } from '@heroicons/react/24/solid';
-import RegionsTable from './tables/regions';
 import ProjectsTable from './tables/projects';
 import { toaster } from '@/components/toaster';
 import { useParams, useRouter } from 'next/navigation';
 import { Options, Option } from '@/components/options';
 import ConfirmModal from '@/components/confirm-modal';
+
+/* IDP */
+type idpsProps = Array<{
+	id: string;
+	name: string;
+	protocol: string;
+	audience: string;
+	groups_claim: string;
+}>;
 
 type providerIdpProps = {
 	idp_id: string;
@@ -47,21 +55,27 @@ type providerIdpProps = {
 
 type providerIdpsProps = Array<providerIdpProps>;
 
-type idpsProps = Array<{
+/* Region */
+type providerRegionProps = {
 	id: string;
 	name: string;
-	protocol: string;
-	audience: string;
-	groups_claim: string;
-}>;
+	description: string;
+	overbooking_cpu: number;
+	overbooking_ram: number;
+	bandwidth_in: number;
+	bandwidth_out: number;
+};
+
+type providerRegionsProps = Array<providerRegionProps>;
 
 export default function ProviderCarousel(props: {
-	providerIdps: providerIdpsProps;
 	idps: idpsProps;
+	providerIdps: providerIdpsProps;
+	providerRegions: providerRegionsProps;
 }) {
 	const router = useRouter();
 
-	const { providerIdps, idps } = props;
+	const { providerIdps, providerRegions, idps } = props;
 
 	const params = useParams();
 	const { id } = params;
@@ -70,12 +84,16 @@ export default function ProviderCarousel(props: {
 	const TOTAL_PAGES = 4;
 	const [currentPage, setCurrentPage] = useState(0);
 	const back = () => setCurrentPage(Math.max(0, currentPage - 1));
-	const next = () => setCurrentPage(Math.min(currentPage + 1, TOTAL_PAGES - 1));
-	
+	const next = () =>
+		setCurrentPage(Math.min(currentPage + 1, TOTAL_PAGES - 1));
+
 	/* IDP */
 	const [showProviderIdpModal, setShowProviderIdpModal] = useState(false);
-	const [showProviderIdpDeleteModal, setShowProviderIdpDeleteModal] = useState(false);
-	const [providerIdpData, setProviderIdpData] = useState<providerIdpProps | undefined>();
+	const [showProviderIdpDeleteModal, setShowProviderIdpDeleteModal] =
+		useState(false);
+	const [providerIdpData, setProviderIdpData] = useState<
+		providerIdpProps | undefined
+	>();
 
 	const connectProviderIdp = async (
 		e: FormEvent<HTMLFormElement>
@@ -181,7 +199,110 @@ export default function ProviderCarousel(props: {
 		}
 	};
 
-	const [newRegionModal, setNewRegionModal] = useState(false);
+	/* Region */
+	const [showProviderRegionModal, setShowProviderRegionModal] =
+		useState(false);
+	const [showProviderRegionDeleteModal, setShowProviderRegionDeleteModal] =
+		useState(false);
+	const [providerRegionData, setProviderRegionData] = useState<
+		providerRegionProps | undefined
+	>();
+
+	const connectProviderRegion = async (
+		e: FormEvent<HTMLFormElement>
+	): Promise<void> => {
+		// Prevent the default form submission (page reload)
+		e.preventDefault();
+
+		const formData = new FormData(e.currentTarget);
+		const entries = Object.fromEntries(formData.entries());
+
+		const body: Record<string, unknown> = { ...entries };
+
+		if (providerRegionData == undefined) {
+			/* CREATE */
+			try {
+				const apiResponse = await fetch(`/api/providers/${id}/regions`, {
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(body),
+				});
+
+				const jsonResponse = await apiResponse;
+
+				if (jsonResponse.ok) {
+					setShowProviderRegionModal(false);
+					router.refresh();
+					toaster.success('Region created successfully');
+				}
+			} catch (err) {
+				console.error('API Error:', err);
+			} finally {
+				return;
+			}
+		} else {
+			/* UPDATE */
+			try {
+				const apiResponse = await fetch(
+					`/api/providers/${id}/regions/${providerRegionData.id}`,
+					{
+						method: 'PUT',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify(body),
+					}
+				);
+
+				const jsonResponse = await apiResponse;
+
+				if (jsonResponse.ok) {
+					setShowProviderRegionModal(false);
+					setProviderRegionData(undefined);
+					router.refresh();
+					toaster.success('Region updated successfully');
+				}
+			} catch (err) {
+				console.error('API Error:', err);
+			} finally {
+				return;
+			}
+		}
+	};
+
+	const deleteProviderRegion = async (): Promise<void> => {
+		try {
+			const apiResponse = await fetch(
+				`/api/providers/${id}/regions/${providerRegionData?.id}`,
+				{
+					method: 'DELETE',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}
+			);
+
+			const jsonResponse = await apiResponse;
+
+			if (jsonResponse.ok) {
+				setShowProviderRegionDeleteModal(false);
+				router.refresh();
+				toaster.success('Region deleted successfully');
+			} else {
+				toaster.error(
+					'Error deleting region',
+					'Some error occurred while deleting the region. Please try again.'
+				);
+			}
+		} catch (err) {
+			console.error('API Error:', err);
+		} finally {
+			return;
+		}
+	};
+
 	const [newProjectModal, setNewProjectModal] = useState(false);
 
 	return (
@@ -226,7 +347,7 @@ export default function ProviderCarousel(props: {
 						<ProviderIdpTable />
 					</CarouselPanel>
 
-					{/* STEP 2 */}
+					{/* STEP 2 - Region */}
 					<CarouselPanel>
 						<div className='w-full mt-12 mb-8'>
 							<div className='flex flex-col md:flex-row justify-between items-center'>
@@ -242,14 +363,15 @@ export default function ProviderCarousel(props: {
 								<Button
 									className='btn btn-secondary w-full md:w-auto lg:mt-0'
 									onClick={() => {
-										setNewRegionModal(true);
+										setProviderRegionData(undefined);
+										setShowProviderRegionModal(true);
 									}}
 								>
 									Add Region
 								</Button>
 							</div>
 						</div>
-						<RegionsTable />
+						<ProviderRegionTable />
 					</CarouselPanel>
 
 					{/* STEP 3 */}
@@ -325,14 +447,15 @@ export default function ProviderCarousel(props: {
 								<Button
 									className='btn btn-secondary w-full md:w-auto lg:mt-0'
 									onClick={() => {
-										setNewRegionModal(true);
+										setProviderRegionData(undefined);
+										setShowProviderRegionModal(true);
 									}}
 								>
 									Add Region
 								</Button>
 							</div>
 						</div>
-						<RegionsTable />
+						<ProviderRegionTable />
 
 						{/* Projects */}
 						<div className='w-full mt-12 mb-8'>
@@ -367,7 +490,7 @@ export default function ProviderCarousel(props: {
 						currentPage === TOTAL_PAGES - 1 ? 'Submit' : 'Next'
 					}
 					backButtonDisabled={currentPage === 0}
-					nextButtonDisabled={providerIdps.length == 0}
+					nextButtonDisabled={(currentPage == 0 && providerIdps.length == 0) || (currentPage == 1 && providerRegions.length == 0)}
 					className='mt-8'
 				/>
 			</Carousel>
@@ -375,7 +498,7 @@ export default function ProviderCarousel(props: {
 			{/* IDP */}
 			<ProviderIdpModal />
 
-			{/* Delete modal */}
+			{/* IDP Delete modal */}
 			<ConfirmModal
 				onConfirm={() => {
 					deleteProviderIdp();
@@ -397,83 +520,30 @@ export default function ProviderCarousel(props: {
 				</p>
 			</ConfirmModal>
 
+			{/* Region */}
+			<ProviderRegionModal />
 
-			{/* Region Modal */}
-			<Modal
-				show={newRegionModal}
-				onClose={() => {
-					setNewRegionModal(false);
+			{/* Region Delete modal */}
+			<ConfirmModal
+				onConfirm={() => {
+					deleteProviderRegion();
 				}}
-				title={
-					<div className='flex items-center'>
-						<MapIcon className='size-8' />
-						&nbsp;Add New Region
-					</div>
-				}
+				onClose={() => {
+					setShowProviderRegionDeleteModal(false);
+				}}
+				confirmButtonText='Yes, delete'
+				cancelButtonText='Cancel'
+				show={showProviderRegionDeleteModal}
+				title={`Delete ${providerRegionData?.name}`}
+				danger={true}
 			>
-				<ModalBody>
-					<Form>
-						<Field>
-							<Input
-								label='Name'
-								name='name'
-								placeholder='Description'
-								required
-							/>
-						</Field>
-						<Field>
-							<Input
-								label='Country'
-								name='country'
-								placeholder='IT'
-								required
-							/>
-						</Field>
-						<Field>
-							<Input
-								label='Site'
-								name='site'
-								placeholder='Site name'
-								required
-							/>
-						</Field>
-						<div className='flex gap-4'>
-							<Field className='w-full'>
-								<Input
-									label='Latitude'
-									name='latitude'
-									placeholder='44.123'
-									required
-								/>
-							</Field>
-							<Field className='w-full'>
-								<Input
-									label='Longitude'
-									name='longitude'
-									placeholder='11.456'
-									required
-								/>
-							</Field>
-						</div>
-						<div className='flex justify-between w-full'>
-							<Button
-								className='btn btn-bold btn-danger'
-								onClick={() => {
-									setNewRegionModal(false);
-								}}
-							>
-								Cancel
-							</Button>
-							<Button
-								className='btn btn-bold btn-primary'
-								type='submit'
-							>
-								Save
-							</Button>
-						</div>
-					</Form>
-				</ModalBody>
-			</Modal>
+				<p>
+					Are you sure you want to delete the{' '}
+					<b>{providerRegionData?.name}</b> region? This action is
+					irreversible and you will not be able to retrieve your region
+					anymore.
+				</p>
+			</ConfirmModal>
 
 			{/* Project Modal */}
 			<Modal
@@ -533,6 +603,7 @@ export default function ProviderCarousel(props: {
 		</div>
 	);
 
+	/* IDP */
 	function editProviderIdp(item: providerIdpProps) {
 		setProviderIdpData(item);
 		setShowProviderIdpModal(true);
@@ -615,7 +686,8 @@ export default function ProviderCarousel(props: {
 					title={
 						<div className='flex items-center'>
 							<IdentificationIcon className='size-8' />
-							&nbsp;Connect Identity Provider
+							&nbsp;
+							{providerIdpData ? 'Edit' : 'Add New'} identity provider
 						</div>
 					}
 				>
@@ -710,6 +782,178 @@ export default function ProviderCarousel(props: {
 						name='groups_claim'
 						placeholder='my-group'
 						defaultValue={providerIdpData?.overrides.groups_claim}
+					/>
+				</Field>
+			</>
+		);
+	}
+
+	/* Region */
+	function editProviderRegion(item: providerRegionProps) {
+		setProviderRegionData(item);
+		setShowProviderRegionModal(true);
+	}
+
+	function ProviderRegionTable() {
+		return (
+			<>
+				{providerRegions.length == 0 ? (
+					<p className='text-gray dark:text-secondary/60 p-2 text-center'>
+						This provider has no regions.
+					</p>
+				) : (
+					<ul className='w-full mt-6'>
+						{providerRegions.map((row) => (
+							<li
+								key={row.id}
+								className='flex flex-row justify-between items-start w-full box-sm'
+							>
+								<div className='flex flex-col w-9/10 mr-2'>
+									<div className='font-bold text-md truncate'>
+										{row.name}
+									</div>
+									<div className='text-md truncate'>
+										{row.description}
+									</div>
+								</div>
+
+								<div className='flex flex-col'>
+									<Options>
+										<Option
+											onClick={() => {
+												editProviderRegion(row);
+											}}
+										>
+											<div className='flex items-center'>
+												<PencilIcon className='size-4' />
+												&nbsp;Edit
+											</div>
+										</Option>
+										<Option
+											data-danger={true}
+											onClick={() => {
+												setProviderRegionData(row);
+												setShowProviderRegionDeleteModal(
+													true
+												);
+											}}
+										>
+											<div className='flex items-center'>
+												<TrashIcon className='size-4' />
+												&nbsp;Delete
+											</div>
+										</Option>
+									</Options>
+								</div>
+							</li>
+						))}
+					</ul>
+				)}
+			</>
+		);
+	}
+
+	function ProviderRegionModal() {
+		return (
+			<>
+				<Modal
+					show={showProviderRegionModal}
+					onClose={() => {
+						setShowProviderRegionModal(false);
+					}}
+					title={
+						<div className='flex items-center'>
+							<MapIcon className='size-8' />
+							&nbsp;
+							{providerRegionData ? 'Edit' : 'Add New'} region
+						</div>
+					}
+				>
+					<ModalBody>
+						<Form onSubmit={connectProviderRegion}>
+							<ProviderRegionForm />
+							<div className='flex justify-between w-full'>
+								<Button
+									className='btn btn-bold btn-danger'
+									onClick={() => {
+										setShowProviderRegionModal(false);
+										setProviderRegionData(undefined);
+									}}
+								>
+									Cancel
+								</Button>
+								<Button
+									className='btn btn-bold btn-primary'
+									type='submit'
+								>
+									Save
+								</Button>
+							</div>
+						</Form>
+					</ModalBody>
+				</Modal>
+			</>
+		);
+	}
+
+	function ProviderRegionForm() {
+		return (
+			<>
+				<Field>
+					<Input
+						label='Name'
+						name='name'
+						placeholder='My name'
+						required
+						defaultValue={providerRegionData?.name}
+					/>
+				</Field>
+				<Field>
+					<Input
+						label='Description'
+						name='description'
+						placeholder='My desc'
+						defaultValue={providerRegionData?.description}
+					/>
+				</Field>
+				<Field>
+					<Input
+						label='Overbooking CPU'
+						name='overbooking_cpu'
+						placeholder='1'
+						type='number'
+						required
+						defaultValue={providerRegionData?.overbooking_cpu || 1}
+					/>
+				</Field>
+				<Field>
+					<Input
+						label='Overbooking RAM'
+						name='overbooking_ram'
+						placeholder='1'
+						type='number'
+						required
+						defaultValue={providerRegionData?.overbooking_ram || 1}
+					/>
+				</Field>
+				<Field>
+					<Input
+						label='Bandwidth IN'
+						name='bandwidth_in'
+						placeholder='10'
+						type='number'
+						required
+						defaultValue={providerRegionData?.bandwidth_in || 10}
+					/>
+				</Field>
+				<Field>
+					<Input
+						label='Bandwidth OUT'
+						name='bandwidth_out'
+						placeholder='10'
+						type='number'
+						required
+						defaultValue={providerRegionData?.bandwidth_out || 10}
 					/>
 				</Field>
 			</>
