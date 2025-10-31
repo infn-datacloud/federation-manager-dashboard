@@ -34,8 +34,6 @@ export default async function Provider({
 	/* Projects */
 	const providerProjects = await getProviderProjects(id);
 
-	console.log(providerProjects)
-
 	return (
 		<>
 			<div className='flex flex-col md:flex-row justify-start md:justify-between items-center'>
@@ -153,6 +151,39 @@ export default async function Provider({
 			const errorText = await apiResponse.text();
 			throw new Error(
 				`Failed to fetch provider's project(s): ${errorText}`
+			);
+		}
+
+		const data = await apiResponse.json();
+		const projects = data.data;
+
+		for (let i = 0; i < projects.length; i++) {
+			const regions = await getProviderProjectRegions(providerId, projects[i].id);
+			if (regions.length == 1) {
+				projects[i].region = regions[0];
+			} else {
+				projects[i].region = {};
+			}
+		}
+
+		console.log(projects)
+
+		return projects;
+	}
+
+	/* Project Regions */
+	async function getProviderProjectRegions(providerId: string, projectId: string) {
+		const url = `${process.env.BASE_URL}/api/providers/${providerId}/projects/${projectId}/regions`;
+
+		const apiResponse = await fetch(url, {
+			method: 'GET',
+			headers: await headers(),
+		});
+
+		if (!apiResponse.ok) {
+			const errorText = await apiResponse.text();
+			throw new Error(
+				`Failed to fetch provider project's region(s) : ${errorText}`
 			);
 		}
 

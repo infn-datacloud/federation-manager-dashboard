@@ -20,7 +20,7 @@ import {
 	Select,
 	SelectOption,
 } from '@/components/form';
-import { Input, InputList } from '@/components/inputs';
+import { Input } from '@/components/inputs';
 import {
 	IdentificationIcon,
 	MapIcon,
@@ -75,6 +75,15 @@ type providerProjectProps = {
 	description: string;
 	iaas_project_id: string;
 	is_root: boolean;
+	region: {
+		region_id: string;
+		overrides: {
+			default_public_net: string;
+			default_private_net: string;
+			private_net_proxy_host: string;
+			private_net_proxy_user: string;
+		};
+	};
 };
 
 type providerProjectsProps = Array<providerProjectProps>;
@@ -352,12 +361,21 @@ export default function ProviderCarousel(props: {
 					}
 				);
 
-				const jsonResponse = await apiResponse;
+				const jsonResponse = await apiResponse.json();
 
-				if (jsonResponse.ok) {
-					setShowProviderProjectModal(false);
-					router.refresh();
-					toaster.success('Project created successfully');
+				if (apiResponse.ok) {
+					if (jsonResponse.id) {
+						if (
+							await createProviderProjectRegion(
+								jsonResponse.id,
+								body
+							)
+						) {
+							setShowProviderProjectModal(false);
+							router.refresh();
+							toaster.success('Project created successfully');
+						}
+					}
 				}
 			} catch (err) {
 				console.error('API Error:', err);
@@ -378,9 +396,10 @@ export default function ProviderCarousel(props: {
 					}
 				);
 
-				const jsonResponse = await apiResponse;
-
-				if (jsonResponse.ok) {
+				if (
+					apiResponse.ok &&
+					(await updateProviderProjectRegion(body))
+				) {
 					setShowProviderProjectModal(false);
 					setProviderProjectData(undefined);
 					router.refresh();
@@ -396,27 +415,29 @@ export default function ProviderCarousel(props: {
 
 	const deleteProviderProject = async (): Promise<void> => {
 		try {
-			const apiResponse = await fetch(
-				`/api/providers/${id}/projects/${providerProjectData?.id}`,
-				{
-					method: 'DELETE',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				}
-			);
-
-			const jsonResponse = await apiResponse;
-
-			if (jsonResponse.ok) {
-				setShowProviderProjectDeleteModal(false);
-				router.refresh();
-				toaster.success('Project deleted successfully');
-			} else {
-				toaster.error(
-					'Error deleting project',
-					'Some error occurred while deleting the project. Please try again.'
+			if (await deleteProviderProjectRegion()) {
+				const apiResponse = await fetch(
+					`/api/providers/${id}/projects/${providerProjectData?.id}`,
+					{
+						method: 'DELETE',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+					}
 				);
+
+				const jsonResponse = await apiResponse;
+
+				if (jsonResponse.ok) {
+					setShowProviderProjectDeleteModal(false);
+					router.refresh();
+					toaster.success('Project deleted successfully');
+				} else {
+					toaster.error(
+						'Error deleting project',
+						'Some error occurred while deleting the project. Please try again.'
+					);
+				}
 			}
 		} catch (err) {
 			console.error('API Error:', err);
@@ -424,6 +445,76 @@ export default function ProviderCarousel(props: {
 			return;
 		}
 	};
+
+	async function createProviderProjectRegion(
+		projectId: string,
+		data: Record<string, unknown>
+	) {
+		const body = {
+			region_id: data['region_id[id]'],
+			overrides: {
+				default_public_net: data.default_public_net,
+				default_private_net: data.default_private_net,
+				private_net_proxy_host: data.private_net_proxy_host,
+				private_net_proxy_user: data.private_net_proxy_user,
+			},
+		};
+
+		const apiResponse = await fetch(
+			`/api/providers/${id}/projects/${projectId}/regions`,
+			{
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(body),
+			}
+		);
+
+		if (apiResponse.ok) return true;
+
+		return false;
+	}
+
+	async function updateProviderProjectRegion(data: Record<string, unknown>) {
+		const body = {
+			default_public_net: data.default_public_net,
+			default_private_net: data.default_private_net,
+			private_net_proxy_host: data.private_net_proxy_host,
+			private_net_proxy_user: data.private_net_proxy_user,
+		};
+
+		const apiResponse = await fetch(
+			`/api/providers/${id}/projects/${providerProjectData?.id}/regions/${providerProjectData?.region.region_id}`,
+			{
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(body),
+			}
+		);
+
+		if (apiResponse.ok) return true;
+
+		return false;
+	}
+
+	async function deleteProviderProjectRegion() {
+		const apiResponse = await fetch(
+			`/api/providers/${id}/projects/${providerProjectData?.id}/regions/${providerProjectData?.region.region_id}`,
+			{
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			}
+		);
+
+		if (apiResponse.ok) return true;
+
+		return false;
+	}
 
 	return (
 		<div className='flex justify-center relative'>
@@ -695,61 +786,6 @@ export default function ProviderCarousel(props: {
 					project anymore.
 				</p>
 			</ConfirmModal>
-
-			{/* <Modal
-				show={newProjectModal}
-				onClose={() => {
-					setNewProjectModal(false);
-				}}
-				title={
-					<div className='flex items-center'>
-						<ClipboardDocumentIcon className='size-8' />
-						&nbsp;Add New Project
-					</div>
-				}
-			>
-				<ModalBody>
-					<Form>
-						<Field>
-							<Input
-								label='Name'
-								name='name'
-								placeholder='Description'
-								required
-							/>
-						</Field>
-						<Field className='flex items-center'>
-							<Checkbox id='isRoot' name='isRoot' />
-							<Label data-required>Is Root</Label>
-						</Field>
-						<Field>
-							<InputList
-								id='regionOverrides'
-								name='regionOverrides'
-								label='Region Overrides'
-								placeholder='Add region override'
-								originalItems={[]}
-							></InputList>
-						</Field>
-						<div className='flex justify-between w-full'>
-							<Button
-								className='btn btn-bold btn-danger'
-								onClick={() => {
-									setNewProjectModal(false);
-								}}
-							>
-								Cancel
-							</Button>
-							<Button
-								className='btn btn-bold btn-primary'
-								type='submit'
-							>
-								Save
-							</Button>
-						</div>
-					</Form>
-				</ModalBody>
-			</Modal> */}
 		</div>
 	);
 
@@ -1151,8 +1187,8 @@ export default function ProviderCarousel(props: {
 										)}
 									</div>
 									{/* <div className='text-xs opacity-80 mt-2'>Region Overrides:</div>
-									{row.regionOverrides.map((item) => (
-										<div key={item} className='text-sm '>
+									{row.regions.map((item) => (
+										<div key={item.region_id} className='text-sm '>
 											{item}
 										</div>
 									))} */}
@@ -1243,6 +1279,12 @@ export default function ProviderCarousel(props: {
 				return item.is_root == true;
 			}).length == 0;
 
+		const selectedRegion = providerProjectData?.region.region_id
+			? providerRegions.filter((region) => {
+					return region.id == providerProjectData?.region.region_id;
+			  })[0]
+			: providerRegions[0];
+
 		return (
 			<>
 				<Field>
@@ -1282,6 +1324,74 @@ export default function ProviderCarousel(props: {
 				) : (
 					''
 				)}
+				<Field hidden={providerProjectData != undefined}>
+					<Select
+						label='Region'
+						name='region_id'
+						defaultValue={{
+							id: selectedRegion.id,
+							name: selectedRegion.name,
+						}}
+					>
+						{providerRegions.map((region, index) => {
+							return (
+								<SelectOption
+									key={index}
+									value={{
+										id: region.id,
+										name: region.name,
+									}}
+								>
+									{region.name}
+								</SelectOption>
+							);
+						})}
+					</Select>
+				</Field>
+				<Field>
+					<Input
+						label='Default public net'
+						name='default_public_net'
+						placeholder='public-net-eu-west-1'
+						defaultValue={
+							providerProjectData?.region.overrides
+								.default_public_net
+						}
+					></Input>
+				</Field>
+				<Field>
+					<Input
+						label='Default private net'
+						name='default_private_net'
+						placeholder='private-net-eu-west-1'
+						defaultValue={
+							providerProjectData?.region.overrides
+								.default_private_net
+						}
+					></Input>
+				</Field>
+				<Field>
+					<Input
+						label='Private net proxy host'
+						name='private_net_proxy_host'
+						placeholder='proxy.internal.company.com'
+						defaultValue={
+							providerProjectData?.region.overrides
+								.private_net_proxy_host
+						}
+					></Input>
+				</Field>
+				<Field>
+					<Input
+						label='Private net proxy user'
+						name='private_net_proxy_user'
+						placeholder='proxyuser'
+						defaultValue={
+							providerProjectData?.region.overrides
+								.private_net_proxy_user
+						}
+					></Input>
+				</Field>
 			</>
 		);
 	}
