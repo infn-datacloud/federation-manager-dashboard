@@ -82,10 +82,6 @@ export default function SlaList(props: Readonly<ListProps>) {
 					router.refresh();
 					toaster.success('User group created successfully');
 				}
-
-				console.log(jsonResponse)
-	
-				//PrintFormErrors(jsonResponse);
 			} catch (err) {
 				console.error('API Error:', err);
 			} finally {

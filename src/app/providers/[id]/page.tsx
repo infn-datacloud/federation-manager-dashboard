@@ -166,8 +166,6 @@ export default async function Provider({
 			}
 		}
 
-		console.log(projects)
-
 		return projects;
 	}
 

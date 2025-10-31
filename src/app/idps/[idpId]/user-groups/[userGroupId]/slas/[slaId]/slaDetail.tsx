@@ -111,10 +111,6 @@ export default function SlaDetail(props: Readonly<ItemProps>) {
 			} else {
 				toaster.error('Update failed', 'Please try again.');
 			}
-
-			console.log(jsonResponse)
-
-			//PrintFormErrors(jsonResponse);
 		} catch (err) {
 			console.error('API Error:', err);
 		} finally {
