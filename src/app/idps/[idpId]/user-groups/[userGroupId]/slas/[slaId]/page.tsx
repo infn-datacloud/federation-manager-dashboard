@@ -91,8 +91,10 @@ async function List({
 	userGroupId: string;
 	slaId: string;
 }) {
-	const projects = await getProjects(idpId, userGroupId, slaId);
-	return <ProjectsList items={projects} />;
+	const slaProjects = await getSlaProjects(idpId, userGroupId, slaId);
+	const projects = await getProjects();
+
+	return <ProjectsList slaProjects={slaProjects} projects={projects} />;
 }
 
 async function getSla(idpId: string, userGroupId: string, slaId: string) {
@@ -113,7 +115,7 @@ async function getSla(idpId: string, userGroupId: string, slaId: string) {
 	return data;
 }
 
-async function getProjects(idpId: string, userGroupId: string, slaId: string) {
+async function getSlaProjects(idpId: string, userGroupId: string, slaId: string) {
 	const url = `${process.env.BASE_URL}/api/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`;
 
 	const apiResponse = await fetch(url, {
@@ -124,6 +126,49 @@ async function getProjects(idpId: string, userGroupId: string, slaId: string) {
 	if (!apiResponse.ok) {
 		const errorText = await apiResponse.text();
 		throw new Error(`Failed to fetch the projects: ${errorText}`);
+	}
+
+	const data = await apiResponse.json();
+
+	return data.data;
+}
+
+async function getProjects() {
+	const url = `${process.env.BASE_URL}/api/providers`;
+
+	const apiResponse = await fetch(url, {
+		method: 'GET',
+		headers: await headers(),
+	});
+
+	if (!apiResponse.ok) {
+		const errorText = await apiResponse.text();
+		throw new Error(`Failed to fetch the projects: ${errorText}`);
+	}
+
+	const data = await apiResponse.json();
+	const projects = [];
+
+	for (const item of data.data) {
+		const providerProjects = await getProjectByProvider(item.id);
+
+		projects.push(...providerProjects);
+	}
+
+	return projects;
+}
+
+async function getProjectByProvider(providerId: string) {
+	const url = `${process.env.BASE_URL}/api/providers/${providerId}/projects`;
+
+	const apiResponse = await fetch(url, {
+		method: 'GET',
+		headers: await headers(),
+	});
+
+	if (!apiResponse.ok) {
+		const errorText = await apiResponse.text();
+		throw new Error(`Failed to fetch the project details: ${errorText}`);
 	}
 
 	const data = await apiResponse.json();

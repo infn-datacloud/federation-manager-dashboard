@@ -1354,8 +1354,7 @@ export default function ProviderCarousel(props: {
 						name='default_public_net'
 						placeholder='public-net-eu-west-1'
 						defaultValue={
-							providerProjectData?.region.overrides
-								.default_public_net
+							providerProjectData?.region?.overrides?.default_public_net
 						}
 					></Input>
 				</Field>
@@ -1365,8 +1364,7 @@ export default function ProviderCarousel(props: {
 						name='default_private_net'
 						placeholder='private-net-eu-west-1'
 						defaultValue={
-							providerProjectData?.region.overrides
-								.default_private_net
+							providerProjectData?.region?.overrides?.default_private_net
 						}
 					></Input>
 				</Field>
@@ -1376,8 +1374,7 @@ export default function ProviderCarousel(props: {
 						name='private_net_proxy_host'
 						placeholder='proxy.internal.company.com'
 						defaultValue={
-							providerProjectData?.region.overrides
-								.private_net_proxy_host
+							providerProjectData?.region?.overrides?.private_net_proxy_host
 						}
 					></Input>
 				</Field>
@@ -1387,8 +1384,7 @@ export default function ProviderCarousel(props: {
 						name='private_net_proxy_user'
 						placeholder='proxyuser'
 						defaultValue={
-							providerProjectData?.region.overrides
-								.private_net_proxy_user
+							providerProjectData?.region?.overrides?.private_net_proxy_user
 						}
 					></Input>
 				</Field>

@@ -34,7 +34,7 @@ export default function SlaList(props: Readonly<ListProps>) {
 
 	const params = useParams();
 	const { idpId, userGroupId } = params;
-	
+
 	const [showSlaModal, setShowSlaModal] = useState(false);
 
 	const listItems = items?.map((item) => (
@@ -54,40 +54,41 @@ export default function SlaList(props: Readonly<ListProps>) {
 			</Link>
 		</div>
 	));
-	
-	const createSla = async (
-			e: FormEvent<HTMLFormElement>
-		): Promise<void> => {
-			// Prevent the default form submission (page reload)
-			e.preventDefault();
-	
-			const formData = new FormData(e.currentTarget);
-			const entries = Object.fromEntries(formData.entries());
-	
-			const body: Record<string, unknown> = { ...entries };
-	
-			try {
-				const apiResponse = await fetch(`/api/idps/${idpId}/user-groups/${userGroupId}/slas`, {
+
+	const createSla = async (e: FormEvent<HTMLFormElement>): Promise<void> => {
+		// Prevent the default form submission (page reload)
+		e.preventDefault();
+
+		const formData = new FormData(e.currentTarget);
+		const entries = Object.fromEntries(formData.entries());
+
+		const body: Record<string, unknown> = { ...entries };
+
+		try {
+			const apiResponse = await fetch(
+				`/api/idps/${idpId}/user-groups/${userGroupId}/slas`,
+				{
 					method: 'POST',
 					headers: {
 						'Content-Type': 'application/json',
 					},
 					body: JSON.stringify(body),
-				});
-	
-				const jsonResponse = await apiResponse.json();
-	
-				if (jsonResponse.id) {
-					setShowSlaModal(false);
-					router.refresh();
-					toaster.success('User group created successfully');
 				}
-			} catch (err) {
-				console.error('API Error:', err);
-			} finally {
-				return;
+			);
+
+			const jsonResponse = await apiResponse.json();
+
+			if (jsonResponse.id) {
+				setShowSlaModal(false);
+				router.refresh();
+				toaster.success('Sla created successfully');
 			}
-		};
+		} catch (err) {
+			console.error('API Error:', err);
+		} finally {
+			return;
+		}
+	};
 
 	return (
 		<>
