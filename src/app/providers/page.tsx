@@ -1,4 +1,4 @@
-import ProjectList from './providerList';
+import ProviderList from './providerList';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import Custom401 from '@/app/pages/401';
@@ -128,7 +128,7 @@ async function List() {
 	const providers = await getProviders();
 	const userId = await getUserId();
 
-	return <ProjectList items={providers} userId={userId} />;
+	return <ProviderList items={providers} userId={userId} />;
 }
 
 async function getProviders() {

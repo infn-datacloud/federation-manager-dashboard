@@ -3,6 +3,7 @@ import Status from '@/components/status';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import Custom401 from '@/app/pages/401';
+import ProviderPageSubmitted from './providerPageSubmitted';
 
 type ProviderPageProps = {
 	params: {
@@ -23,6 +24,8 @@ export default async function Provider({
 
 	const { id } = params;
 	const provider = await getProvider(id);
+
+	const userId = await getUserId();
 
 	/* IDPs */
 	const idps = await getIdentityProviders();
@@ -49,12 +52,26 @@ export default async function Provider({
 				</div>
 			</div>
 
-			<ProviderCarousel
-				idps={idps}
-				providerIdps={providerIdps}
-				providerRegions={providerRegions}
-				providerProjects={providerProjects}
-			/>
+			{provider.status !== 7 ? (
+				provider.status == 2 ? (
+					<ProviderPageSubmitted
+						provider={provider}
+						providerIdps={providerIdps}
+						providerRegions={providerRegions}
+						providerProjects={providerProjects}
+						userId={userId}
+					/>
+				) : (
+					<ProviderCarousel
+						idps={idps}
+						providerIdps={providerIdps}
+						providerRegions={providerRegions}
+						providerProjects={providerProjects}
+					/>
+				)
+			) : (
+				''
+			)}
 		</>
 	);
 
@@ -188,5 +205,19 @@ export default async function Provider({
 		const data = await apiResponse.json();
 
 		return data.data;
+	}
+
+	async function getUserId() {
+		const apiResponse = await fetch(
+			`${process.env.BASE_URL}/api/users/my-id`,
+			{
+				method: 'GET',
+				headers: await headers(),
+			}
+		);
+
+		const id = await apiResponse.json();
+
+		return id;
 	}
 }

@@ -31,7 +31,7 @@ export async function POST(req: Request, { params }: Params) {
 }
 
 export async function GET(_: Request, { params }: Params) {
-    const { id } = params;
+    const { id } = await params;
     const accessToken = await getAuthToken();
 
     if (!accessToken) {

@@ -27,22 +27,39 @@ type ListProps = {
 export default function List(props: Readonly<ListProps>) {
 	const { items } = props;
 
-	const listItems = items?.map((item) => (
-		<div
-			key={item.id}
-			className='box w-full flex  cursor-pointer clickable'
-		>
-			<Link
-				href={'providers/' + item.id}
-				className='w-full flex flex-col md:flex-row justify-between items-start md:items-center'
+	const listItems = items?.map((item) =>
+		/* DISABLED */
+		item.status == '7' ? (
+			<div
+				key={item.id}
+				className='box w-full flex pointer-none opacity-50'
 			>
-				<h3 className='font-black truncate'>{item.name}</h3>
-				<p className='w-full md:w-1/4 mt-6 md:mt-0 flex justify-end'>
-					<Status status={item.status} />
-				</p>
-			</Link>
-		</div>
-	));
+				<div
+					className='w-full flex flex-col md:flex-row justify-between items-start md:items-center'
+				>
+					<h3 className='font-black truncate'>{item.name}</h3>
+					<p className='w-full md:w-1/4 mt-6 md:mt-0 flex justify-end'>
+						<Status status={item.status} />
+					</p>
+				</div>
+			</div>
+		) : (
+			<div
+				key={item.id}
+				className='box w-full flex  cursor-pointer clickable'
+			>
+				<Link
+					href={'providers/' + item.id}
+					className='w-full flex flex-col md:flex-row justify-between items-start md:items-center'
+				>
+					<h3 className='font-black truncate'>{item.name}</h3>
+					<p className='w-full md:w-1/4 mt-6 md:mt-0 flex justify-end'>
+						<Status status={item.status} />
+					</p>
+				</Link>
+			</div>
+		)
+	);
 
 	if (!items || items.length === 0) {
 		return (

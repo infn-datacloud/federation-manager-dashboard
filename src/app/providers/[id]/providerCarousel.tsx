@@ -105,8 +105,13 @@ export default function ProviderCarousel(props: {
 	const TOTAL_PAGES = 4;
 	const [currentPage, setCurrentPage] = useState(0);
 	const back = () => setCurrentPage(Math.max(0, currentPage - 1));
-	const next = () =>
+	const next = () => {
 		setCurrentPage(Math.min(currentPage + 1, TOTAL_PAGES - 1));
+
+		if (currentPage + 1 == TOTAL_PAGES) {
+			submitProvider();
+		}
+	}
 
 	/* IDP */
 	const [showProviderIdpModal, setShowProviderIdpModal] = useState(false);
@@ -515,6 +520,36 @@ export default function ProviderCarousel(props: {
 
 		return false;
 	}
+
+	/* Submit */
+	async function submitProvider () {
+		if (
+			currentPage + 1 != TOTAL_PAGES ||
+			providerIdps.length == 0 ||
+			providerRegions.length == 0 ||
+			providerProjects.length == 0
+		)
+			return;
+
+		try {
+			const apiResponse = await fetch(`/api/providers/${id}/submit`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				}
+			});
+
+			if (apiResponse.ok) {
+				toaster.success('Provider submitted successfully');
+				router.push('/provider/'+ id);
+			}
+		} catch (err) {
+			console.error('API Error:', err);
+		} finally {
+			return;
+		}
+		
+	};
 
 	return (
 		<div className='flex justify-center relative'>

@@ -10,7 +10,7 @@ import { Form } from '@/components/form';
 import { toaster } from '@/components/toaster';
 import { useRouter } from 'next/navigation';
 
-type ProjectListProps = {
+type ProvierListProps = {
 	items: Array<{
 		id: string;
 		name: string;
@@ -29,7 +29,7 @@ type ProjectListProps = {
 	userId: string;
 };
 
-export default function ProjectList(props: Readonly<ProjectListProps>) {
+export default function ProvierList(props: Readonly<ProvierListProps>) {
 	const router = useRouter();
 	const { items, userId } = props;
 

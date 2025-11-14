@@ -20,6 +20,7 @@ type IdpFormProps = {
 		href?: string;
 	};
 	userId: string;
+	disabled?: boolean;
 };
 
 export default function IdpForm(props: Readonly<IdpFormProps>) {
@@ -34,6 +35,7 @@ export default function IdpForm(props: Readonly<IdpFormProps>) {
 					placeholder='Provider Example'
 					defaultValue={item?.name}
 					required
+					disabled={props.disabled}
 				/>
 			</Field>
 			<Field>
@@ -43,6 +45,7 @@ export default function IdpForm(props: Readonly<IdpFormProps>) {
 					placeholder='Description Example'
 					defaultValue={item?.description}
 					required
+					disabled={props.disabled}
 				/>
 			</Field>
 			<Field>
@@ -52,13 +55,15 @@ export default function IdpForm(props: Readonly<IdpFormProps>) {
 					placeholder='https://auth.example.infn.it'
 					defaultValue={item?.auth_endpoint}
 					required
+					disabled={props.disabled}
 				/>
 			</Field>
 			<Field>
 				<Checkbox
 					name='is_public'
-					value={item?.is_public}
+					defaultChecked={item?.is_public}
 					label='Is public'
+					disabled={props.disabled}
 				/>
 			</Field>
 			<Field>
@@ -66,6 +71,7 @@ export default function IdpForm(props: Readonly<IdpFormProps>) {
 					label='Provider type'
 					name='type'
 					defaultValue={item?.type ? item?.type : 'openstack'}
+					disabled={props.disabled}
 				>
 					<SelectOption value={'openstack'}>openstack</SelectOption>
 					<SelectOption value={'kubernetes'}>kubernetes</SelectOption>
@@ -75,19 +81,21 @@ export default function IdpForm(props: Readonly<IdpFormProps>) {
 				<Input
 					label='Rally username'
 					name='rally_username'
-					value={item?.rally_username}
+					defaultValue={item?.rally_username}
 					placeholder='Username'
 					required
+					disabled={props.disabled}
 				/>
 			</Field>
 			<Field>
 				<Input
 					label='Rally password'
 					name='rally_password'
-					value={item?.rally_password}
+					defaultValue={item?.rally_password}
 					placeholder='Password'
 					type='password'
 					required
+					disabled={props.disabled}
 				/>
 			</Field>
 			<Field>
@@ -96,6 +104,7 @@ export default function IdpForm(props: Readonly<IdpFormProps>) {
 					name='image_tags'
 					placeholder='infn-cloud'
 					originalItems={item?.image_tags ?? []}
+					disabled={props.disabled}
 				></InputList>
 			</Field>
 			<Field>
@@ -104,6 +113,7 @@ export default function IdpForm(props: Readonly<IdpFormProps>) {
 					name='network_tags'
 					placeholder='infn-cloud'
 					originalItems={item?.network_tags ?? []}
+					disabled={props.disabled}
 				></InputList>
 			</Field>
 			<Field>
@@ -113,6 +123,7 @@ export default function IdpForm(props: Readonly<IdpFormProps>) {
 					placeholder='example@infn.it'
 					required
 					originalItems={item?.support_emails ?? []}
+					disabled={props.disabled}
 				></InputList>
 			</Field>
 			<Field>
@@ -122,6 +133,7 @@ export default function IdpForm(props: Readonly<IdpFormProps>) {
 					name='site_admins'
 					placeholder='Admin'
 					originalItems={[userId]}
+					disabled={props.disabled}
 				></InputList>
 			</Field>
 		</>

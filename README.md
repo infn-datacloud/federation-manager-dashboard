@@ -62,6 +62,9 @@ IAM_CLIENT_ID=<your_client_id>
 IAM_CLIENT_SECRET=<your_client_secret>
 IAM_DISCOVERY_URL='https://example.com/.well-known/openid-configuration'
 IAM_SCOPES='openid profile email'
+
+BASE_URL='https://localhost:3000' # Base URL of your app
+API_SERVER_URL='http://server:8000/api/v1'
 ```
 
 **Imporant**: `BETTER_AUTH_SECRET` is a variable to securely protect session cookies
