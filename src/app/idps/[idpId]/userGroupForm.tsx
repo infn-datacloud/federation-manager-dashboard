@@ -29,7 +29,6 @@ export default function UserGroupForm(props: Readonly<Item>) {
 					name='description'
 					placeholder='Example description'
 					defaultValue={item?.description}
-					required
 				/>
 			</Field>
 		</>

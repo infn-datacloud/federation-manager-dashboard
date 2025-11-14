@@ -44,13 +44,13 @@ export default function IdpForm(props: Readonly<IdpFormProps>) {
 					name='description'
 					placeholder='Description Example'
 					defaultValue={item?.description}
-					required
 					disabled={props.disabled}
 				/>
 			</Field>
 			<Field>
 				<Input
 					label='Auth URL'
+					type='url'
 					name='auth_endpoint'
 					placeholder='https://auth.example.infn.it'
 					defaultValue={item?.auth_endpoint}
@@ -122,6 +122,7 @@ export default function IdpForm(props: Readonly<IdpFormProps>) {
 					name='support_emails'
 					placeholder='example@infn.it'
 					required
+					type='email'
 					originalItems={item?.support_emails ?? []}
 					disabled={props.disabled}
 				></InputList>

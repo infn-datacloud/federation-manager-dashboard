@@ -978,7 +978,6 @@ export default function ProviderCarousel(props: {
 						label='Name'
 						name='name'
 						placeholder='My name'
-						required
 						defaultValue={providerIdpData?.overrides.name}
 					/>
 				</Field>
@@ -1345,6 +1344,7 @@ export default function ProviderCarousel(props: {
 						name='iaas_project_id'
 						placeholder='xxxx-xxxx-xxxx-xxxx'
 						defaultValue={providerProjectData?.iaas_project_id}
+						required
 					/>
 				</Field>
 				{canBeRoot || providerProjectData?.is_root ? (
