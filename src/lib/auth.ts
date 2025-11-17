@@ -21,6 +21,10 @@ export const auth = betterAuth({
 			],
 		}),
 	],
+	session: {
+		expiresIn: 60 * 60 * 12, // 12 hours
+		updateAge: 60 * 5,
+	},
 });
 
 // run migrations
