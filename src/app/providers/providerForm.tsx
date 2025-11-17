@@ -17,7 +17,9 @@ type IdpFormProps = {
 		user_name?: string;
 		rally_username?: string;
 		rally_password?: string;
-		href?: string;
+		test_flavor_name?: string;
+		test_network_id?: string;
+		floating_ips_enable?: boolean;
 	};
 	userId: string;
 	disabled?: boolean;
@@ -95,6 +97,32 @@ export default function IdpForm(props: Readonly<IdpFormProps>) {
 					placeholder='Password'
 					type='password'
 					required
+					disabled={props.disabled}
+				/>
+			</Field>
+			<Field>
+				<Input
+					label='Rally flavor name'
+					name='test_flavor_name'
+					defaultValue={item?.test_flavor_name ?? 'tiny'}
+					placeholder='tiny'
+					disabled={props.disabled}
+				/>
+			</Field>
+			<Field>
+				<Input
+					label='Rally network id'
+					name='test_network_id'
+					defaultValue={item?.test_network_id}
+					placeholder='network-id'
+					disabled={props.disabled}
+				/>
+			</Field>
+			<Field>
+				<Checkbox
+					name='floating_ips_enable'
+					defaultChecked={item?.floating_ips_enable}
+					label='Enable floating IPs'
 					disabled={props.disabled}
 				/>
 			</Field>

@@ -28,7 +28,6 @@ import {
 	TrashIcon,
 	PencilIcon,
 	ShieldCheckIcon,
-	EyeIcon,
 	PlusIcon,
 } from '@heroicons/react/24/solid';
 import { toaster } from '@/components/toaster';
