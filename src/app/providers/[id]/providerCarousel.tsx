@@ -28,11 +28,33 @@ import {
 	TrashIcon,
 	PencilIcon,
 	ShieldCheckIcon,
+	EyeIcon,
+	PlusIcon,
 } from '@heroicons/react/24/solid';
 import { toaster } from '@/components/toaster';
 import { useParams, useRouter } from 'next/navigation';
 import { Options, Option } from '@/components/options';
 import ConfirmModal from '@/components/confirm-modal';
+import ProviderForm from '../providerForm';
+
+/* Provider */
+type providerProps = {
+	id: string;
+	status: number;
+	name: string;
+	description: string;
+	type: string;
+	auth_endpoint: string;
+	is_public: boolean;
+	support_emails: Array<string>;
+	image_tags: Array<string>;
+	network_tags: Array<string>;
+	rally_username: string;
+	rally_password: string;
+	site_admins: Array<string>;
+	site_testers: Array<string>;
+	status_name: string;
+};
 
 /* IDP */
 type idpsProps = Array<{
@@ -89,14 +111,23 @@ type providerProjectProps = {
 type providerProjectsProps = Array<providerProjectProps>;
 
 export default function ProviderCarousel(props: {
+	provider: providerProps;
 	idps: idpsProps;
 	providerIdps: providerIdpsProps;
 	providerRegions: providerRegionsProps;
 	providerProjects: providerProjectsProps;
+	userId: string;
 }) {
 	const router = useRouter();
 
-	const { idps, providerIdps, providerRegions, providerProjects } = props;
+	const {
+		provider,
+		idps,
+		providerIdps,
+		providerRegions,
+		providerProjects,
+		userId,
+	} = props;
 
 	const params = useParams();
 	const { id } = params;
@@ -111,7 +142,7 @@ export default function ProviderCarousel(props: {
 		if (currentPage + 1 == TOTAL_PAGES) {
 			submitProvider();
 		}
-	}
+	};
 
 	/* IDP */
 	const [showProviderIdpModal, setShowProviderIdpModal] = useState(false);
@@ -522,7 +553,7 @@ export default function ProviderCarousel(props: {
 	}
 
 	/* Submit */
-	async function submitProvider () {
+	async function submitProvider() {
 		if (
 			currentPage + 1 != TOTAL_PAGES ||
 			providerIdps.length == 0 ||
@@ -536,216 +567,330 @@ export default function ProviderCarousel(props: {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
-				}
+				},
 			});
 
 			if (apiResponse.ok) {
 				toaster.success('Provider submitted successfully');
-				router.push('/provider/'+ id);
+				router.push('/provider/' + id);
 			}
 		} catch (err) {
 			console.error('API Error:', err);
 		} finally {
 			return;
 		}
-		
+	}
+
+	const [showProviderModal, setShowProviderModal] = useState(false);
+	const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+	const deleteProvider = async (): Promise<void> => {
+		try {
+			const apiResponse = await fetch(`/api/providers/${id}`, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			if (apiResponse.ok) {
+				setShowDeleteModal(false);
+				router.push('/providers');
+				toaster.success('Provider deleted successfully');
+			} else {
+				toaster.error(
+					'Error deleting Provider',
+					'Some error occurred while deleting the provider. Please try again.'
+				);
+			}
+		} catch (err) {
+			console.error('API Error:', err);
+		} finally {
+			return;
+		}
 	};
 
 	return (
-		<div className='flex justify-center relative'>
-			<Stepper
-				currentPage={currentPage}
-				totalPages={TOTAL_PAGES}
-				className='absolute -left-20 top-20'
-			/>
-			<Carousel selectedIndex={currentPage} className='w-full'>
-				<CarouselList>
-					<CarouselTab>STEP 1</CarouselTab>
-					<CarouselTab>STEP 2</CarouselTab>
-					<CarouselTab>STEP 3</CarouselTab>
-					<CarouselTab>STEP 4</CarouselTab>
-				</CarouselList>
-				<CarouselPanels>
-					{/* STEP 1 - IDP */}
-					<CarouselPanel>
-						<div className='w-full mt-12 mb-8'>
-							<div className='flex flex-col md:flex-row justify-between items-center'>
-								<div className='flex flex-col w-full lg:w-7/10 mb-2'>
-									<span className='text-sm uppercase font-bold text-infn/50 lg:w-full'>
-										step 1
-									</span>
-									<span className='text-xl font-bold lg:w-full lg:truncate'>
-										Connect at least one identity provider
-									</span>
-								</div>
+		<>
+			<div className='flex flex-col md:flex-row gap-4 mt-8'>
+				<Button
+					className='w-full md:w-1/2 btn btn-secondary'
+					onClick={() => {
+						setShowProviderModal(true);
+					}}
+				>
+					<PencilIcon className='size-4' />
+					Edit
+				</Button>
+				<Button
+					className='w-full md:w-1/2 btn btn-danger'
+					onClick={() => {
+						setShowDeleteModal(true);
+					}}
+				>
+					<TrashIcon className='size-4' />
+					Delete
+				</Button>
+			</div>
 
-								<Button
-									className='btn btn-secondary w-full md:w-auto lg:mt-0'
-									onClick={() => {
-										setProviderIdpData(undefined);
-										setShowProviderIdpModal(true);
-									}}
-								>
-									Connect IDP
-								</Button>
+			{/* If status is SUBMITTED */}
+			{provider.status == 2 ? (
+				<>
+					<div className='w-full mt-12 mb-8 p-8 bg-gray/10 rounded-3xl flex flex-row text-sm'>
+						{/* <ClockIcon className='w-6 mr-2 opacity-30' /> */}
+						<div>
+							<h3 className='mb-4 flex'>
+								The provider is ready for testing
+							</h3>
+							<div>
+								The provider setup has been successfully
+								completed and is now ready for validation. Both
+								manual and automated tests will be conducted by
+								the site tester to ensure everything is working
+								as expected.
+								<br />
+								You will receive a notification once all tests
+								have been completed.
 							</div>
 						</div>
-						<ProviderIdpTable />
-					</CarouselPanel>
+					</div>
 
-					{/* STEP 2 - Region */}
-					<CarouselPanel>
-						<div className='w-full mt-12 mb-8'>
-							<div className='flex flex-col md:flex-row justify-between items-center'>
-								<div className='flex flex-col w-full lg:w-7/10 mb-2'>
-									<span className='text-sm uppercase font-bold text-infn/50 lg:w-full'>
-										step 2
-									</span>
-									<span className='text-xl font-bold lg:w-full lg:truncate'>
-										Add at least one region
-									</span>
-								</div>
+					<ProviderBody />
+				</>
+			) : (
+				<>
+					<div className='flex justify-center relative'>
+						<Stepper
+							currentPage={currentPage}
+							totalPages={TOTAL_PAGES}
+							className='absolute -left-20 top-20'
+						/>
+						<Carousel
+							selectedIndex={currentPage}
+							className='w-full'
+						>
+							<CarouselList>
+								<CarouselTab>STEP 1</CarouselTab>
+								<CarouselTab>STEP 2</CarouselTab>
+								<CarouselTab>STEP 3</CarouselTab>
+								<CarouselTab>STEP 4</CarouselTab>
+							</CarouselList>
+							<CarouselPanels>
+								{/* STEP 1 - IDP */}
+								<CarouselPanel>
+									<div className='w-full mt-12 mb-8'>
+										<div className='flex flex-col md:flex-row justify-between items-center'>
+											<div className='flex flex-col w-full lg:w-7/10 mb-2'>
+												<span className='text-sm uppercase font-bold text-infn/50 lg:w-full'>
+													step 1
+												</span>
+												<span className='text-xl font-bold lg:w-full lg:truncate'>
+													Connect at least one
+													identity provider
+												</span>
+											</div>
 
-								<Button
-									className='btn btn-secondary w-full md:w-auto lg:mt-0'
-									onClick={() => {
-										setProviderRegionData(undefined);
-										setShowProviderRegionModal(true);
-									}}
-								>
-									Add Region
-								</Button>
-							</div>
+											<Button
+												className='btn btn-secondary w-full md:w-auto lg:mt-0'
+												onClick={() => {
+													setProviderIdpData(
+														undefined
+													);
+													setShowProviderIdpModal(
+														true
+													);
+												}}
+											>
+												Connect IDP
+											</Button>
+										</div>
+									</div>
+									<ProviderIdpTable />
+								</CarouselPanel>
+
+								{/* STEP 2 - Region */}
+								<CarouselPanel>
+									<div className='w-full mt-12 mb-8'>
+										<div className='flex flex-col md:flex-row justify-between items-center'>
+											<div className='flex flex-col w-full lg:w-7/10 mb-2'>
+												<span className='text-sm uppercase font-bold text-infn/50 lg:w-full'>
+													step 2
+												</span>
+												<span className='text-xl font-bold lg:w-full lg:truncate'>
+													Add at least one region
+												</span>
+											</div>
+
+											<Button
+												className='btn btn-secondary w-full md:w-auto lg:mt-0'
+												onClick={() => {
+													setProviderRegionData(
+														undefined
+													);
+													setShowProviderRegionModal(
+														true
+													);
+												}}
+											>
+												Add Region
+											</Button>
+										</div>
+									</div>
+									<ProviderRegionTable />
+								</CarouselPanel>
+
+								{/* STEP 3 - Project */}
+								<CarouselPanel>
+									<div className='w-full mt-12 mb-8'>
+										<div className='flex flex-col md:flex-row justify-between items-center'>
+											<div className='flex flex-col w-full lg:w-7/10 mb-2'>
+												<span className='text-sm uppercase font-bold text-infn/50 lg:w-full'>
+													step 3
+												</span>
+												<span className='text-xl font-bold lg:w-full lg:truncate'>
+													Add at least one project
+												</span>
+											</div>
+
+											<Button
+												className='btn btn-secondary w-full md:w-auto lg:mt-0'
+												onClick={() => {
+													setProviderProjectData(
+														undefined
+													);
+													setShowProviderProjectModal(
+														true
+													);
+												}}
+											>
+												Add Project
+											</Button>
+										</div>
+									</div>
+									<ProviderProjectTable />
+								</CarouselPanel>
+
+								{/* STEP 4 */}
+								<CarouselPanel>
+									<div className='w-full mt-12 mb-8'>
+										<div className='flex flex-col md:flex-row justify-between items-center'>
+											<div className='flex flex-col w-full lg:w-7/10 mb-2'>
+												<span className='text-sm uppercase font-bold text-infn/50 lg:w-full'>
+													step 4
+												</span>
+												<span className='text-xl font-bold lg:w-full lg:truncate'>
+													Check everything and submit
+													the request
+												</span>
+											</div>
+										</div>
+									</div>
+
+									<ProviderBody />
+								</CarouselPanel>
+							</CarouselPanels>
+
+							{/* NAVIGATION */}
+							<CarouselNavigator
+								currentPage={currentPage}
+								totalPages={TOTAL_PAGES}
+								onBack={back}
+								onNext={next}
+								backButtonTitle='Back'
+								nextButtonTitle={
+									currentPage === TOTAL_PAGES - 1
+										? 'Submit'
+										: 'Next'
+								}
+								backButtonDisabled={currentPage === 0}
+								nextButtonDisabled={
+									(currentPage == 0 &&
+										providerIdps.length == 0) ||
+									(currentPage == 1 &&
+										providerRegions.length == 0) ||
+									(currentPage == 2 &&
+										providerProjects.length == 0)
+								}
+								className='mt-8'
+							/>
+						</Carousel>
+					</div>
+				</>
+			)}
+
+			{/* Edit Provider Modal */}
+			<Modal
+				show={showProviderModal}
+				onClose={() => {
+					setShowProviderModal(false);
+				}}
+				title={
+					<div className='flex items-center'>
+						<PencilIcon className='size-8' />
+						&nbsp;Edit Provider
+					</div>
+				}
+			>
+				<ModalBody>
+					<Form>
+						<ProviderForm
+							userId={userId}
+							item={{
+								id: provider.id,
+								name: provider.name,
+								description: provider.description,
+								auth_endpoint: provider.auth_endpoint,
+								is_public: provider.is_public,
+								type: provider.type,
+								image_tags: provider.image_tags,
+								network_tags: provider.network_tags,
+								support_emails: provider.support_emails,
+								site_admins: provider.site_admins,
+								status: provider.status.toString(),
+								rally_username: provider.rally_username,
+								rally_password: provider.rally_password,
+							}}
+						/>
+						<div className='flex justify-between w-full pt-4'>
+							<Button
+								className='btn btn-bold btn-danger'
+								onClick={() => {
+									setShowProviderModal(false);
+								}}
+							>
+								Close
+							</Button>
+							<Button
+								className='btn btn-bold btn-primary'
+								type='submit'
+							>
+								Save
+							</Button>
 						</div>
-						<ProviderRegionTable />
-					</CarouselPanel>
+					</Form>
+				</ModalBody>
+			</Modal>
 
-					{/* STEP 3 - Project */}
-					<CarouselPanel>
-						<div className='w-full mt-12 mb-8'>
-							<div className='flex flex-col md:flex-row justify-between items-center'>
-								<div className='flex flex-col w-full lg:w-7/10 mb-2'>
-									<span className='text-sm uppercase font-bold text-infn/50 lg:w-full'>
-										step 3
-									</span>
-									<span className='text-xl font-bold lg:w-full lg:truncate'>
-										Add at least one project
-									</span>
-								</div>
-
-								<Button
-									className='btn btn-secondary w-full md:w-auto lg:mt-0'
-									onClick={() => {
-										setProviderProjectData(undefined);
-										setShowProviderProjectModal(true);
-									}}
-								>
-									Add Project
-								</Button>
-							</div>
-						</div>
-						<ProviderProjectTable />
-					</CarouselPanel>
-
-					{/* STEP 4 */}
-					<CarouselPanel>
-						<div className='w-full mt-12 mb-8'>
-							<div className='flex flex-col md:flex-row justify-between items-center'>
-								<div className='flex flex-col w-full lg:w-7/10 mb-2'>
-									<span className='text-sm uppercase font-bold text-infn/50 lg:w-full'>
-										step 4
-									</span>
-									<span className='text-xl font-bold lg:w-full lg:truncate'>
-										Check everything and submit the request
-									</span>
-								</div>
-							</div>
-						</div>
-
-						{/* IDP */}
-						<div className='w-full mt-12 mb-8'>
-							<div className='flex flex-col md:flex-row justify-between items-start md:items-center'>
-								<div className='flex items-center font-black uppercase'>
-									<IdentificationIcon className='size-6' />
-									&nbsp;Identity Providers
-								</div>
-
-								<Button
-									className='btn btn-secondary w-full md:w-auto lg:mt-0'
-									onClick={() => {
-										setProviderIdpData(undefined);
-										setShowProviderIdpModal(true);
-									}}
-								>
-									Connect IDP
-								</Button>
-							</div>
-						</div>
-						<ProviderIdpTable />
-
-						{/* Regions */}
-						<div className='w-full mt-12 mb-8'>
-							<div className='flex flex-col md:flex-row justify-between items-start md:items-center'>
-								<div className='flex items-center font-black uppercase'>
-									<MapIcon className='size-6' />
-									&nbsp;Regions
-								</div>
-
-								<Button
-									className='btn btn-secondary w-full md:w-auto lg:mt-0'
-									onClick={() => {
-										setProviderRegionData(undefined);
-										setShowProviderRegionModal(true);
-									}}
-								>
-									Add Region
-								</Button>
-							</div>
-						</div>
-						<ProviderRegionTable />
-
-						{/* Projects */}
-						<div className='w-full mt-12 mb-8'>
-							<div className='flex flex-col md:flex-row justify-between items-start md:items-center'>
-								<div className='flex items-center font-black uppercase'>
-									<ClipboardDocumentIcon className='size-6' />
-									&nbsp;Projects
-								</div>
-
-								<Button
-									className='btn btn-secondary w-full md:w-auto lg:mt-0'
-									onClick={() => {
-										setProviderProjectData(undefined);
-										setShowProviderProjectModal(true);
-									}}
-								>
-									Add Project
-								</Button>
-							</div>
-						</div>
-						<ProviderProjectTable />
-					</CarouselPanel>
-				</CarouselPanels>
-
-				{/* NAVIGATION */}
-				<CarouselNavigator
-					currentPage={currentPage}
-					totalPages={TOTAL_PAGES}
-					onBack={back}
-					onNext={next}
-					backButtonTitle='Back'
-					nextButtonTitle={
-						currentPage === TOTAL_PAGES - 1 ? 'Submit' : 'Next'
-					}
-					backButtonDisabled={currentPage === 0}
-					nextButtonDisabled={
-						(currentPage == 0 && providerIdps.length == 0) ||
-						(currentPage == 1 && providerRegions.length == 0) ||
-						(currentPage == 2 && providerProjects.length == 0)
-					}
-					className='mt-8'
-				/>
-			</Carousel>
+			{/* Delete Modal */}
+			<ConfirmModal
+				onConfirm={() => {
+					deleteProvider();
+				}}
+				onClose={() => {
+					setShowDeleteModal(false);
+				}}
+				confirmButtonText='Yes, delete'
+				cancelButtonText='Cancel'
+				show={showDeleteModal}
+				title={`Delete ${provider.name}`}
+				danger={true}
+			>
+				<p>
+					Are you sure you want to delete the <b>{provider.name}</b>{' '}
+					provider? This action is irreversible and you will not be
+					able to retrieve your provider anymore.
+				</p>
+			</ConfirmModal>
 
 			{/* IDP */}
 			<ProviderIdpModal />
@@ -821,7 +966,7 @@ export default function ProviderCarousel(props: {
 					project anymore.
 				</p>
 			</ConfirmModal>
-		</div>
+		</>
 	);
 
 	/* IDP */
@@ -871,20 +1016,27 @@ export default function ProviderCarousel(props: {
 												&nbsp;Edit
 											</div>
 										</Option>
-										<Option
-											data-danger={true}
-											onClick={() => {
-												setProviderIdpData(row);
-												setShowProviderIdpDeleteModal(
-													true
-												);
-											}}
-										>
-											<div className='flex items-center'>
-												<TrashIcon className='size-4' />
-												&nbsp;Delete
-											</div>
-										</Option>
+
+										{provider.status != 2 ||
+											(provider.status == 2 &&
+												providerIdps.length > 1 && (
+													<Option
+														data-danger={true}
+														onClick={() => {
+															setProviderIdpData(
+																row
+															);
+															setShowProviderIdpDeleteModal(
+																true
+															);
+														}}
+													>
+														<div className='flex items-center'>
+															<TrashIcon className='size-4' />
+															&nbsp;Delete
+														</div>
+													</Option>
+												))}
 									</Options>
 								</div>
 							</li>
@@ -1050,20 +1202,26 @@ export default function ProviderCarousel(props: {
 												&nbsp;Edit
 											</div>
 										</Option>
-										<Option
-											data-danger={true}
-											onClick={() => {
-												setProviderRegionData(row);
-												setShowProviderRegionDeleteModal(
-													true
-												);
-											}}
-										>
-											<div className='flex items-center'>
-												<TrashIcon className='size-4' />
-												&nbsp;Delete
-											</div>
-										</Option>
+										{provider.status != 2 ||
+											(provider.status == 2 &&
+												providerRegions.length > 1 && (
+													<Option
+														data-danger={true}
+														onClick={() => {
+															setProviderRegionData(
+																row
+															);
+															setShowProviderRegionDeleteModal(
+																true
+															);
+														}}
+													>
+														<div className='flex items-center'>
+															<TrashIcon className='size-4' />
+															&nbsp;Delete
+														</div>
+													</Option>
+												))}
 									</Options>
 								</div>
 							</li>
@@ -1220,12 +1378,6 @@ export default function ProviderCarousel(props: {
 											''
 										)}
 									</div>
-									{/* <div className='text-xs opacity-80 mt-2'>Region Overrides:</div>
-									{row.regions.map((item) => (
-										<div key={item.region_id} className='text-sm '>
-											{item}
-										</div>
-									))} */}
 								</div>
 
 								<div className='flex flex-col'>
@@ -1240,20 +1392,26 @@ export default function ProviderCarousel(props: {
 												&nbsp;Edit
 											</div>
 										</Option>
-										<Option
-											data-danger={true}
-											onClick={() => {
-												setProviderProjectData(row);
-												setShowProviderProjectDeleteModal(
-													true
-												);
-											}}
-										>
-											<div className='flex items-center'>
-												<TrashIcon className='size-4' />
-												&nbsp;Delete
-											</div>
-										</Option>
+										{provider.status != 2 ||
+											(provider.status == 2 &&
+												providerProjects.length > 1 && (
+													<Option
+														data-danger={true}
+														onClick={() => {
+															setProviderProjectData(
+																row
+															);
+															setShowProviderProjectDeleteModal(
+																true
+															);
+														}}
+													>
+														<div className='flex items-center'>
+															<TrashIcon className='size-4' />
+															&nbsp;Delete
+														</div>
+													</Option>
+												))}
 									</Options>
 								</div>
 							</li>
@@ -1389,7 +1547,8 @@ export default function ProviderCarousel(props: {
 						name='default_public_net'
 						placeholder='public-net-eu-west-1'
 						defaultValue={
-							providerProjectData?.region?.overrides?.default_public_net
+							providerProjectData?.region?.overrides
+								?.default_public_net
 						}
 					></Input>
 				</Field>
@@ -1399,7 +1558,8 @@ export default function ProviderCarousel(props: {
 						name='default_private_net'
 						placeholder='private-net-eu-west-1'
 						defaultValue={
-							providerProjectData?.region?.overrides?.default_private_net
+							providerProjectData?.region?.overrides
+								?.default_private_net
 						}
 					></Input>
 				</Field>
@@ -1409,7 +1569,8 @@ export default function ProviderCarousel(props: {
 						name='private_net_proxy_host'
 						placeholder='proxy.internal.company.com'
 						defaultValue={
-							providerProjectData?.region?.overrides?.private_net_proxy_host
+							providerProjectData?.region?.overrides
+								?.private_net_proxy_host
 						}
 					></Input>
 				</Field>
@@ -1419,10 +1580,83 @@ export default function ProviderCarousel(props: {
 						name='private_net_proxy_user'
 						placeholder='proxyuser'
 						defaultValue={
-							providerProjectData?.region?.overrides?.private_net_proxy_user
+							providerProjectData?.region?.overrides
+								?.private_net_proxy_user
 						}
 					></Input>
 				</Field>
+			</>
+		);
+	}
+
+	function ProviderBody() {
+		return (
+			<>
+				{/* IDP */}
+				<div className='w-full mt-12 mb-8'>
+					<div className='flex flex-col md:flex-row justify-between items-start md:items-center'>
+						<div className='flex items-center font-black uppercase'>
+							<IdentificationIcon className='size-6' />
+							&nbsp;Identity Providers
+						</div>
+
+						<Button
+							className='btn btn-secondary w-full md:w-auto lg:mt-0'
+							onClick={() => {
+								setProviderIdpData(undefined);
+								setShowProviderIdpModal(true);
+							}}
+						>
+							<PlusIcon className='size-4' />
+							Connect IDP
+						</Button>
+					</div>
+				</div>
+				<ProviderIdpTable />
+
+				{/* Regions */}
+				<div className='w-full mt-12 mb-8'>
+					<div className='flex flex-col md:flex-row justify-between items-start md:items-center'>
+						<div className='flex items-center font-black uppercase'>
+							<MapIcon className='size-6' />
+							&nbsp;Regions
+						</div>
+
+						<Button
+							className='btn btn-secondary w-full md:w-auto lg:mt-0'
+							onClick={() => {
+								setProviderRegionData(undefined);
+								setShowProviderRegionModal(true);
+							}}
+						>
+							<PlusIcon className='size-4' />
+							Add Region
+						</Button>
+					</div>
+				</div>
+				<ProviderRegionTable />
+
+				{/* Projects */}
+				<div className='w-full mt-12 mb-8'>
+					<div className='flex flex-col md:flex-row justify-between items-start md:items-center'>
+						<div className='flex items-center font-black uppercase'>
+							<ClipboardDocumentIcon className='size-6' />
+							&nbsp;Projects
+						</div>
+
+						<Button
+							className='btn btn-secondary w-full md:w-auto lg:mt-0'
+							onClick={() => {
+								setProviderProjectData(undefined);
+								setShowProviderProjectModal(true);
+							}}
+						>
+							<PlusIcon className='size-4' />
+							Add Project
+						</Button>
+					</div>
+				</div>
+				<ProviderProjectTable />
 			</>
 		);
 	}

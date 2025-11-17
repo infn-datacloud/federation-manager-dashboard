@@ -27,6 +27,7 @@ type ListProps = {
 	projects: Array<{
 		id: string;
 		name: string;
+		provider_name: string;
 	}>;
 };
 
@@ -192,12 +193,14 @@ export default function ProjectsList(props: Readonly<ListProps>) {
 							>
 								Cancel
 							</Button>
-							<Button
-								className='btn btn-bold btn-primary'
-								type='submit'
-							>
-								Save
-							</Button>
+							{projects.length > 0 && (
+								<Button
+									className='btn btn-bold btn-primary'
+									type='submit'
+								>
+									Save
+								</Button>
+							)}
 						</div>
 					</Form>
 				</ModalBody>

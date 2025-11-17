@@ -152,7 +152,22 @@ async function getProjects() {
 	for (const item of data.data) {
 		const providerProjects = await getProjectByProvider(item.id);
 
+		for (const proj of providerProjects) {
+			proj.provider_name = item.name;
+		}
+
 		projects.push(...providerProjects);
+
+		// take Ready only
+		/* if (item.status == 1) {
+			const providerProjects = await getProjectByProvider(item.id);
+
+			for (const proj of providerProjects) {
+				proj.provider_name = item.name;
+			}
+
+			projects.push(...providerProjects);
+		} */
 	}
 
 	return projects;

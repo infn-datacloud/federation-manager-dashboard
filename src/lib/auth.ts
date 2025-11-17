@@ -22,7 +22,7 @@ export const auth = betterAuth({
 		}),
 	],
 	session: {
-		expiresIn: 60 * 60 * 12, // 12 hours
+		expiresIn: 60 * 60, // 1 hour
 		updateAge: 60 * 5,
 	},
 });

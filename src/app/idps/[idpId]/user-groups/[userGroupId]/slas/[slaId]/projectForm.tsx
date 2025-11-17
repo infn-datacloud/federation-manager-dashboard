@@ -10,25 +10,35 @@ type Item = {
 	projects: Array<{
 		id: string;
 		name: string;
+		provider_name: string;
 	}>;
 };
 
 export default function ProjectForm(props: Readonly<Item>) {
 	const { item, projects } = props;
 
-	console.log(item, projects)
-
 	const items = projects?.map((item) => (
-		<SelectOption key={item.id} value={{ id: item.id, name: item.name }}>
-			{item.name}
+		<SelectOption key={item.id} value={{ id: item.id, name: `${item.provider_name} - ${item.name}` }}>
+			{item.provider_name} - {item.name}
 		</SelectOption>
 	));
+
+	if (items.length === 0) {
+		return (
+			<>
+				<p>
+					No available projects. Please ask a <b>SITE ADMIN</b> to add
+					a project in a <b>READY</b> state first.
+				</p>
+			</>
+		);
+	}
 
 	const selectedProgect = item?.id
 		? item.id
 		: {
 				id: projects[0].id,
-				name: projects[0].name,
+				name: projects[0].provider_name + ' - ' + projects[0].name,
 		  };
 
 	return (

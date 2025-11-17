@@ -3,7 +3,6 @@ import Status from '@/components/status';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import Custom401 from '@/app/pages/401';
-import ProviderPageSubmitted from './providerPageSubmitted';
 
 type ProviderPageProps = {
 	params: {
@@ -51,24 +50,17 @@ export default async function Provider({
 					<Status status={provider.status} />
 				</div>
 			</div>
+			<div className='mt-4 text-justify'>{provider.description}</div>
 
 			{provider.status !== 7 ? (
-				provider.status == 2 ? (
-					<ProviderPageSubmitted
-						provider={provider}
-						providerIdps={providerIdps}
-						providerRegions={providerRegions}
-						providerProjects={providerProjects}
-						userId={userId}
-					/>
-				) : (
-					<ProviderCarousel
-						idps={idps}
-						providerIdps={providerIdps}
-						providerRegions={providerRegions}
-						providerProjects={providerProjects}
-					/>
-				)
+				<ProviderCarousel
+					provider={provider}
+					idps={idps}
+					providerIdps={providerIdps}
+					providerRegions={providerRegions}
+					providerProjects={providerProjects}
+					userId={userId}
+				/>
 			) : (
 				''
 			)}
