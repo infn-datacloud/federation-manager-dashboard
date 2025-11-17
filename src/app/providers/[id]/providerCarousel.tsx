@@ -133,7 +133,7 @@ export default function ProviderCarousel(props: {
 
 	/* Navigator */
 	const TOTAL_PAGES = 4;
-	const [currentPage, setCurrentPage] = useState(0);
+	const [currentPage, setCurrentPage] = useState(getCurrentPage());
 	const back = () => setCurrentPage(Math.max(0, currentPage - 1));
 	const next = () => {
 		setCurrentPage(Math.min(currentPage + 1, TOTAL_PAGES - 1));
@@ -580,8 +580,58 @@ export default function ProviderCarousel(props: {
 		}
 	}
 
+	/* Provider */
 	const [showProviderModal, setShowProviderModal] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+	const editProvider = async (
+		e: FormEvent<HTMLFormElement>
+	): Promise<void> => {
+		// Prevent the default form submission (page reload)
+		e.preventDefault();
+
+		const formData = new FormData(e.currentTarget);
+		const entries = Object.fromEntries(formData.entries());
+
+		const body: Record<string, unknown> = { ...entries };
+
+		for (const key in body) {
+			const value = body[key];
+			if (typeof value === 'string') {
+				try {
+					const parsed = JSON.parse(value);
+					if (Array.isArray(parsed)) {
+						body[key] = parsed;
+					}
+				} catch {
+					// ignore invalid JSON
+				}
+			}
+		}
+
+		try {
+			const apiResponse = await fetch(`/api/providers/${id}`, {
+				method: 'PATCH',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(body),
+			});
+			
+			if (apiResponse.ok) {
+				setShowProviderModal(false);
+				router.refresh();
+				toaster.success('Provider edited successfully');
+			}
+
+			//PrintFormErrors(jsonResponse);
+		} catch (err) {
+			console.error('API Error:', err);
+		} finally {
+			return;
+		}
+	};
+
 
 	const deleteProvider = async (): Promise<void> => {
 		try {
@@ -831,7 +881,7 @@ export default function ProviderCarousel(props: {
 				}
 			>
 				<ModalBody>
-					<Form>
+					<Form onSubmit={editProvider}>
 						<ProviderForm
 							userId={userId}
 							item={{
@@ -1658,5 +1708,18 @@ export default function ProviderCarousel(props: {
 				<ProviderProjectTable />
 			</>
 		);
+	}
+
+	function getCurrentPage() {
+		switch (true) {
+			case providerIdps.length == 0:
+				return 0;
+			case providerRegions.length == 0:
+				return 1;
+			case providerProjects.length == 0:
+				return 2;
+			default:
+				return 3;
+		}
 	}
 }

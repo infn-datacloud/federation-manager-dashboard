@@ -74,7 +74,7 @@ export default function ProvierList(props: Readonly<ProvierListProps>) {
 			if (jsonResponse.id) {
 				setShowProviderModal(false);
 				router.refresh();
-				toaster.success('IDP created successfully');
+				toaster.success('Provider created successfully');
 			}
 
 			//PrintFormErrors(jsonResponse);
