@@ -49,7 +49,7 @@ export default async function Sla(props: Readonly<IdpPageProps>) {
 
 			<h1 className='mb-6 flex items-center'>
 				<DocumentDuplicateIcon className='size-10 mr-4' />
-				User Group
+				SLA
 			</h1>
 
 			<Suspense fallback={<LoadingDetail />}>

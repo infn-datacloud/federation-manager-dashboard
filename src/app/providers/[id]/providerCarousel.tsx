@@ -53,6 +53,9 @@ type providerProps = {
 	site_admins: Array<string>;
 	site_testers: Array<string>;
 	status_name: string;
+	test_flavor_name: string;
+	test_network_id?: string;
+	floating_ips_enable: boolean;
 };
 
 /* IDP */
@@ -571,7 +574,7 @@ export default function ProviderCarousel(props: {
 
 			if (apiResponse.ok) {
 				toaster.success('Provider submitted successfully');
-				router.push('/provider/' + id);
+				router.push('/providers/' + id);
 			}
 		} catch (err) {
 			console.error('API Error:', err);
@@ -617,7 +620,7 @@ export default function ProviderCarousel(props: {
 				},
 				body: JSON.stringify(body),
 			});
-			
+
 			if (apiResponse.ok) {
 				setShowProviderModal(false);
 				router.refresh();
@@ -631,7 +634,6 @@ export default function ProviderCarousel(props: {
 			return;
 		}
 	};
-
 
 	const deleteProvider = async (): Promise<void> => {
 		try {
@@ -682,31 +684,8 @@ export default function ProviderCarousel(props: {
 				</Button>
 			</div>
 
-			{/* If status is SUBMITTED */}
-			{provider.status == 2 ? (
-				<>
-					<div className='w-full mt-12 mb-8 p-8 bg-gray/10 rounded-3xl flex flex-row text-sm'>
-						{/* <ClockIcon className='w-6 mr-2 opacity-30' /> */}
-						<div>
-							<h3 className='mb-4 flex'>
-								The provider is ready for testing
-							</h3>
-							<div>
-								The provider setup has been successfully
-								completed and is now ready for validation. Both
-								manual and automated tests will be conducted by
-								the site tester to ensure everything is working
-								as expected.
-								<br />
-								You will receive a notification once all tests
-								have been completed.
-							</div>
-						</div>
-					</div>
-
-					<ProviderBody />
-				</>
-			) : (
+			{/* If provider is in status DRAFT */}
+			{provider.status == 0 && (
 				<>
 					<div className='flex justify-center relative'>
 						<Stepper
@@ -750,6 +729,7 @@ export default function ProviderCarousel(props: {
 													);
 												}}
 											>
+												<PlusIcon className='size-4' />
 												Connect IDP
 											</Button>
 										</div>
@@ -781,6 +761,7 @@ export default function ProviderCarousel(props: {
 													);
 												}}
 											>
+												<PlusIcon className='size-4' />
 												Add Region
 											</Button>
 										</div>
@@ -812,6 +793,7 @@ export default function ProviderCarousel(props: {
 													);
 												}}
 											>
+												<PlusIcon className='size-4' />
 												Add Project
 											</Button>
 										</div>
@@ -867,6 +849,54 @@ export default function ProviderCarousel(props: {
 				</>
 			)}
 
+			{/* If provider is in status SUBMITTED */}
+			{provider.status == 1 && (
+				<>
+					<div className='w-full mt-12 mb-8 p-8 bg-gray/10 rounded-3xl flex flex-row text-sm'>
+						{/* <ClockIcon className='w-6 mr-2 opacity-30' /> */}
+						<div>
+							<h3 className='mb-4 flex'>
+								The provider has been submitted
+							</h3>
+							<div>
+								The provider has been successfully submitted
+								and is now awaiting the next step. The SLA
+								Manager must connect the SLA in order to proceed
+								with the process.
+							</div>
+						</div>
+					</div>
+
+					<ProviderBody />
+				</>
+			)}
+
+			{/* If provider is in status READY */}
+			{provider.status == 2 && (
+				<>
+					<div className='w-full mt-12 mb-8 p-8 bg-gray/10 rounded-3xl flex flex-row text-sm'>
+						{/* <ClockIcon className='w-6 mr-2 opacity-30' /> */}
+						<div>
+							<h3 className='mb-4 flex'>
+								The provider is ready for testing
+							</h3>
+							<div>
+								The provider setup has been successfully
+								completed and is now ready for validation. Both
+								manual and automated tests will be conducted by
+								the site tester to ensure everything is working
+								as expected.
+								<br />
+								You will receive a notification once all tests
+								have been completed.
+							</div>
+						</div>
+					</div>
+
+					<ProviderBody />
+				</>
+			)}
+
 			{/* Edit Provider Modal */}
 			<Modal
 				show={showProviderModal}
@@ -882,24 +912,7 @@ export default function ProviderCarousel(props: {
 			>
 				<ModalBody>
 					<Form onSubmit={editProvider}>
-						<ProviderForm
-							userId={userId}
-							item={{
-								id: provider.id,
-								name: provider.name,
-								description: provider.description,
-								auth_endpoint: provider.auth_endpoint,
-								is_public: provider.is_public,
-								type: provider.type,
-								image_tags: provider.image_tags,
-								network_tags: provider.network_tags,
-								support_emails: provider.support_emails,
-								site_admins: provider.site_admins,
-								status: provider.status.toString(),
-								rally_username: provider.rally_username,
-								rally_password: provider.rally_password,
-							}}
-						/>
+						<ProviderForm userId={userId} item={provider} />
 						<div className='flex justify-between w-full pt-4'>
 							<Button
 								className='btn btn-bold btn-danger'
@@ -1116,7 +1129,15 @@ export default function ProviderCarousel(props: {
 				>
 					<ModalBody>
 						<Form onSubmit={connectProviderIdp}>
-							<ProviderIdpForm />
+							{idps.length == 0 ? (
+								<p>
+									No identity providers available. Please ask
+									your <b>SLA Manager</b> to add at least one
+									identity provider.
+								</p>
+							) : (
+								<ProviderIdpForm />
+							)}
 							<div className='flex justify-between w-full'>
 								<Button
 									className='btn btn-bold btn-danger'
@@ -1127,12 +1148,14 @@ export default function ProviderCarousel(props: {
 								>
 									Cancel
 								</Button>
-								<Button
-									className='btn btn-bold btn-primary'
-									type='submit'
-								>
-									Save
-								</Button>
+								{idps.length != 0 && (
+									<Button
+										className='btn btn-bold btn-primary'
+										type='submit'
+									>
+										Save
+									</Button>
+								)}
 							</div>
 						</Form>
 					</ModalBody>

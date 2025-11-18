@@ -13,7 +13,7 @@ export default async function getAuthToken() {
 
 	const accessToken = await auth.api.getAccessToken({
 		body: {
-			providerId: 'iam',
+			providerId: process.env.IAM_PROVIDER_ID!,
 			userId: session.user.id,
 		},
 	});

@@ -1,7 +1,7 @@
 import { Field, Checkbox, Select, SelectOption } from '@/components/form';
 import { Input, InputList } from '@/components/inputs';
 
-type IdpFormProps = {
+type ProviderFormProps = {
 	item?: {
 		id: string;
 		name?: string;
@@ -13,19 +13,19 @@ type IdpFormProps = {
 		network_tags?: Array<string>;
 		support_emails?: Array<string>;
 		site_admins?: Array<string>;
-		status?: string;
+		status?: number;
 		user_name?: string;
 		rally_username?: string;
 		rally_password?: string;
 		test_flavor_name?: string;
 		test_network_id?: string;
-		floating_ips_enable?: boolean;
+		floating_ips_enable: boolean;
 	};
 	userId: string;
 	disabled?: boolean;
 };
 
-export default function IdpForm(props: Readonly<IdpFormProps>) {
+export default function ProviderForm(props: Readonly<ProviderFormProps>) {
 	const { item, userId } = props;
 
 	return (
@@ -106,6 +106,7 @@ export default function IdpForm(props: Readonly<IdpFormProps>) {
 					name='test_flavor_name'
 					defaultValue={item?.test_flavor_name ?? 'tiny'}
 					placeholder='tiny'
+					required
 					disabled={props.disabled}
 				/>
 			</Field>
