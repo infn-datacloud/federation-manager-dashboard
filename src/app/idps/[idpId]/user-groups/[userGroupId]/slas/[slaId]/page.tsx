@@ -4,7 +4,7 @@ import SlaDetail from './slaDetail';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import Custom401 from '@/app/pages/401';
-import { DocumentDuplicateIcon } from '@heroicons/react/24/solid';
+import { CalendarDaysIcon, DocumentDuplicateIcon } from '@heroicons/react/24/solid';
 import { Suspense } from 'react';
 import { LoadingDetail, LoadingList } from './loading';
 
@@ -65,7 +65,7 @@ export default async function Sla(props: Readonly<IdpPageProps>) {
 async function Detail({
 	idpId,
 	userGroupId,
-	slaId
+	slaId,
 }: {
 	idpId: string;
 	userGroupId: string;
@@ -76,7 +76,26 @@ async function Detail({
 	return (
 		<>
 			<h2>{sla.name}</h2>
+			<Link href={sla.url} target='_blank'>
+				<div className='mt-2 opacity-50 underline'>{sla.url}</div>
+			</Link>
 			<div className='mt-4 text-justify'>{sla.description}</div>
+			<div className='mt-4 flex flex-col'>
+				<div className='flex items-center'>
+					<CalendarDaysIcon className='inline size-5 mr-2' />
+					<div className='w-16 font-bold'>Start:</div>
+					{new Date(sla.start_date).toLocaleDateString('it-IT')}
+				</div>
+				<div className='flex items-center'>
+					<CalendarDaysIcon className='inline size-5 mr-2' />
+					<div className='w-16 font-bold'>End:</div>
+					{new Date(sla.end_date).toLocaleDateString('it-IT')}
+				</div>
+
+				<div className='text-sm text-gray-500 mt-1'>
+					{getRemainingTime(sla.end_date)}
+				</div>
+			</div>
 			<SlaDetail item={sla} />
 		</>
 	);
@@ -85,7 +104,7 @@ async function Detail({
 async function List({
 	idpId,
 	userGroupId,
-	slaId
+	slaId,
 }: {
 	idpId: string;
 	userGroupId: string;
@@ -115,7 +134,11 @@ async function getSla(idpId: string, userGroupId: string, slaId: string) {
 	return data;
 }
 
-async function getSlaProjects(idpId: string, userGroupId: string, slaId: string) {
+async function getSlaProjects(
+	idpId: string,
+	userGroupId: string,
+	slaId: string
+) {
 	const url = `${process.env.BASE_URL}/api/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`;
 
 	const apiResponse = await fetch(url, {
@@ -190,3 +213,32 @@ async function getProjectByProvider(providerId: string) {
 
 	return data.data;
 }
+
+export function getRemainingTime(endDate: string | Date): string {
+	const now = new Date();
+	const end = new Date(endDate);
+
+	const diff = end.getTime() - now.getTime();
+
+	if (diff <= 0) return 'Expired';
+
+	const oneDay = 1000 * 60 * 60 * 24;
+	const daysTotal = diff / oneDay;
+
+	// If it's between 0 and <1 day → return 1d
+	if (daysTotal < 1) return '1d';
+
+	const fullDays = Math.floor(daysTotal);
+
+	const years = Math.floor(fullDays / 365);
+	const months = Math.floor((fullDays % 365) / 30);
+	const days = fullDays % 30;
+
+	const result: string[] = [];
+	if (years) result.push(`${years} years`);
+	if (months) result.push(`${months} months`);
+	if (days) result.push(`${days} days`);
+
+	return result.join(', ') + ' remaining';
+}
+  
