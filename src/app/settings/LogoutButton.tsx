@@ -13,6 +13,7 @@ export default function LogoutButton() {
 			fetchOptions: {
 				onSuccess: () => {
 					router.push('/login');
+					router.refresh();
 				},
 			},
 		});

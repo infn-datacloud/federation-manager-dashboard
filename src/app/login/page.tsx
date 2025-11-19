@@ -27,10 +27,11 @@ export default function LoginPage() {
 			/>
 			<div className='flex flex-col items-center w-full'>
 				<Button
-					className='btn btn-primary btn-bold w-min'
+					className='btn btn-primary w-full md:w-1/2 px-4 py-2 font-bold text-lg flex justify-center items-center space-x-2'
 					onClick={handleLogin}
 				>
-					Log in <ArrowLeftEndOnRectangleIcon className='size-5' />
+					<ArrowLeftEndOnRectangleIcon className='size-6' />
+					Log in with IAM
 				</Button>
 			</div>
 		</>
