@@ -14,15 +14,36 @@ export default async function Settings() {
 		return <Custom401 />;
 	}
 
+	const userRoles = process.env.USER_ROLES
+		? process.env.USER_ROLES.split(',')
+		: [];
+
 	return (
 		<>
 			<Box>
 				<div className='flex items-center justify-between w-full'>
 					<div className='flex items-center gap-6'>
 						<Gravatar email={session?.user.email} />
-						<h1>{session?.user.name}</h1>
+						<div>
+							<h1>{session?.user.name}</h1>
+							<div className='flex flex-col md:flex-row gap-2 mt-1'>
+								{userRoles.map((role) => {
+									return (
+										<span
+											key={role}
+											className='bg-infn/60 flex size-4 max-w-fit flex-none items-center rounded-full p-0.5 px-2 text-xs text-white sm:h-5 sm:min-w-max font-bold'
+										>
+											<span className='hidden sm:block'>
+												{role
+													.replace('-', ' ')
+													.toUpperCase()}
+											</span>
+										</span>
+									);
+								})}
+							</div>
+						</div>
 					</div>
-
 					<LogoutButton />
 				</div>
 			</Box>

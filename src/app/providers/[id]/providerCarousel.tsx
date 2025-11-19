@@ -29,6 +29,8 @@ import {
 	PencilIcon,
 	ShieldCheckIcon,
 	PlusIcon,
+	UserPlusIcon,
+	PlayIcon,
 } from '@heroicons/react/24/solid';
 import { toaster } from '@/components/toaster';
 import { useParams, useRouter } from 'next/navigation';
@@ -119,6 +121,7 @@ export default function ProviderCarousel(props: {
 	providerRegions: providerRegionsProps;
 	providerProjects: providerProjectsProps;
 	userId: string;
+	userRoles: Array<string>;
 }) {
 	const router = useRouter();
 
@@ -129,6 +132,7 @@ export default function ProviderCarousel(props: {
 		providerRegions,
 		providerProjects,
 		userId,
+		userRoles,
 	} = props;
 
 	const params = useParams();
@@ -663,26 +667,41 @@ export default function ProviderCarousel(props: {
 
 	return (
 		<>
-			<div className='flex flex-col md:flex-row gap-4 mt-8'>
-				<Button
-					className='w-full md:w-1/2 btn btn-secondary'
-					onClick={() => {
-						setShowProviderModal(true);
-					}}
-				>
-					<PencilIcon className='size-4' />
-					Edit
-				</Button>
-				<Button
-					className='w-full md:w-1/2 btn btn-danger'
-					onClick={() => {
-						setShowDeleteModal(true);
-					}}
-				>
-					<TrashIcon className='size-4' />
-					Delete
-				</Button>
-			</div>
+			{userRoles.includes('site-admin') && (
+				<div className='flex flex-col md:flex-row gap-4 mt-8'>
+					<Button
+						className='w-full md:w-1/2 btn btn-secondary'
+						onClick={() => {
+							setShowProviderModal(true);
+						}}
+					>
+						<PencilIcon className='size-4' />
+						Edit
+					</Button>
+					<Button
+						className='w-full md:w-1/2 btn btn-danger'
+						onClick={() => {
+							setShowDeleteModal(true);
+						}}
+					>
+						<TrashIcon className='size-4' />
+						Delete
+					</Button>
+				</div>
+			)}
+
+			{provider.status > 1 && userRoles.includes('site-tester') && (
+				<div className='flex flex-col md:flex-row gap-4 mt-8'>
+					<Button className='w-full md:w-1/2 btn btn-secondary'>
+						<UserPlusIcon className='size-4' />
+						Assign to me
+					</Button>
+					<Button className='w-full md:w-1/2 btn btn-primary'>
+						<PlayIcon className='size-4' />
+						Start Tests
+					</Button>
+				</div>
+			)}
 
 			{/* If provider is in status DRAFT */}
 			{provider.status == 0 && (
@@ -859,10 +878,10 @@ export default function ProviderCarousel(props: {
 								The provider has been submitted
 							</h3>
 							<div>
-								The provider has been successfully submitted
-								and is now awaiting the next step. The SLA
-								Manager must connect the SLA in order to proceed
-								with the process.
+								The provider has been successfully submitted and
+								is now awaiting the next step. The SLA Manager
+								must connect the SLA in order to proceed with
+								the process.
 							</div>
 						</div>
 					</div>
@@ -874,24 +893,26 @@ export default function ProviderCarousel(props: {
 			{/* If provider is in status READY */}
 			{provider.status == 2 && (
 				<>
-					<div className='w-full mt-12 mb-8 p-8 bg-gray/10 rounded-3xl flex flex-row text-sm'>
-						{/* <ClockIcon className='w-6 mr-2 opacity-30' /> */}
-						<div>
-							<h3 className='mb-4 flex'>
-								The provider is ready for testing
-							</h3>
+					{!userRoles.includes('site-tester') && (
+						<div className='w-full mt-12 mb-8 p-8 bg-gray/10 rounded-3xl flex flex-row text-sm'>
+							{/* <ClockIcon className='w-6 mr-2 opacity-30' /> */}
 							<div>
-								The provider setup has been successfully
-								completed and is now ready for validation. Both
-								manual and automated tests will be conducted by
-								the site tester to ensure everything is working
-								as expected.
-								<br />
-								You will receive a notification once all tests
-								have been completed.
+								<h3 className='mb-4 flex'>
+									The provider is ready for testing
+								</h3>
+								<div>
+									The provider setup has been successfully
+									completed and is now ready for validation.
+									Both manual and automated tests will be
+									conducted by the site tester to ensure
+									everything is working as expected.
+									<br />
+									You will receive a notification once all
+									tests have been completed.
+								</div>
 							</div>
 						</div>
-					</div>
+					)}
 
 					<ProviderBody />
 				</>
@@ -1055,52 +1076,44 @@ export default function ProviderCarousel(props: {
 									<div className='font-bold text-md lg:w-1/2 truncate'>
 										{row.overrides.name}
 									</div>
-									<div className='text-sm flex items-center opacity-80 lg:w-1/4'>
-										<IdentificationIcon className='size-4' />
-										&nbsp;
-										<p className='truncate'>{row.idp_id}</p>
-									</div>
-									<div className='text-sm mt-2 lg:mt-0 flex items-center opacity-60 lg:w-1/4'>
-										<p className='truncate'>
-											{row.overrides.protocol}
-										</p>
-									</div>
 								</div>
-								<div className='flex flex-col'>
-									<Options>
-										<Option
-											onClick={() => {
-												editProviderIdp(row);
-											}}
-										>
-											<div className='flex items-center'>
-												<PencilIcon className='size-4' />
-												&nbsp;Edit
-											</div>
-										</Option>
+								{userRoles.includes('site-admin') && (
+									<div className='flex flex-col'>
+										<Options>
+											<Option
+												onClick={() => {
+													editProviderIdp(row);
+												}}
+											>
+												<div className='flex items-center'>
+													<PencilIcon className='size-4' />
+													&nbsp;Edit
+												</div>
+											</Option>
 
-										{provider.status != 2 ||
-											(provider.status == 2 &&
-												providerIdps.length > 1 && (
-													<Option
-														data-danger={true}
-														onClick={() => {
-															setProviderIdpData(
-																row
-															);
-															setShowProviderIdpDeleteModal(
-																true
-															);
-														}}
-													>
-														<div className='flex items-center'>
-															<TrashIcon className='size-4' />
-															&nbsp;Delete
-														</div>
-													</Option>
-												))}
-									</Options>
-								</div>
+											{provider.status != 2 ||
+												(provider.status == 2 &&
+													providerIdps.length > 1 && (
+														<Option
+															data-danger={true}
+															onClick={() => {
+																setProviderIdpData(
+																	row
+																);
+																setShowProviderIdpDeleteModal(
+																	true
+																);
+															}}
+														>
+															<div className='flex items-center'>
+																<TrashIcon className='size-4' />
+																&nbsp;Delete
+															</div>
+														</Option>
+													))}
+										</Options>
+									</div>
+								)}
 							</li>
 						))}
 					</ul>
@@ -1262,40 +1275,43 @@ export default function ProviderCarousel(props: {
 									</div>
 								</div>
 
-								<div className='flex flex-col'>
-									<Options>
-										<Option
-											onClick={() => {
-												editProviderRegion(row);
-											}}
-										>
-											<div className='flex items-center'>
-												<PencilIcon className='size-4' />
-												&nbsp;Edit
-											</div>
-										</Option>
-										{provider.status != 2 ||
-											(provider.status == 2 &&
-												providerRegions.length > 1 && (
-													<Option
-														data-danger={true}
-														onClick={() => {
-															setProviderRegionData(
-																row
-															);
-															setShowProviderRegionDeleteModal(
-																true
-															);
-														}}
-													>
-														<div className='flex items-center'>
-															<TrashIcon className='size-4' />
-															&nbsp;Delete
-														</div>
-													</Option>
-												))}
-									</Options>
-								</div>
+								{userRoles.includes('site-admin') && (
+									<div className='flex flex-col'>
+										<Options>
+											<Option
+												onClick={() => {
+													editProviderRegion(row);
+												}}
+											>
+												<div className='flex items-center'>
+													<PencilIcon className='size-4' />
+													&nbsp;Edit
+												</div>
+											</Option>
+											{provider.status != 2 ||
+												(provider.status == 2 &&
+													providerRegions.length >
+														1 && (
+														<Option
+															data-danger={true}
+															onClick={() => {
+																setProviderRegionData(
+																	row
+																);
+																setShowProviderRegionDeleteModal(
+																	true
+																);
+															}}
+														>
+															<div className='flex items-center'>
+																<TrashIcon className='size-4' />
+																&nbsp;Delete
+															</div>
+														</Option>
+													))}
+										</Options>
+									</div>
+								)}
 							</li>
 						))}
 					</ul>
@@ -1452,40 +1468,43 @@ export default function ProviderCarousel(props: {
 									</div>
 								</div>
 
-								<div className='flex flex-col'>
-									<Options>
-										<Option
-											onClick={() => {
-												editProviderProject(row);
-											}}
-										>
-											<div className='flex items-center'>
-												<PencilIcon className='size-4' />
-												&nbsp;Edit
-											</div>
-										</Option>
-										{provider.status != 2 ||
-											(provider.status == 2 &&
-												providerProjects.length > 1 && (
-													<Option
-														data-danger={true}
-														onClick={() => {
-															setProviderProjectData(
-																row
-															);
-															setShowProviderProjectDeleteModal(
-																true
-															);
-														}}
-													>
-														<div className='flex items-center'>
-															<TrashIcon className='size-4' />
-															&nbsp;Delete
-														</div>
-													</Option>
-												))}
-									</Options>
-								</div>
+								{userRoles.includes('site-admin') && (
+									<div className='flex flex-col'>
+										<Options>
+											<Option
+												onClick={() => {
+													editProviderProject(row);
+												}}
+											>
+												<div className='flex items-center'>
+													<PencilIcon className='size-4' />
+													&nbsp;Edit
+												</div>
+											</Option>
+											{provider.status != 2 ||
+												(provider.status == 2 &&
+													providerProjects.length >
+														1 && (
+														<Option
+															data-danger={true}
+															onClick={() => {
+																setProviderProjectData(
+																	row
+																);
+																setShowProviderProjectDeleteModal(
+																	true
+																);
+															}}
+														>
+															<div className='flex items-center'>
+																<TrashIcon className='size-4' />
+																&nbsp;Delete
+															</div>
+														</Option>
+													))}
+										</Options>
+									</div>
+								)}
 							</li>
 						))}
 					</ul>
@@ -1672,16 +1691,18 @@ export default function ProviderCarousel(props: {
 							&nbsp;Identity Providers
 						</div>
 
-						<Button
-							className='btn btn-secondary w-full md:w-auto lg:mt-0'
-							onClick={() => {
-								setProviderIdpData(undefined);
-								setShowProviderIdpModal(true);
-							}}
-						>
-							<PlusIcon className='size-4' />
-							Connect IDP
-						</Button>
+						{userRoles.includes('site-admin') && (
+							<Button
+								className='btn btn-secondary w-full md:w-auto lg:mt-0'
+								onClick={() => {
+									setProviderIdpData(undefined);
+									setShowProviderIdpModal(true);
+								}}
+							>
+								<PlusIcon className='size-4' />
+								Connect IDP
+							</Button>
+						)}
 					</div>
 				</div>
 				<ProviderIdpTable />
@@ -1694,16 +1715,18 @@ export default function ProviderCarousel(props: {
 							&nbsp;Regions
 						</div>
 
-						<Button
-							className='btn btn-secondary w-full md:w-auto lg:mt-0'
-							onClick={() => {
-								setProviderRegionData(undefined);
-								setShowProviderRegionModal(true);
-							}}
-						>
-							<PlusIcon className='size-4' />
-							Add Region
-						</Button>
+						{userRoles.includes('site-admin') && (
+							<Button
+								className='btn btn-secondary w-full md:w-auto lg:mt-0'
+								onClick={() => {
+									setProviderRegionData(undefined);
+									setShowProviderRegionModal(true);
+								}}
+							>
+								<PlusIcon className='size-4' />
+								Add Region
+							</Button>
+						)}
 					</div>
 				</div>
 				<ProviderRegionTable />
@@ -1716,16 +1739,18 @@ export default function ProviderCarousel(props: {
 							&nbsp;Projects
 						</div>
 
-						<Button
-							className='btn btn-secondary w-full md:w-auto lg:mt-0'
-							onClick={() => {
-								setProviderProjectData(undefined);
-								setShowProviderProjectModal(true);
-							}}
-						>
-							<PlusIcon className='size-4' />
-							Add Project
-						</Button>
+						{userRoles.includes('site-admin') && (
+							<Button
+								className='btn btn-secondary w-full md:w-auto lg:mt-0'
+								onClick={() => {
+									setProviderProjectData(undefined);
+									setShowProviderProjectModal(true);
+								}}
+							>
+								<PlusIcon className='size-4' />
+								Add Project
+							</Button>
+						)}
 					</div>
 				</div>
 				<ProviderProjectTable />

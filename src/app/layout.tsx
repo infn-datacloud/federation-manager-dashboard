@@ -7,6 +7,7 @@ import { Cog8ToothIcon } from '@heroicons/react/24/solid';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { ToasterPortal } from '@/components/toaster';
+import { findUserRoles } from '@/utils';
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -32,6 +33,8 @@ export default async function RootLayout({
 		headers: await headers(),
 	});
 
+	process.env.USER_ROLES = (await findUserRoles()).toString();
+
 	return (
 		<html lang='en'>
 			<body
@@ -41,16 +44,16 @@ export default async function RootLayout({
 					logo='/logos/infn_logo_white.png'
 					name='Federation Manager'
 				>
-					{session ? (
-						<Link
-							href='/settings'
-							className='text-white h-full ml-auto mr-4 flex items-center'
-						>
-							<Cog8ToothIcon className='size-7' />
-						</Link>
-					) : (
-						''
-					)}
+					<div className='flex items-center h-full text-white'>
+						{session && (
+							<Link
+								href='/settings'
+								className='text-white h-full ml-auto mr-4 flex items-center'
+							>
+								<Cog8ToothIcon className='size-7' />
+							</Link>
+						)}
+					</div>
 				</Navbar>
 
 				<div className='w-full md:w-3/4 lg:w-1/2 mx-auto p-8'>

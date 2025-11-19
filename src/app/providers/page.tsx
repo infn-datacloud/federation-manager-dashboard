@@ -128,7 +128,13 @@ async function List() {
 	const providers = await getProviders();
 	const userId = await getUserId();
 
-	return <ProviderList items={providers} userId={userId} />;
+	const userRoles = process.env.USER_ROLES
+		? process.env.USER_ROLES.split(',')
+		: [];
+
+	return (
+		<ProviderList items={providers} userId={userId} userRoles={userRoles} />
+	);
 }
 
 async function getProviders() {

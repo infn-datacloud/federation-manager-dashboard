@@ -1,0 +1,28 @@
+import { NextResponse } from 'next/server';
+import getAuthToken from '../../../utils';
+
+interface Params {
+	params: { id: string };
+}
+
+export async function POST(req: Request, { params }: Params) {
+	const { id } = await params;
+	const accessToken = await getAuthToken();
+
+	if (!accessToken) {
+		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+	}
+
+	const res = await fetch(
+		`${process.env.API_SERVER_URL}/providers/${id}/testers`,
+		{
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+				'Content-Type': 'application/json',
+			},
+		}
+	);
+	const data = await res.json();
+	return NextResponse.json(data, { status: res.status });
+}

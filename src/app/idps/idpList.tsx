@@ -81,12 +81,12 @@ export default function IdpList(props: Readonly<Items>) {
 	return (
 		<>
 			<List items={items} />
-			<div className='fixed bottom-0 right-0 py-12 px-8 flex items-center justify-center'>
+			<div className='fixed bottom-0 right-0 py-8 px-4 flex items-center justify-center'>
 				<Button
-					className='btn btn-primary font-bold uppercase rounded-full w-full lg:fixed lg:bottom-12 lg:right-12 p-8 lg:w-auto text-3xl shadow-[-3px_3px_8px_rgba(0,0,0,0.1)] clickable '
+					className='btn btn-primary font-bold uppercase rounded-full w-full md:w-3/4 lg:fixed lg:bottom-12 lg:right-12 p-6 lg:w-auto text-xl shadow-[-3px_3px_8px_rgba(0,0,0,0.1)] clickable '
 					onClick={() => setShowIdpModal(true)}
 				>
-					<PlusIcon className='size-10' />
+					<PlusIcon className='size-7' />
 					<div className='hidden md:inline'>&nbsp;Create IDP</div>
 				</Button>
 			</div>

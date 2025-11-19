@@ -27,11 +27,12 @@ type ProvierListProps = {
 		href: string;
 	}>;
 	userId: string;
+	userRoles: Array<string>;
 };
 
 export default function ProvierList(props: Readonly<ProvierListProps>) {
 	const router = useRouter();
-	const { items, userId } = props;
+	const { items, userId, userRoles } = props;
 
 	const [showProviderModal, setShowProviderModal] = useState(false);
 
@@ -88,51 +89,55 @@ export default function ProvierList(props: Readonly<ProvierListProps>) {
 	return (
 		<>
 			<List items={items} />
-			<div className='md:w-full fixed bottom-0 right-0 py-12 px-8 flex items-center justify-center'>
-				<Button
-					className='btn btn-primary font-bold uppercase rounded-full w-full md:w-3/4 lg:fixed lg:bottom-12 lg:right-12 p-8 lg:w-auto text-3xl shadow-[-3px_3px_8px_rgba(0,0,0,0.1)] clickable '
-					onClick={() => setShowProviderModal(true)}
-				>
-					<PlusIcon className='size-10' />
-					<div className='hidden md:inline'>
-						&nbsp;Create Provider
+			{userRoles.includes('site-admin') && (
+				<>
+					<div className='md:w-full fixed bottom-0 right-0 py-8 px-4 flex items-center justify-center'>
+						<Button
+							className='btn btn-primary font-bold uppercase rounded-full w-full md:w-3/4 lg:fixed lg:bottom-12 lg:right-12 p-6 lg:w-auto text-xl shadow-[-3px_3px_8px_rgba(0,0,0,0.1)] clickable '
+							onClick={() => setShowProviderModal(true)}
+						>
+							<PlusIcon className='size-7' />
+							<div className='hidden md:inline'>
+								&nbsp;Create Provider
+							</div>
+						</Button>
 					</div>
-				</Button>
-			</div>
-			<Modal
-				show={showProviderModal}
-				onClose={() => {
-					setShowProviderModal(false);
-				}}
-				title={
-					<div className='flex items-center'>
-						<PlusIcon className='size-8' />
-						&nbsp;Create New Provider
-					</div>
-				}
-			>
-				<ModalBody>
-					<Form onSubmit={createProvider}>
-						<ProviderForm userId={userId} />
-						<div className='flex justify-between w-full pt-4'>
-							<Button
-								className='btn btn-bold btn-danger'
-								onClick={() => {
-									setShowProviderModal(false);
-								}}
-							>
-								Cancel
-							</Button>
-							<Button
-								className='btn btn-bold btn-primary'
-								type='submit'
-							>
-								Save
-							</Button>
-						</div>
-					</Form>
-				</ModalBody>
-			</Modal>
+					<Modal
+						show={showProviderModal}
+						onClose={() => {
+							setShowProviderModal(false);
+						}}
+						title={
+							<div className='flex items-center'>
+								<PlusIcon className='size-8' />
+								&nbsp;Create New Provider
+							</div>
+						}
+					>
+						<ModalBody>
+							<Form onSubmit={createProvider}>
+								<ProviderForm userId={userId} />
+								<div className='flex justify-between w-full pt-4'>
+									<Button
+										className='btn btn-bold btn-danger'
+										onClick={() => {
+											setShowProviderModal(false);
+										}}
+									>
+										Cancel
+									</Button>
+									<Button
+										className='btn btn-bold btn-primary'
+										type='submit'
+									>
+										Save
+									</Button>
+								</div>
+							</Form>
+						</ModalBody>
+					</Modal>
+				</>
+			)}
 		</>
 	);
 }

@@ -32,7 +32,7 @@ export default async function Provider({
 
 	/* Regions */
 	const providerRegions = await getProviderRegions(id);
-	
+
 	/* Projects */
 	const providerProjects = await getProviderProjects(id);
 
@@ -54,6 +54,11 @@ export default async function Provider({
 
 			{provider.status !== 7 ? (
 				<ProviderCarousel
+					userRoles={
+						process.env.USER_ROLES
+							? process.env.USER_ROLES.split(',')
+							: []
+					}
 					provider={provider}
 					idps={idps}
 					providerIdps={providerIdps}
@@ -105,7 +110,7 @@ export default async function Provider({
 
 		return data.data;
 	}
-	
+
 	async function getIdentityProviders() {
 		const url = `${process.env.BASE_URL}/api/idps`;
 
@@ -167,7 +172,10 @@ export default async function Provider({
 		const projects = data.data;
 
 		for (let i = 0; i < projects.length; i++) {
-			const regions = await getProviderProjectRegions(providerId, projects[i].id);
+			const regions = await getProviderProjectRegions(
+				providerId,
+				projects[i].id
+			);
 			if (regions.length == 1) {
 				projects[i].region = regions[0];
 			} else {
@@ -179,7 +187,10 @@ export default async function Provider({
 	}
 
 	/* Project Regions */
-	async function getProviderProjectRegions(providerId: string, projectId: string) {
+	async function getProviderProjectRegions(
+		providerId: string,
+		projectId: string
+	) {
 		const url = `${process.env.BASE_URL}/api/providers/${providerId}/projects/${projectId}/regions`;
 
 		const apiResponse = await fetch(url, {
