@@ -23,6 +23,9 @@ export default async function Provider({
 
 	const { id } = params;
 	const provider = await getProvider(id);
+	provider['tester_name'] = await getProviderTester(provider.site_testers);
+
+	console.log(provider);
 
 	const userId = await getUserId();
 
@@ -88,6 +91,28 @@ export default async function Provider({
 		const data = await apiResponse.json();
 
 		return data;
+	}
+
+	async function getProviderTester(site_testers: Array<string>) {
+		if (site_testers.length > 0) {
+			const url = `${process.env.BASE_URL}/api/users/${site_testers[0]}`;
+
+			const apiResponse = await fetch(url, {
+				method: 'GET',
+				headers: await headers(),
+			});
+
+			if (!apiResponse.ok) {
+				const errorText = await apiResponse.text();
+				throw new Error(`Failed to fetch provider(s): ${errorText}`);
+			}
+
+			const data = await apiResponse.json();
+
+			return data.name;
+		} else {
+			return '';
+		}
 	}
 
 	/* IDPs */

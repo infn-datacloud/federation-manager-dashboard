@@ -31,6 +31,7 @@ import {
 	PlusIcon,
 	UserPlusIcon,
 	PlayIcon,
+	UserIcon,
 } from '@heroicons/react/24/solid';
 import { toaster } from '@/components/toaster';
 import { useParams, useRouter } from 'next/navigation';
@@ -58,6 +59,7 @@ type providerProps = {
 	test_flavor_name: string;
 	test_network_id?: string;
 	floating_ips_enable: boolean;
+	tester_name: string;
 };
 
 /* IDP */
@@ -665,8 +667,42 @@ export default function ProviderCarousel(props: {
 		}
 	};
 
+	const assignProvider = async (): Promise<void> => {
+		try {
+			const apiResponse = await fetch(`/api/providers/${id}/testers`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify({ id: userId }),
+			});
+
+			if (apiResponse.ok) {
+				router.refresh();
+				toaster.success('Provider assigned successfully');
+			} else {
+				toaster.error(
+					'Error assigning Provider',
+					'Some error occurred while assigning the provider. Please try again.'
+				);
+			}
+		} catch (err) {
+			console.error('API Error:', err);
+		} finally {
+			return;
+		}
+	};
+
 	return (
 		<>
+			{provider.tester_name != '' && (
+				<div className='flex items-center'>
+					Assigned to:
+					<UserIcon className='size-4 mr-1 ml-4' />
+					<b>{provider.tester_name}</b>
+				</div>
+			)}
+
 			{userRoles.includes('site-admin') && (
 				<div className='flex flex-col md:flex-row gap-4 mt-8'>
 					<Button
@@ -692,11 +728,18 @@ export default function ProviderCarousel(props: {
 
 			{provider.status > 1 && userRoles.includes('site-tester') && (
 				<div className='flex flex-col md:flex-row gap-4 mt-8'>
-					<Button className='w-full md:w-1/2 btn btn-secondary'>
-						<UserPlusIcon className='size-4' />
-						Assign to me
-					</Button>
-					<Button className='w-full md:w-1/2 btn btn-primary'>
+					{provider.tester_name == '' && (
+						<Button
+							className='w-full md:w-max btn btn-secondary'
+							onClick={() => {
+								assignProvider();
+							}}
+						>
+							<UserPlusIcon className='size-4' />
+							Assign to me
+						</Button>
+					)}
+					<Button className='w-full md:w-max btn btn-primary'>
 						<PlayIcon className='size-4' />
 						Start Tests
 					</Button>

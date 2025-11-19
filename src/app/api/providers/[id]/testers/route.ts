@@ -13,6 +13,8 @@ export async function POST(req: Request, { params }: Params) {
 		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
 	}
 
+	const body = await req.json();
+
 	const res = await fetch(
 		`${process.env.API_SERVER_URL}/providers/${id}/testers`,
 		{
@@ -21,6 +23,7 @@ export async function POST(req: Request, { params }: Params) {
 				Authorization: `Bearer ${accessToken}`,
 				'Content-Type': 'application/json',
 			},
+			body: JSON.stringify(body),
 		}
 	);
 	const data = await res.json();
