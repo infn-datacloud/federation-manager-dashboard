@@ -15,16 +15,39 @@ type Item = {
 };
 
 export default function SlaForm(props: Readonly<Item>) {
-    const { item } = props;
+	const { item } = props;
 
-	const [maxStart, setMaxStart] = useState(item?.end_date || '');
-	const [minEnd, setMinEnd] = useState(item?.start_date || '');
+	// Generic date adjuster (add or subtract)
+	const adjustDate = (dateStr: string, days: number) => {
+		const d = new Date(dateStr);
+		d.setDate(d.getDate() + days);
+		return d.toISOString().split('T')[0];
+	};
 
-    return (
+	// Initial state uses the adjustDate function
+	const [maxStart, setMaxStart] = useState(
+		item?.end_date ? adjustDate(item.end_date, -1) : ''
+	);
+
+	const [minEnd, setMinEnd] = useState(
+		item?.start_date ? adjustDate(item.start_date, 1) : ''
+	);
+
+	// Handlers that apply the date offset
+	const handleStartChange = (value: string) => {
+		setMinEnd(adjustDate(value, 1));
+	};
+
+	const handleEndChange = (value: string) => {
+		setMaxStart(adjustDate(value, -1));
+	};
+
+	return (
 		<>
 			<Field>
 				<Input name='id' defaultValue={item?.id} hidden />
 			</Field>
+
 			<Field>
 				<Input
 					label='Name'
@@ -34,6 +57,7 @@ export default function SlaForm(props: Readonly<Item>) {
 					required
 				/>
 			</Field>
+
 			<Field>
 				<Input
 					label='Description'
@@ -42,6 +66,7 @@ export default function SlaForm(props: Readonly<Item>) {
 					defaultValue={item?.description}
 				/>
 			</Field>
+
 			<Field>
 				<Input
 					label='Url'
@@ -52,6 +77,7 @@ export default function SlaForm(props: Readonly<Item>) {
 					required
 				/>
 			</Field>
+
 			<Field>
 				<Datetime
 					label='Start Date'
@@ -59,21 +85,18 @@ export default function SlaForm(props: Readonly<Item>) {
 					value={item?.start_date}
 					required
 					max={maxStart}
-					onChange={(e) => {
-						setMinEnd(e);
-					}}
+					onChange={handleStartChange}
 				/>
 			</Field>
+
 			<Field>
 				<Datetime
-					label='end Date'
+					label='End Date'
 					name='end_date'
 					value={item?.end_date}
 					required
 					min={minEnd}
-					onChange={(e) => {
-						setMaxStart(e);
-					}}
+					onChange={handleEndChange}
 				/>
 			</Field>
 		</>

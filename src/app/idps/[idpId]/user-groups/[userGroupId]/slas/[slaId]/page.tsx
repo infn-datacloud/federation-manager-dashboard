@@ -4,8 +4,8 @@ import SlaDetail from './slaDetail';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import Custom401 from '@/app/pages/401';
-import { CalendarDaysIcon, DocumentDuplicateIcon } from '@heroicons/react/24/solid';
-import { Suspense } from 'react';
+import { CalendarDaysIcon, DocumentDuplicateIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid';
+import { JSX, Suspense } from 'react';
 import { LoadingDetail, LoadingList } from './loading';
 
 type IdpPageProps = {
@@ -14,6 +14,15 @@ type IdpPageProps = {
 		userGroupId: string;
 		slaId: string;
 	}>;
+};
+
+type SlaProps = {
+	id: string;
+	name: string;
+	description: string;
+	url: string;
+	start_date: string;
+	end_date: string;
 };
 
 export default async function Sla(props: Readonly<IdpPageProps>) {
@@ -26,6 +35,8 @@ export default async function Sla(props: Readonly<IdpPageProps>) {
 	}
 
 	const { idpId, userGroupId, slaId } = await props.params;
+
+	const sla = await getSla(idpId, userGroupId, slaId);
 
 	return (
 		<>
@@ -53,10 +64,10 @@ export default async function Sla(props: Readonly<IdpPageProps>) {
 			</h1>
 
 			<Suspense fallback={<LoadingDetail />}>
-				<Detail idpId={idpId} userGroupId={userGroupId} slaId={slaId} />
+				<Detail idpId={idpId} userGroupId={userGroupId} slaId={slaId} sla={sla} />
 			</Suspense>
 			<Suspense fallback={<LoadingList />}>
-				<List idpId={idpId} userGroupId={userGroupId} slaId={slaId} />
+				<List idpId={idpId} userGroupId={userGroupId} slaId={slaId} sla={sla} />
 			</Suspense>
 		</>
 	);
@@ -66,13 +77,13 @@ async function Detail({
 	idpId,
 	userGroupId,
 	slaId,
+	sla,
 }: {
 	idpId: string;
 	userGroupId: string;
 	slaId: string;
+	sla: SlaProps;
 }) {
-	const sla = await getSla(idpId, userGroupId, slaId);
-
 	return (
 		<>
 			<h2>{sla.name}</h2>
@@ -83,12 +94,12 @@ async function Detail({
 			<div className='mt-4 flex flex-col'>
 				<div className='flex items-center'>
 					<CalendarDaysIcon className='inline size-5 mr-2' />
-					<div className='w-16 font-bold'>Start:</div>
+					<div className='w-16 font-bold'>Start</div>
 					{new Date(sla.start_date).toLocaleDateString('it-IT')}
 				</div>
 				<div className='flex items-center'>
 					<CalendarDaysIcon className='inline size-5 mr-2' />
-					<div className='w-16 font-bold'>End:</div>
+					<div className='w-16 font-bold'>End</div>
 					{new Date(sla.end_date).toLocaleDateString('it-IT')}
 				</div>
 
@@ -105,15 +116,17 @@ async function List({
 	idpId,
 	userGroupId,
 	slaId,
+	sla,
 }: {
 	idpId: string;
 	userGroupId: string;
 	slaId: string;
+	sla: SlaProps;
 }) {
 	const slaProjects = await getSlaProjects(idpId, userGroupId, slaId);
 	const projects = await getProjects();
 
-	return <ProjectsList slaProjects={slaProjects} projects={projects} />;
+	return <ProjectsList slaProjects={slaProjects} projects={projects} endDate={sla.end_date} />;
 }
 
 async function getSla(idpId: string, userGroupId: string, slaId: string) {
@@ -214,13 +227,24 @@ async function getProjectByProvider(providerId: string) {
 	return data.data;
 }
 
-export function getRemainingTime(endDate: string | Date): string {
+export function getRemainingTime(endDate: string | Date): string|JSX.Element {
 	const now = new Date();
 	const end = new Date(endDate);
 
 	const diff = end.getTime() - now.getTime();
 
-	if (diff <= 0) return 'Expired';
+	if (diff <= 0) return (
+		<div className='text-white bg-danger/80 rounded-md px-6 py-4 mt-4'>
+			<div className='flex items-center mb-1'>
+				<ExclamationTriangleIcon className='size-4 mr-1' />
+				<div className='font-bold'>SLA Expired</div>
+			</div>
+			<div>
+				This SLA can no longer be associated with any project, as it
+				expired on {end.toLocaleDateString('it-IT')}.
+			</div>
+		</div>
+	);
 
 	const oneDay = 1000 * 60 * 60 * 24;
 	const daysTotal = diff / oneDay;

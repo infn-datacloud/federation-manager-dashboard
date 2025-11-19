@@ -29,10 +29,11 @@ type ListProps = {
 		name: string;
 		provider_name: string;
 	}>;
+	endDate: string;
 };
 
 export default function ProjectsList(props: Readonly<ListProps>) {
-	const { slaProjects, projects } = props;
+	const { slaProjects, projects, endDate } = props;
 
 	const router = useRouter();
 
@@ -46,6 +47,11 @@ export default function ProjectsList(props: Readonly<ListProps>) {
 		name: string;
 		provider: string;
 	} | null>(null);
+
+	const now = new Date();
+	const end = new Date(endDate);
+
+	const diff = end.getTime() - now.getTime();
 
 	const listItems = slaProjects?.map((item) => (
 		<div
@@ -81,7 +87,7 @@ export default function ProjectsList(props: Readonly<ListProps>) {
 		const formattedBody = {
 			...body,
 			project_id: body['project_id[id]'],
-		}
+		};
 
 		try {
 			const apiResponse = await fetch(
@@ -108,33 +114,33 @@ export default function ProjectsList(props: Readonly<ListProps>) {
 	};
 
 	const disconnectProject = async (): Promise<void> => {
-			try {
-				const apiResponse = await fetch(
-					`/api/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects/${selectedItem?.id}`,
-					{
-						method: 'DELETE',
-						headers: {
-							'Content-Type': 'application/json',
-						},
-					}
-				);
-	
-				if (apiResponse.ok) {
-					setShowDeleteModal(false);
-					router.refresh();
-					toaster.success('Project disconnected successfully');
-				} else {
-					toaster.error(
-						'Error disconnecting project',
-						'Some error occurred while disconnecting the project. Please try again.'
-					);
+		try {
+			const apiResponse = await fetch(
+				`/api/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects/${selectedItem?.id}`,
+				{
+					method: 'DELETE',
+					headers: {
+						'Content-Type': 'application/json',
+					},
 				}
-			} catch (err) {
-				console.error('API Error:', err);
-			} finally {
-				return;
+			);
+
+			if (apiResponse.ok) {
+				setShowDeleteModal(false);
+				router.refresh();
+				toaster.success('Project disconnected successfully');
+			} else {
+				toaster.error(
+					'Error disconnecting project',
+					'Some error occurred while disconnecting the project. Please try again.'
+				);
 			}
-		};
+		} catch (err) {
+			console.error('API Error:', err);
+		} finally {
+			return;
+		}
+	};
 
 	return (
 		<>
@@ -143,15 +149,17 @@ export default function ProjectsList(props: Readonly<ListProps>) {
 					<PresentationChartLineIcon className='size-6' />
 					&nbsp;Projects
 				</div>
-				<Button
-					className='btn btn-secondary mt-4 md:mt-0'
-					onClick={() => {
-						setShowProjectModal(true);
-					}}
-				>
-					<PlusIcon className='size-4' />
-					Connect project
-				</Button>
+				{diff > 0 && (
+					<Button
+						className='btn btn-secondary mt-4 md:mt-0'
+						onClick={() => {
+							setShowProjectModal(true);
+						}}
+					>
+						<PlusIcon className='size-4' />
+						Connect project
+					</Button>
+				)}
 			</div>
 
 			{!slaProjects || slaProjects.length == 0 ? (
