@@ -53,18 +53,23 @@ To launch the development environment, an installation of [Node.js](https://node
 Create a file named `.env` located to the project root directory and define the following variables:
 
 ```.env
-# Better-Auth
 BETTER_AUTH_SECRET='xxxxxxx'
 BETTER_AUTH_URL='https://localhost:3000' # Base URL of your app
 
-# IAM Client
-IAM_CLIENT_ID=<your_client_id>
-IAM_CLIENT_SECRET=<your_client_secret>
-IAM_DISCOVERY_URL='https://example.com/.well-known/openid-configuration'
+IAM_ISSUER_URL="https://iam.example.com/"
+IAM_CLIENT_ID='xxxx-xxxx-xxxx-xxxx-xxxxxxx'
+IAM_CLIENT_SECRET='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx'
+IAM_DISCOVERY_URL='https://iam.example.com/.well-known/openid-configuration'
 IAM_SCOPES='openid profile email'
+IAM_PROVIDER_ID="iam"
 
 BASE_URL='https://localhost:3000' # Base URL of your app
-API_SERVER_URL='http://server:8000/api/v1'
+API_SERVER_URL="http://192.168.1.1:8000/api/v1"
+
+# Groups for role-based access control
+SITE_ADMIN_GROUPS={"https://iam.cloud.infn.it/": ["admins"]}
+SITE_TESTER_GROUPS={"https://iam.cloud.infn.it/": ["admins/beta-testers"]}
+SLA_MANAGER_GROUPS={"https://iam.cloud.infn.it/": ["users/sla", "users/catchall"]}
 ```
 
 **Imporant**: `BETTER_AUTH_SECRET` is a variable to securely protect session cookies
