@@ -6,6 +6,32 @@ import { Suspense } from 'react';
 import { LoadingList } from './loading';
 import Header from '@/components/header';
 
+type ProvierProps = {
+	id: string;
+	name: string;
+	description: string;
+	auth_url?: string;
+	is_public?: boolean;
+	provider_type?: string;
+	image_tags?: Array<string>;
+	network_tags?: Array<string>;
+	support_emails?: Array<string>;
+	site_admins?: Array<string>;
+	site_testers?: Array<string>;
+	status: string;
+	user_name: string;
+	href: string;
+	site_tester_name: string;
+};
+
+type UserProps = {
+	id: string;
+	name: string;
+	email: string;
+	issuer: string;
+	sub: string;
+};
+
 export default async function Providers() {
 	const session = await auth.api.getSession({
 		headers: await headers(),
@@ -144,8 +170,20 @@ async function getProviders() {
 	});
 
 	const providers = await apiResponse.json();
+	const updatedProviders = await assignSiteTesterNames(providers.data);
 
-	return providers.data;
+	return updatedProviders;
+}
+
+async function getUsers() {
+	const apiResponse = await fetch(`${process.env.BASE_URL}/api/users`, {
+		method: 'GET',
+		headers: await headers(),
+	});
+
+	const users = await apiResponse.json();
+
+	return users.data;
 }
 
 async function getUserId() {
@@ -157,4 +195,24 @@ async function getUserId() {
 	const id = await apiResponse.json();
 
 	return id;
+}
+
+async function assignSiteTesterNames(providers: Array<ProvierProps>) {
+	const users = await getUsers();
+
+	providers.forEach((provider) => {
+		const user = users.filter((user: UserProps) => {
+			return (
+				provider?.site_testers &&
+				provider.site_testers.length > 0 &&
+				user.id == provider.site_testers[0]
+			);
+		});
+
+		if (user.length > 0) {
+			provider.site_tester_name = user[0].name;
+		}
+	});
+
+	return providers;
 }

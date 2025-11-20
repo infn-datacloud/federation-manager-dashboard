@@ -2,7 +2,7 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
-import { InboxIcon } from '@heroicons/react/24/solid';
+import { InboxIcon, UserIcon } from '@heroicons/react/24/solid';
 import Status from '@/components/status';
 import Link from 'next/link';
 
@@ -21,6 +21,7 @@ type ListProps = {
 		status: string;
 		user_name: string;
 		href: string;
+		site_tester_name: string;
 	}>;
 };
 
@@ -34,30 +35,32 @@ export default function List(props: Readonly<ListProps>) {
 				key={item.id}
 				className='box w-full flex pointer-none opacity-50'
 			>
-				<div
-					className='w-full flex flex-col md:flex-row justify-between items-start md:items-center'
-				>
+				<div className='w-full flex flex-col md:flex-row justify-between items-start md:items-center'>
 					<h3 className='font-black truncate'>{item.name}</h3>
+					<div className='flex items-center opacity-70'>
+						<UserIcon className='size-4 mr-2' />
+						{item.site_tester_name}
+					</div>
 					<p className='w-full md:w-1/4 mt-6 md:mt-0 flex justify-end'>
 						<Status status={item.status} />
 					</p>
 				</div>
 			</div>
 		) : (
-			<div
+			<Link
+				href={'providers/' + item.id}
 				key={item.id}
-				className='box w-full flex  cursor-pointer clickable'
+				className='w-full flex flex-col md:flex-row justify-between items-start md:items-center box cursor-pointer clickable'
 			>
-				<Link
-					href={'providers/' + item.id}
-					className='w-full flex flex-col md:flex-row justify-between items-start md:items-center'
-				>
-					<h3 className='font-black truncate'>{item.name}</h3>
-					<p className='w-full md:w-1/4 mt-6 md:mt-0 flex justify-end'>
-						<Status status={item.status} />
-					</p>
-				</Link>
-			</div>
+				<h3 className='font-black truncate md:w-1/3'>{item.name}</h3>
+				<div className='flex items-center opacity-70 md:w-1/3'>
+					<UserIcon className='size-4 mr-2' />
+					{item.site_tester_name}
+				</div>
+				<p className='w-full md:w-1/4 mt-6 md:mt-0 flex justify-end'>
+					<Status status={item.status} />
+				</p>
+			</Link>
 		)
 	);
 

@@ -24,6 +24,7 @@ type ProvierListProps = {
 		site_admins?: Array<string>;
 		status: string;
 		user_name: string;
+		site_tester_name: string;
 		href: string;
 	}>;
 	userId: string;
