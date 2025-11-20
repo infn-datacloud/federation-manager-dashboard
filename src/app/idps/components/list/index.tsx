@@ -23,20 +23,21 @@ export default function List(props: Readonly<ListProps>) {
 	const { items } = props;
 
 	const listItems = items?.map((item) => (
-		<div
+		<Link
 			key={item.id}
-			className='box w-full flex justify-between items-start cursor-pointer clickable'
+			href={'idps/' + item.id}
+			className='w-full box flex flex-col cursor-pointer clickable'
 		>
-			<Link href={'idps/' + item.id} className='w-full'>
-				<h3 className='font-black truncate'>{item.name}</h3>
-				<div className='truncate text-sm opacity-80 font-semibold'>
-					{item.endpoint}
-				</div>
+			<h3 className='font-black truncate'>{item.name}</h3>
+			<div className='truncate text-sm opacity-80 font-semibold'>
+				{item.endpoint}
+			</div>
+			{item.description && (
 				<div className='mt-4 text-sm line-clamp-2 opacity-80'>
 					{item.description}
 				</div>
-			</Link>
-		</div>
+			)}
+		</Link>
 	));
 
 	if (!items || items.length === 0) {
@@ -52,9 +53,5 @@ export default function List(props: Readonly<ListProps>) {
 		);
 	}
 
-	return (
-		<>
-			{listItems}
-		</>
-	);
+	return <>{listItems}</>;
 }

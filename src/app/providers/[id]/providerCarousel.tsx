@@ -703,48 +703,50 @@ export default function ProviderCarousel(props: {
 				</div>
 			)}
 
-			{userRoles.includes('site-admin') && (
-				<div className='flex flex-col md:flex-row gap-4 mt-8'>
-					<Button
-						className='w-full md:w-1/2 btn btn-secondary'
-						onClick={() => {
-							setShowProviderModal(true);
-						}}
-					>
-						<PencilIcon className='size-4' />
-						Edit
-					</Button>
-					<Button
-						className='w-full md:w-1/2 btn btn-danger'
-						onClick={() => {
-							setShowDeleteModal(true);
-						}}
-					>
-						<TrashIcon className='size-4' />
-						Delete
-					</Button>
-				</div>
-			)}
-
-			{provider.status > 1 && userRoles.includes('site-tester') && (
-				<div className='flex flex-col md:flex-row gap-4 mt-8'>
-					{provider.tester_name == '' && (
+			<div className='mt-8'>
+				{userRoles.includes('site-admin') && (
+					<div className='flex flex-col md:flex-row gap-4 mb-2'>
 						<Button
-							className='w-full md:w-max btn btn-secondary'
+							className='w-full md:w-1/2 btn btn-secondary'
 							onClick={() => {
-								assignProvider();
+								setShowProviderModal(true);
 							}}
 						>
-							<UserPlusIcon className='size-4' />
-							Assign to me
+							<PencilIcon className='size-4' />
+							Edit
 						</Button>
-					)}
-					<Button className='w-full md:w-max btn btn-primary'>
-						<PlayIcon className='size-4' />
-						Start Tests
-					</Button>
-				</div>
-			)}
+						<Button
+							className='w-full md:w-1/2 btn btn-danger'
+							onClick={() => {
+								setShowDeleteModal(true);
+							}}
+						>
+							<TrashIcon className='size-4' />
+							Delete
+						</Button>
+					</div>
+				)}
+
+				{provider.status > 1 && userRoles.includes('site-tester') && (
+					<div className='flex flex-col md:flex-row gap-4'>
+						{provider.tester_name == '' && (
+							<Button
+								className='w-full md:w-fill btn btn-secondary'
+								onClick={() => {
+									assignProvider();
+								}}
+							>
+								<UserPlusIcon className='size-4' />
+								Assign to me
+							</Button>
+						)}
+						<Button className='w-full md:w-fill btn btn-primary'>
+							<PlayIcon className='size-4' />
+							Start Tests
+						</Button>
+					</div>
+				)}
+			</div>
 
 			{/* If provider is in status DRAFT */}
 			{provider.status == 0 && (

@@ -25,8 +25,6 @@ export default async function Provider({
 	const provider = await getProvider(id);
 	provider['tester_name'] = await getProviderTester(provider.site_testers);
 
-	console.log(provider);
-
 	const userId = await getUserId();
 
 	/* IDPs */

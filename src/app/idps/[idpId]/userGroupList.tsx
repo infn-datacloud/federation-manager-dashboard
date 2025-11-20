@@ -32,20 +32,16 @@ export default function UserGroupsList(props: Readonly<ListProps>) {
 	const [showUserGroupModal, setShowUserGroupModal] = useState(false);
 
 	const listItems = items?.map((item) => (
-		<div
+		<Link
+			href={`/idps/${idpId}/user-groups/${item.id}`}
+			className='w-full flex flex-col box cursor-pointer clickable'
 			key={item.id}
-			className='box w-full flex items-start cursor-pointer clickable'
 		>
-			<Link
-				href={`/idps/${idpId}/user-groups/${item.id}`}
-				className='w-full'
-			>
-				<h3 className='truncate font-black'>{item.name}</h3>
-				<div className='mt-1 text-sm line-clamp-2 opacity-80'>
-					{item.description}
-				</div>
-			</Link>
-		</div>
+			<h3 className='truncate font-black'>{item.name}</h3>
+			<div className='mt-1 text-sm line-clamp-2 opacity-80'>
+				{item.description}
+			</div>
+		</Link>
 	));
 
 	const createUserGroup = async (
