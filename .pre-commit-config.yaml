@@ -1,0 +1,14 @@
+repos:
+  # YAML format
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-yaml
+
+  # GitGuardian for passwords and secrets check
+  - repo: https://github.com/gitguardian/ggshield
+    rev: v1.43.0
+    hooks:
+      - id: ggshield
+        language_version: python3
+        stages: [pre-commit]

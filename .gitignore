@@ -40,7 +40,12 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-certificates
+
+# VSCode and other IDEs
+**/.vscode/**
+!**/.vscode/launch.json
 
 # DB
 auth.sqlite
+
+certificates
