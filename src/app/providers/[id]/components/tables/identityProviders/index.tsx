@@ -45,12 +45,27 @@ function Row(
 	);
 }
 
-type IdentityProvidersTableProps = {
-	data: { id: string; name: string; idp: string; protocol: string }[];
-};
-
-export default function IdentityProvidersTable(props: Readonly<IdentityProvidersTableProps>) {
-	const { data } = props;
+export default function IdentityProvidersTable() {
+	const data=[
+		{
+			id: '1',
+			name: 'Roger Rabbit',
+			idp: 'IDP name 1zxv ',
+			protocol: 'openiassdd',
+		},
+		{
+			id: '2',
+			name: 'Coolest of them all',
+			idp: 'IDP',
+			protocol: 'opesnid',
+		},
+		{
+			id: '3',
+			name: 'Test',
+			idp: 'IDP 3',
+			protocol: 'id',
+		},
+	]
 
 	if (data.length === 0) {
 		return (

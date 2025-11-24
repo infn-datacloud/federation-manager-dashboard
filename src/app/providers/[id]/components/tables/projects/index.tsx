@@ -59,17 +59,31 @@ function Row(
 	);
 }
 
-type ProjectsProps = {
-	data: {
-		id: string;
-		name: string;
-		isRoot: boolean;
-		regionOverrides: string[];
-	}[];
-};
-
-export default function Projects(props: Readonly<ProjectsProps>) {
-	const { data } = props;
+export default function Projects() {
+	const data=[
+		{
+			id: '1',
+			name: 'ReCaS Bari',
+			isRoot: true,
+			regionOverrides: [
+				'92021290-d2a7-48fe-aa4f-9f81737352213',
+				'92021290-d2a7-48fe-aa4f-9f81737325223',
+				'92021290-d2a7-48fe-aa4f-9f81733735223',
+			],
+		},
+		{
+			id: '2',
+			name: 'Cygno Experiment',
+			isRoot: false,
+			regionOverrides: [
+				'92021290-d2a7-48fe-aa4f-9f81743735223',
+				'92021290-d2a7-48fe-aa4f-9f81753735223',
+				'92021290-d2a7-48fe-aa4f-9f81763735223',
+				'92021290-d2a7-48fe-aa4f-9f81773735223',
+				'92021290-d2a7-48fe-aa4f-9f81783735223',
+			],
+		},
+	]
 
 	if (data.length === 0) {
 		return (

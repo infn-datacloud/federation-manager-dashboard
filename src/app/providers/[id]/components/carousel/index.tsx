@@ -82,28 +82,7 @@ export default function ProviderCarousel() {
 								</Button>
 							</div>
 						</div>
-						<IdentityProvidersTable
-							data={[
-								{
-									id: '1',
-									name: 'Roger Rabbit',
-									idp: 'IDP name 1zxv ',
-									protocol: 'openiassdd',
-								},
-								{
-									id: '2',
-									name: 'Coolest of them all',
-									idp: 'IDP',
-									protocol: 'opesnid',
-								},
-								{
-									id: '3',
-									name: 'Test',
-									idp: 'IDP 3',
-									protocol: 'id',
-								},
-							]}
-						/>
+						<IdentityProvidersTable />
 					</CarouselPanel>
 
 					{/* STEP 2 */}
@@ -129,26 +108,7 @@ export default function ProviderCarousel() {
 								</Button>
 							</div>
 						</div>
-						<RegionsTable
-							data={[
-								{
-									id: '1',
-									name: 'INFN Bari',
-									country: 'Italia',
-									site: 'Istituto di fisica Enrico Fermi',
-									latitude: 44.123456,
-									longitude: 11.456789,
-								},
-								{
-									id: '2',
-									name: 'INFN Bari',
-									country: 'Italia',
-									site: 'Istituto di fisica Enrico Fermi',
-									latitude: 44.123456,
-									longitude: 11.456789,
-								},
-							]}
-						/>
+						<RegionsTable />
 					</CarouselPanel>
 
 					{/* STEP 3 */}
@@ -174,32 +134,7 @@ export default function ProviderCarousel() {
 								</Button>
 							</div>
 						</div>
-						<ProjectsTable
-							data={[
-								{
-									id: '1',
-									name: 'ReCaS Bari',
-									isRoot: true,
-									regionOverrides: [
-										'92021290-d2a7-48fe-aa4f-9f81737352213',
-										'92021290-d2a7-48fe-aa4f-9f81737325223',
-										'92021290-d2a7-48fe-aa4f-9f81733735223',
-									],
-								},
-								{
-									id: '2',
-									name: 'Cygno Experiment',
-									isRoot: false,
-									regionOverrides: [
-										'92021290-d2a7-48fe-aa4f-9f81743735223',
-										'92021290-d2a7-48fe-aa4f-9f81753735223',
-										'92021290-d2a7-48fe-aa4f-9f81763735223',
-										'92021290-d2a7-48fe-aa4f-9f81773735223',
-										'92021290-d2a7-48fe-aa4f-9f81783735223',
-									],
-								},
-							]}
-						/>
+						<ProjectsTable />
 					</CarouselPanel>
 
 					{/* STEP 4 */}
@@ -235,28 +170,7 @@ export default function ProviderCarousel() {
 								</Button>
 							</div>
 						</div>
-						<IdentityProvidersTable
-							data={[
-								{
-									id: '1',
-									name: 'Roger Rabbit',
-									idp: 'IDP name 1zxv ',
-									protocol: 'openiassdd',
-								},
-								{
-									id: '2',
-									name: 'Coolest of them all',
-									idp: 'IDP',
-									protocol: 'opesnid',
-								},
-								{
-									id: '3',
-									name: 'Test',
-									idp: 'IDP 3',
-									protocol: 'id',
-								},
-							]}
-						/>
+						<IdentityProvidersTable />
 
 						{/* Regions */}
 						<div className='w-full mt-12 mb-8'>
@@ -276,26 +190,7 @@ export default function ProviderCarousel() {
 								</Button>
 							</div>
 						</div>
-						<RegionsTable
-							data={[
-								{
-									id: '1',
-									name: 'INFN Bari',
-									country: 'Italia',
-									site: 'Istituto di fisica Enrico Fermi',
-									latitude: 44.123456,
-									longitude: 11.456789,
-								},
-								{
-									id: '2',
-									name: 'INFN Bari',
-									country: 'Italia',
-									site: 'Istituto di fisica Enrico Fermi',
-									latitude: 44.123456,
-									longitude: 11.456789,
-								},
-							]}
-						/>
+						<RegionsTable />
 
 						{/* Projects */}
 						<div className='w-full mt-12 mb-8'>
@@ -315,32 +210,7 @@ export default function ProviderCarousel() {
 								</Button>
 							</div>
 						</div>
-						<ProjectsTable
-							data={[
-								{
-									id: '1',
-									name: 'ReCaS Bari',
-									isRoot: true,
-									regionOverrides: [
-										'92021290-d2a7-48fe-aa4f-9f81737352213',
-										'92021290-d2a7-48fe-aa4f-9f81737325223',
-										'92021290-d2a7-48fe-aa4f-9f81733735223',
-									],
-								},
-								{
-									id: '2',
-									name: 'Cygno Experiment',
-									isRoot: false,
-									regionOverrides: [
-										'92021290-d2a7-48fe-aa4f-9f81743735223',
-										'92021290-d2a7-48fe-aa4f-9f81753735223',
-										'92021290-d2a7-48fe-aa4f-9f81763735223',
-										'92021290-d2a7-48fe-aa4f-9f81773735223',
-										'92021290-d2a7-48fe-aa4f-9f81783735223',
-									],
-								},
-							]}
-						/>
+						<ProjectsTable />
 					</CarouselPanel>
 				</CarouselPanels>
 
