@@ -53,7 +53,7 @@ To launch the development environment, an installation of [Node.js](https://node
 Create a file named `.env` located to the project root directory and define the following variables:
 
 ```.env
-FM_ENDPOINT_URL="https://localhost:3000/"   # IMPORTANT: Remember the final "/"
+FM_ENDPOINT_URL="https://localhost:3000"
 FM_AUTH_SECRET="xxxxxxxx"
 
 API_SERVER_URL="http://192.168.1.1:8000/api/v1"
