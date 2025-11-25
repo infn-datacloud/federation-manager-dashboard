@@ -1,36 +1,115 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Federation Manager
 
-## Getting Started
+Federation Manager is a Next.js web application that seamlessly integrates providers and communities into DataCloud with simplicity, security, and automated resource management.
 
-First, run the development server:
+## Introduction
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+The app is implemented in **TypeScript**, using **Next.js**.
+
+User authentication and session management are handled by **Better-Auth**, while OAuth2/OpenID Connect flows are configured for your IAM provider.
+
+## IAM Client Configuration
+
+To register a new client, go to the chosen INDIGO IAM instance, login as admin
+and create a new client with the configuration described below.
+
+### Redirect URIs
+
+In the client main page, add all needed redirect uris.
+
+To enable development of the dashboard on your local machine, the redirect uri
+must be:
+
+```shell
+https://localhost:3000/api/auth/oauth2/callback/iam
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+For a production deployment, the redirect uri will be, for example:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```shell
+https://federation-manager.cloud.infn.it/api/auth/oauth2/callback/iam
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+where [https://federation-manager.cloud.infn.it](https://federation-manager.cloud.infn.it) is the URL where the dashboard is located.
 
-## Learn More
+### Scopes
 
-To learn more about Next.js, take a look at the following resources:
+In the *Scopes* tab, assure that the following scopes are enabled
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `email`
+- `openid`
+- `profile`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### Grant Types
 
-## Deploy on Vercel
+In the *Grant Types* tab, enable `authorization_code`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Local development
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+To launch the development environment, an installation of [Node.js](https://nodejs.org/en) is the only mandatory requirement.
+
+### Create the `.env` file
+
+Create a file named `.env` located to the project root directory and define the following variables:
+
+```.env
+FM_ENDPOINT_URL="https://localhost:3000/"   # IMPORTANT: Remember the final "/"
+FM_AUTH_SECRET="xxxxxxxx"
+
+API_SERVER_URL="http://192.168.1.1:8000/api/v1"
+
+FM_OIDC_URL="https://iam.example.it/"       # IMPORTANT: Remember the final "/"
+FM_OIDC_CLIENT_ID="xxxx-xxxx-xxxx-xxxx-xxxxxxx"
+FM_OIDC_CLIENT_SECRET="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+FM_OIDC_SCOPES="openid profile email"
+FM_OIDC_PROVIDER_ID="iam"
+
+# Groups for role-based access control
+GROUPS_SITE_ADMIN={"https://iam.cloud.infn.it/": ["admins"]}
+GROUPS_SITE_TESTER={"https://iam.cloud.infn.it/": ["admins/beta-testers"]}
+GROUPS_SLA_MANAGER={"https://iam.cloud.infn.it/": ["users/sla", "users/catchall"]}
+```
+
+**Imporant**: `FM_AUTH_SECRET` is a variable to securely protect session cookies
+for authentication. You could generate a secret running:
+
+```shell
+openssl rand -base64 32
+```
+
+> **Note**<br />
+> This is considered a **sensitive credential** to decrypt session cookies and thus the Access Token. **Do not share** the secret especially the once generated for production deployment.
+
+### Local development
+
+First install the required dependencies with:
+
+```shell
+npm run install
+```
+
+and then start the Next.js development server running:
+
+```shell
+npm run dev
+```
+
+Something similar to the following should be prompted:
+
+```bash
+> federation-manager-dashboard@0.1.0 dev
+> next dev --turbopack --experimental-https
+
+ ⚠ Self-signed certificates are currently an experimental feature, use with caution.
+   Using already generated self signed certificate
+   ▲ Next.js 15.5.3 (Turbopack)
+   - Local:        https://localhost:3000
+   - Environments: .env
+
+ ✓ Starting...
+ ○ Compiling middleware ...
+ ✓ Compiled middleware in 895ms
+ ✓ Ready in 1731ms
+```
+
+The dashboard is then available at [https://localhost:3000](https://localhost:3000).

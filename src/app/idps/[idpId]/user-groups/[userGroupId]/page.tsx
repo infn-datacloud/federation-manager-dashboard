@@ -1,6 +1,12 @@
 import SlaList from './slaList';
 import Link from '@/components/link';
 import UserGroupDetail from './userGroupDetail';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
+import Custom401 from '@/app/pages/401';
+import { UserGroupIcon } from '@heroicons/react/24/solid';
+import { Suspense } from 'react';
+import { LoadingDetail, LoadingList } from './loading';
 
 type IdpPageProps = {
 	params: Promise<{
@@ -10,38 +16,19 @@ type IdpPageProps = {
 };
 
 export default async function Idp(props: Readonly<IdpPageProps>) {
+	const session = await auth.api.getSession({
+		headers: await headers(),
+	});
+	if (!session) {
+		// Auth error, show 401 page
+		return <Custom401 />;
+	}
+
 	const { idpId, userGroupId } = await props.params;
-
-	const items = [
-		{
-			id: '1',
-			name: 'signad_sla.pdf',
-			description: 'SLA for the Cygno project',
-			url: 'https://example.com',
-			startDate: '08-11-2025',
-			endDate: '31-12-2025',
-		},
-		{
-			id: '2',
-			name: 'terabit_sla.pdf',
-			description: 'SLA for the Terabit project',
-			url: 'https://example.com',
-			startDate: '08-11-2025',
-			endDate: '31-12-2025',
-		},
-	];
-
-	// retrieve with a get by ID
-	const userGroup = {
-		id: '1',
-		name: 'Cygno',
-		description:
-			'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-	};
 
 	return (
 		<>
-			<div className='mb-12'>
+			<div className='mb-2'>
 				<Link href='/idps' className='opacity-50 hover:opacity-80'>
 					Identity Providers
 				</Link>
@@ -55,14 +42,82 @@ export default async function Idp(props: Readonly<IdpPageProps>) {
 				</span>
 			</div>
 
-			<h1>
-				{userGroup.name} - UG: {userGroupId}, ID: {idpId}
+			<h1 className='mb-6 flex items-center'>
+				<UserGroupIcon className='size-10 mr-4' />
+				User Group
 			</h1>
-			<div className='mt-4 text-justify'>
-				{userGroup.description}
-			</div>
-			<UserGroupDetail item={userGroup} />
-			<SlaList items={items} />
+
+			<Suspense fallback={<LoadingDetail />}>
+				<Detail idpId={idpId} userGroupId={userGroupId} />
+			</Suspense>
+			<Suspense fallback={<LoadingList />}>
+				<List idpId={idpId} userGroupId={userGroupId} />
+			</Suspense>
 		</>
 	);
+}
+
+async function Detail({
+	idpId,
+	userGroupId,
+}: {
+	idpId: string;
+	userGroupId: string;
+}) {
+	const userGroup = await getUserGroup(idpId, userGroupId);
+
+	return (
+		<>
+			<h2>{userGroup.name}</h2>
+			<div className='mt-4 text-justify'>{userGroup.description}</div>
+			<UserGroupDetail item={userGroup} />
+		</>
+	);
+}
+
+async function List({
+	idpId,
+	userGroupId,
+}: {
+	idpId: string;
+	userGroupId: string;
+}) {
+	const slas = await getSlas(idpId, userGroupId);
+	return <SlaList items={slas} />;
+}
+
+async function getUserGroup(idpId: string, userGroupId: string) {
+	const url = `${process.env.FM_ENDPOINT_URL}api_internal/idps/${idpId}/user-groups/${userGroupId}`;
+
+	const apiResponse = await fetch(url, {
+		method: 'GET',
+		headers: await headers(),
+	});
+
+	if (!apiResponse.ok) {
+		const errorText = await apiResponse.statusText;
+		throw new Error(`Failed to fetch user group: ${errorText}`);
+	}
+
+	const data = await apiResponse.json();
+
+	return data;
+}
+
+async function getSlas(idpId: string, userGroupId: string) {
+	const url = `${process.env.FM_ENDPOINT_URL}api_internal/idps/${idpId}/user-groups/${userGroupId}/slas`;
+
+	const apiResponse = await fetch(url, {
+		method: 'GET',
+		headers: await headers(),
+	});
+
+	if (!apiResponse.ok) {
+		const errorText = await apiResponse.text();
+		throw new Error(`Failed to fetch user groups: ${errorText}`);
+	}
+
+	const data = await apiResponse.json();
+
+	return data.data;
 }

@@ -15,9 +15,6 @@ export default function UserGroupForm(props: Readonly<Item>) {
     return (
 		<>
 			<Field>
-				<Input name='id' defaultValue={item?.id} hidden />
-			</Field>
-			<Field>
 				<Input
 					label='Name'
 					name='name'
@@ -32,7 +29,6 @@ export default function UserGroupForm(props: Readonly<Item>) {
 					name='description'
 					placeholder='Example description'
 					defaultValue={item?.description}
-					required
 				/>
 			</Field>
 		</>

@@ -33,13 +33,13 @@ export default function IdpForm(props: Readonly<Item>) {
 					name='description'
 					placeholder='IDP description'
 					defaultValue={item?.description}
-					required
 				/>
 			</Field>
 			<Field>
 				<Input
 					label='Endpoint'
 					name='endpoint'
+					type='url'
 					placeholder='https://auth.example.infn.it'
 					defaultValue={item?.endpoint}
 					required
@@ -51,7 +51,6 @@ export default function IdpForm(props: Readonly<Item>) {
 					name='protocol'
 					placeholder='openid'
 					defaultValue={item?.protocol}
-					required
 				/>
 			</Field>
 			<Field>
@@ -60,7 +59,6 @@ export default function IdpForm(props: Readonly<Item>) {
 					name='audience'
 					placeholder='my-aud'
 					defaultValue={item?.audience}
-					required
 				/>
 			</Field>
 			<Field>

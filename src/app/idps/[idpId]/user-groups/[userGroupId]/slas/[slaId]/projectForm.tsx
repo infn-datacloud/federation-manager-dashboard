@@ -7,31 +7,39 @@ type Item = {
 		name: string;
 		provider: string;
 	};
+	projects: Array<{
+		id: string;
+		name: string;
+		provider_name: string;
+	}>;
 };
 
 export default function ProjectForm(props: Readonly<Item>) {
-	const { item } = props;
-
-	const projects = [
-		{
-			id: '0',
-			name: 'Intertwin',
-		},
-		{
-			id: '1',
-			name: 'Terabit',
-		},
-		{
-			id: '2',
-			name: 'ICSC',
-		},
-	];
+	const { item, projects } = props;
 
 	const items = projects?.map((item) => (
-		<SelectOption key={item.id} value={item}>
-			{item.name}
+		<SelectOption key={item.id} value={{ id: item.id, name: `${item.provider_name} - ${item.name}` }}>
+			{item.provider_name} - {item.name}
 		</SelectOption>
 	));
+
+	if (items.length === 0) {
+		return (
+			<>
+				<p>
+					No available projects. Please ask a <b>SITE ADMIN</b> to add
+					a project in a <b>READY</b> state first.
+				</p>
+			</>
+		);
+	}
+
+	const selectedProgect = item?.id
+		? item.id
+		: {
+				id: projects[0].id,
+				name: projects[0].provider_name + ' - ' + projects[0].name,
+		  };
 
 	return (
 		<>
@@ -40,7 +48,7 @@ export default function ProjectForm(props: Readonly<Item>) {
 			</Field>
 			<Field>
 				<Label data-required>Project</Label>
-				<Select name='project' defaultValue={projects[0]}>
+				<Select name='project_id' defaultValue={selectedProgect}>
 					{items}
 				</Select>
 			</Field>

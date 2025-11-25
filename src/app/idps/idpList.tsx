@@ -1,13 +1,14 @@
 'use client';
 
 import { Button } from '@/components/buttons';
-import Header from '@/components/header';
 import List from './components/list';
 import { Modal, ModalBody } from '@/components/modal';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import { Form } from '@/components/form';
 import IdpForm from './idpForm';
+import { toaster } from '@/components/toaster';
+import { useRouter } from 'next/navigation';
 
 type Items = {
 	items: Array<{
@@ -22,24 +23,70 @@ type Items = {
 };
 
 export default function IdpList(props: Readonly<Items>) {
+	const router = useRouter();
 	const { items } = props;
 
 	const [showIdpModal, setShowIdpModal] = useState(false);
 
+	const createIdentityProvider = async (
+		e: FormEvent<HTMLFormElement>
+	): Promise<void> => {
+		// Prevent the default form submission (page reload)
+		e.preventDefault();
+
+		const formData = new FormData(e.currentTarget);
+		const entries = Object.fromEntries(formData.entries());
+
+		const body: Record<string, unknown> = { ...entries };
+
+		for (const key in body) {
+			const value = body[key];
+			if (typeof value === 'string') {
+				try {
+					const parsed = JSON.parse(value);
+					if (Array.isArray(parsed)) {
+						body[key] = parsed;
+					}
+				} catch {
+					// ignore invalid JSON
+				}
+			}
+		}
+
+		try {
+			const apiResponse = await fetch('/api_internal/idps', {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(body),
+			});
+
+			const jsonResponse = await apiResponse.json();
+
+			if (jsonResponse.id) {
+				setShowIdpModal(false);
+				router.refresh();
+				toaster.success('IDP created successfully');
+			}
+
+			//PrintFormErrors(jsonResponse);
+		} catch (err) {
+			console.error('API Error:', err);
+		} finally {
+			return;
+		}
+	};
+
 	return (
 		<>
-			<Header
-				logo='/logos/infn_logo.png'
-				title='Identity Providers'
-				subtitle='Identity Providers supported by Data Cloud. Resource providers must support at least one of them. Data Cloud users MUST be registered to at least one of those Identity Providers.'
-			/>
 			<List items={items} />
-			<div className='fixed bottom-0 right-0 py-12 px-8 flex items-center justify-center'>
+			<div className='fixed bottom-0 right-0 py-8 px-4 flex items-center justify-center'>
 				<Button
-					className='btn btn-primary font-bold uppercase rounded-full w-full lg:fixed lg:bottom-12 lg:right-12 p-8 lg:w-auto text-3xl shadow-[-3px_3px_8px_rgba(0,0,0,0.1)] clickable '
+					className='btn btn-primary font-bold uppercase rounded-full w-full md:w-3/4 lg:fixed lg:bottom-12 lg:right-12 p-6 lg:w-auto text-xl shadow-[-3px_3px_8px_rgba(0,0,0,0.1)] clickable '
 					onClick={() => setShowIdpModal(true)}
 				>
-					<PlusIcon className='size-10' />
+					<PlusIcon className='size-7' />
 					<div className='hidden md:inline'>&nbsp;Create IDP</div>
 				</Button>
 			</div>
@@ -56,7 +103,7 @@ export default function IdpList(props: Readonly<Items>) {
 				}
 			>
 				<ModalBody>
-					<Form>
+					<Form onSubmit={createIdentityProvider}>
 						<IdpForm />
 						<div className='flex justify-between w-full pt-4'>
 							<Button

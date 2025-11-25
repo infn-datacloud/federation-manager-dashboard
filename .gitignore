@@ -31,7 +31,7 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # env files (can opt-in for committing if needed)
-.env*
+.env
 
 # vercel
 .vercel
@@ -40,6 +40,12 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+
 # VSCode and other IDEs
 **/.vscode/**
 !**/.vscode/launch.json
+
+# DB
+auth.sqlite
+
+certificates

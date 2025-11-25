@@ -5,12 +5,14 @@
 'use client';
 
 import { TrashIcon, PencilIcon } from '@heroicons/react/24/solid';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { Modal, ModalBody } from '@/components/modal';
 import { Form } from '@/components/form';
 import IdpForm from '../idpForm';
 import { Button } from '@/components/buttons';
 import ConfirmModal from '@/components/confirm-modal';
+import { useParams, useRouter } from 'next/navigation';
+import { toaster } from '@/components/toaster';
 
 type ItemProps = {
 	item: {
@@ -25,10 +27,95 @@ type ItemProps = {
 };
 
 export default function IdpDetail(props: Readonly<ItemProps>) {
+	const router = useRouter();
+
 	const { item } = props;
+
+	const params = useParams();
+	const { idpId } = params;
 
 	const [showIdpModal, setShowIdpModal] = useState(false);
 	const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+	const deleteIdentityProvider = async (): Promise<void> => {
+		try {
+			const apiResponse = await fetch(`/api_internal/idps/${idpId}`, {
+				method: 'DELETE',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
+
+			const jsonResponse = await apiResponse; //.json();
+
+			if (jsonResponse.ok) {
+				setShowDeleteModal(false);
+				router.push('/idps');
+				toaster.success('IDP deleted successfully');
+			} else {
+				toaster.error(
+					'Error deleting IDP',
+					'Some error occurred while deleting the identity provider. Please try again.'
+				);
+			}
+		} catch (err) {
+			console.error('API Error:', err);
+		} finally {
+			return;
+		}
+	};
+
+	const updateIdentityProvider = async (
+		e: FormEvent<HTMLFormElement>
+	): Promise<void> => {
+		// Prevent the default form submission (page reload)
+		e.preventDefault();
+
+		const formData = new FormData(e.currentTarget);
+		const entries = Object.fromEntries(formData.entries());
+
+		const body: Record<string, unknown> = { ...entries };
+
+		for (const key in body) {
+			const value = body[key];
+			if (typeof value === 'string') {
+				try {
+					const parsed = JSON.parse(value);
+					if (Array.isArray(parsed)) {
+						body[key] = parsed;
+					}
+				} catch {
+					// ignore invalid JSON
+				}
+			}
+		}
+
+		try {
+			const apiResponse = await fetch(`/api_internal/idps/${idpId}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(body),
+			});
+
+			const jsonResponse = await apiResponse; //.json();
+
+			if (jsonResponse.ok) {
+				setShowIdpModal(false);
+				router.refresh();
+				toaster.success('IDP updated successfully');
+			} else {
+				toaster.error('Update failed', 'Please try again.');
+			}
+
+			//PrintFormErrors(jsonResponse);
+		} catch (err) {
+			console.error('API Error:', err);
+		} finally {
+			return;
+		}
+	};
 
 	return (
 		<>
@@ -40,7 +127,7 @@ export default function IdpDetail(props: Readonly<ItemProps>) {
 					}}
 				>
 					<PencilIcon className='size-4' />
-					Details
+					Edit
 				</Button>
 				<Button
 					className='w-full md:w-1/2 btn btn-danger'
@@ -67,7 +154,7 @@ export default function IdpDetail(props: Readonly<ItemProps>) {
 				}
 			>
 				<ModalBody>
-					<Form>
+					<Form onSubmit={updateIdentityProvider}>
 						<IdpForm item={item} />
 						<div className='flex justify-between w-full pt-4'>
 							<Button
@@ -92,7 +179,7 @@ export default function IdpDetail(props: Readonly<ItemProps>) {
 			{/* Delete Modal */}
 			<ConfirmModal
 				onConfirm={() => {
-					setShowDeleteModal(false);
+					deleteIdentityProvider();
 				}}
 				onClose={() => {
 					setShowDeleteModal(false);
@@ -101,7 +188,7 @@ export default function IdpDetail(props: Readonly<ItemProps>) {
 				cancelButtonText='Cancel'
 				show={showDeleteModal}
 				title={`Delete ${item.name}`}
-                danger={true}
+				danger={true}
 			>
 				<p>
 					Are you sure you want to delete the <b>{item.name}</b> IDP?

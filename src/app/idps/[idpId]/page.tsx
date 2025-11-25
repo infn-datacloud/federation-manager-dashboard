@@ -1,6 +1,12 @@
 import UserGroupsList from './userGroupList';
 import Link from '@/components/link';
 import IdpDetail from './idpDetail';
+import { auth } from '@/lib/auth';
+import { headers } from 'next/headers';
+import Custom401 from '@/app/pages/401';
+import { Suspense } from 'react';
+import { LoadingDetail, LoadingList } from './loading';
+import { IdentificationIcon } from '@heroicons/react/24/solid';
 
 type IdpPageProps = {
 	params: Promise<{
@@ -9,41 +15,19 @@ type IdpPageProps = {
 };
 
 export default async function Idp(props: Readonly<IdpPageProps>) {
+	const session = await auth.api.getSession({
+		headers: await headers(),
+	});
+	if (!session) {
+		// Auth error, show 401 page
+		return <Custom401 />;
+	}
+
 	const { idpId } = await props.params;
-
-	const items = [
-		{
-			id: '1',
-			name: 'Cygno',
-			description:
-				'lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. lorem ipsum dolor sit amet consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim ad minim veniam quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-		},
-		{
-			id: '2',
-			name: 'Terabit',
-			description: 'lorem ipsum dolor sit amet consectetur adipiscing',
-		},
-		{
-			id: '3',
-			name: 'ICSC',
-			description: 'lorem ipsum dolor sit amet consectetur adipiscing',
-		},
-	];
-
-	// retrieve with a get by ID
-	const idp = {
-		id: '2',
-		name: 'IAM Cloud 2',
-		description: 'INFN-Cloud identity provider',
-		endpoint: 'https://2-iam.cloud.infn.it/',
-		protocol: 'openid',
-		audience: 'aud',
-		groups_claim: 'group',
-	};
 
 	return (
 		<>
-			<div className='mb-12'>
+			<div className='mb-2'>
 				<Link href='/idps' className='opacity-50 hover:opacity-80'>
 					Identity Providers
 				</Link>
@@ -53,13 +37,71 @@ export default async function Idp(props: Readonly<IdpPageProps>) {
 				</span>
 			</div>
 
-			<h1>
-				{idp.name} - ID: {idpId}
+			<h1 className='mb-6 flex items-center'>
+				<IdentificationIcon className='size-10 mr-4' />
+				Identity Provider
 			</h1>
+
+			<Suspense fallback={<LoadingDetail />}>
+				<Detail idpId={idpId} />
+			</Suspense>
+			<Suspense fallback={<LoadingList />}>
+				<List idpId={idpId} />
+			</Suspense>
+		</>
+	);
+}
+
+async function Detail({ idpId }: { idpId: string }) {
+	const idp = await getIdentityProvider(idpId);
+
+	return (
+		<>
+			<h2>{idp.name}</h2>
 			<div className='opacity-80 text-md'>{idp.endpoint}</div>
 			<div className='mt-4 text-justify'>{idp.description}</div>
 			<IdpDetail item={idp} />
-			<UserGroupsList items={items} />
 		</>
 	);
+}
+
+async function List({ idpId }: { idpId: string }) {
+	const userGroups = await getUserGroups(idpId);
+	return <UserGroupsList items={userGroups} />;
+}
+
+async function getIdentityProvider(id: string) {
+	const url = `${process.env.FM_ENDPOINT_URL}api_internal/idps/${id}`;
+
+	const apiResponse = await fetch(url, {
+		method: 'GET',
+		headers: await headers(),
+	});
+
+	if (!apiResponse.ok) {
+		const errorText = await apiResponse.text();
+		throw new Error(`Failed to fetch identity provider: ${errorText}`);
+	}
+
+	const data = await apiResponse.json();
+
+	return data;
+}
+
+async function getUserGroups(id: string) {
+	const url = `${process.env.FM_ENDPOINT_URL}api_internal/idps/${id}/user-groups`;
+
+	const apiResponse = await fetch(url, {
+		method: 'GET',
+		headers: await headers(),
+	});
+
+	if (!apiResponse.ok) {
+		const errorText = await apiResponse.text();
+		throw new Error(`Failed to fetch user groups: ${errorText}`);
+	}
+
+	const data = await apiResponse.json();
+
+	return data.data;
 }
