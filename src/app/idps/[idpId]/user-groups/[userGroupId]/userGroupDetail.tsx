@@ -36,7 +36,7 @@ export default function UserGroupDetail(props: Readonly<ItemProps>) {
 	const deleteUserGroup = async (): Promise<void> => {
 		try {
 			const apiResponse = await fetch(
-				`/api_internal/idps/${idpId}/user-groups/${userGroupId}`,
+				`/api/ssr/idps/${idpId}/user-groups/${userGroupId}`,
 				{
 					method: 'DELETE',
 					headers: {
@@ -91,7 +91,7 @@ export default function UserGroupDetail(props: Readonly<ItemProps>) {
 
 		try {
 			const apiResponse = await fetch(
-				`/api_internal/idps/${idpId}/user-groups/${userGroupId}`,
+				`/api/ssr/idps/${idpId}/user-groups/${userGroupId}`,
 				{
 					method: 'PUT',
 					headers: {

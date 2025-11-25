@@ -91,7 +91,7 @@ export default function ProjectsList(props: Readonly<ListProps>) {
 
 		try {
 			const apiResponse = await fetch(
-				`/api_internal/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`,
+				`/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`,
 				{
 					method: 'POST',
 					headers: {
@@ -116,7 +116,7 @@ export default function ProjectsList(props: Readonly<ListProps>) {
 	const disconnectProject = async (): Promise<void> => {
 		try {
 			const apiResponse = await fetch(
-				`/api_internal/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects/${selectedItem?.id}`,
+				`/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects/${selectedItem?.id}`,
 				{
 					method: 'DELETE',
 					headers: {

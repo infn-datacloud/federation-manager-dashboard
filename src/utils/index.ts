@@ -1,9 +1,8 @@
-import jwt from 'jsonwebtoken';
-import getAuthToken from '@/app/api_internal/utils';
+import getAuthToken from '@/app/api/ssr/utils';
 
 export async function findUserRoles() {
 	const accessToken = await getAuthToken();
-	const decoded = jwt.decode(accessToken!);
+	const decoded = decodeJwtPayload(accessToken!);
 
 	type JwtPayloadWithGroups = {
 		groups?: string[];
@@ -13,13 +12,13 @@ export async function findUserRoles() {
 	const userRoles: string[] = [];
 
 	const siteAdminGroups = JSON.parse(process.env.GROUPS_SITE_ADMIN!)[
-		process.env.FM_OIDC_URL!
+		`${process.env.FM_OIDC_URL!}/`
 	];
 	const siteTesterGroups = JSON.parse(process.env.GROUPS_SITE_TESTER!)[
-		process.env.FM_OIDC_URL!
+		`${process.env.FM_OIDC_URL!}/`
 	];
 	const slaManagerGroups = JSON.parse(process.env.GROUPS_SLA_MANAGER!)[
-		process.env.FM_OIDC_URL!
+		`${process.env.FM_OIDC_URL!}/`
 	];
 
 	groups?.forEach((group) => {
@@ -52,4 +51,12 @@ export async function findUserRoles() {
 	});
 
 	return userRoles;
+}
+
+export function decodeJwtPayload(token: string) {
+	if (token) {
+		return JSON.parse(atob(token.split('.')[1]));
+	} else {
+		return {};
+	}
 }

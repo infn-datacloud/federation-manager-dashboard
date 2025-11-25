@@ -71,7 +71,7 @@ async function List({ idpId }: { idpId: string }) {
 }
 
 async function getIdentityProvider(id: string) {
-	const url = `${process.env.FM_ENDPOINT_URL}api_internal/idps/${id}`;
+	const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/idps/${id}`;
 
 	const apiResponse = await fetch(url, {
 		method: 'GET',
@@ -89,7 +89,7 @@ async function getIdentityProvider(id: string) {
 }
 
 async function getUserGroups(id: string) {
-	const url = `${process.env.FM_ENDPOINT_URL}api_internal/idps/${id}/user-groups`;
+	const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/idps/${id}/user-groups`;
 
 	const apiResponse = await fetch(url, {
 		method: 'GET',

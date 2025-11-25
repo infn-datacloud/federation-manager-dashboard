@@ -147,7 +147,7 @@ async function List({
 }
 
 async function getSla(idpId: string, userGroupId: string, slaId: string) {
-	const url = `${process.env.FM_ENDPOINT_URL}api_internal/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}`;
+	const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}`;
 
 	const apiResponse = await fetch(url, {
 		method: 'GET',
@@ -169,7 +169,7 @@ async function getSlaProjects(
 	userGroupId: string,
 	slaId: string
 ) {
-	const url = `${process.env.FM_ENDPOINT_URL}api_internal/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`;
+	const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`;
 
 	const apiResponse = await fetch(url, {
 		method: 'GET',
@@ -187,7 +187,7 @@ async function getSlaProjects(
 }
 
 async function getProjects() {
-	const url = `${process.env.FM_ENDPOINT_URL}api_internal/providers`;
+	const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/providers`;
 
 	const apiResponse = await fetch(url, {
 		method: 'GET',
@@ -227,7 +227,7 @@ async function getProjects() {
 }
 
 async function getProjectByProvider(providerId: string) {
-	const url = `${process.env.FM_ENDPOINT_URL}api_internal/providers/${providerId}/projects`;
+	const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/providers/${providerId}/projects`;
 
 	const apiResponse = await fetch(url, {
 		method: 'GET',

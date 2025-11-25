@@ -1,10 +1,4 @@
-import {
-	Field,
-	Checkbox,
-	Select,
-	SelectOption,
-	Label,
-} from '@/components/form';
+import { Field, Checkbox, Select, SelectOption } from '@/components/form';
 import { Input, InputList } from '@/components/inputs';
 
 type ProviderFormProps = {

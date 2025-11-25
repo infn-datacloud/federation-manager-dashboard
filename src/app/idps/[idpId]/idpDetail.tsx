@@ -39,7 +39,7 @@ export default function IdpDetail(props: Readonly<ItemProps>) {
 
 	const deleteIdentityProvider = async (): Promise<void> => {
 		try {
-			const apiResponse = await fetch(`/api_internal/idps/${idpId}`, {
+			const apiResponse = await fetch(`/api/ssr/idps/${idpId}`, {
 				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json',
@@ -91,7 +91,7 @@ export default function IdpDetail(props: Readonly<ItemProps>) {
 		}
 
 		try {
-			const apiResponse = await fetch(`/api_internal/idps/${idpId}`, {
+			const apiResponse = await fetch(`/api/ssr/idps/${idpId}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',

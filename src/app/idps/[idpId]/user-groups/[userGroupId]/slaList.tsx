@@ -61,7 +61,7 @@ export default function SlaList(props: Readonly<ListProps>) {
 
 		try {
 			const apiResponse = await fetch(
-				`/api_internal/idps/${idpId}/user-groups/${userGroupId}/slas`,
+				`/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas`,
 				{
 					method: 'POST',
 					headers: {

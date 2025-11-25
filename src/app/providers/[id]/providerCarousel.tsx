@@ -179,7 +179,7 @@ export default function ProviderCarousel(props: {
 				};
 
 				const apiResponse = await fetch(
-					`/api_internal/providers/${id}/idps`,
+					`/api/ssr/providers/${id}/idps`,
 					{
 						method: 'POST',
 						headers: {
@@ -207,7 +207,7 @@ export default function ProviderCarousel(props: {
 			/* UPDATE */
 			try {
 				const apiResponse = await fetch(
-					`/api_internal/providers/${id}/idps/${providerIdpData.idp_id}`,
+					`/api/ssr/providers/${id}/idps/${providerIdpData.idp_id}`,
 					{
 						method: 'PUT',
 						headers: {
@@ -238,7 +238,7 @@ export default function ProviderCarousel(props: {
 	const deleteProviderIdp = async (): Promise<void> => {
 		try {
 			const apiResponse = await fetch(
-				`/api_internal/providers/${id}/idps/${providerIdpData?.idp_id}`,
+				`/api/ssr/providers/${id}/idps/${providerIdpData?.idp_id}`,
 				{
 					method: 'DELETE',
 					headers: {
@@ -290,7 +290,7 @@ export default function ProviderCarousel(props: {
 			/* CREATE */
 			try {
 				const apiResponse = await fetch(
-					`/api_internal/providers/${id}/regions`,
+					`/api/ssr/providers/${id}/regions`,
 					{
 						method: 'POST',
 						headers: {
@@ -316,7 +316,7 @@ export default function ProviderCarousel(props: {
 			/* UPDATE */
 			try {
 				const apiResponse = await fetch(
-					`/api_internal/providers/${id}/regions/${providerRegionData.id}`,
+					`/api/ssr/providers/${id}/regions/${providerRegionData.id}`,
 					{
 						method: 'PUT',
 						headers: {
@@ -345,7 +345,7 @@ export default function ProviderCarousel(props: {
 	const deleteProviderRegion = async (): Promise<void> => {
 		try {
 			const apiResponse = await fetch(
-				`/api_internal/providers/${id}/regions/${providerRegionData?.id}`,
+				`/api/ssr/providers/${id}/regions/${providerRegionData?.id}`,
 				{
 					method: 'DELETE',
 					headers: {
@@ -397,7 +397,7 @@ export default function ProviderCarousel(props: {
 			/* CREATE */
 			try {
 				const apiResponse = await fetch(
-					`/api_internal/providers/${id}/projects`,
+					`/api/ssr/providers/${id}/projects`,
 					{
 						method: 'POST',
 						headers: {
@@ -432,7 +432,7 @@ export default function ProviderCarousel(props: {
 			/* UPDATE */
 			try {
 				const apiResponse = await fetch(
-					`/api_internal/providers/${id}/projects/${providerProjectData.id}`,
+					`/api/ssr/providers/${id}/projects/${providerProjectData.id}`,
 					{
 						method: 'PUT',
 						headers: {
@@ -463,7 +463,7 @@ export default function ProviderCarousel(props: {
 		try {
 			if (await deleteProviderProjectRegion()) {
 				const apiResponse = await fetch(
-					`/api_internal/providers/${id}/projects/${providerProjectData?.id}`,
+					`/api/ssr/providers/${id}/projects/${providerProjectData?.id}`,
 					{
 						method: 'DELETE',
 						headers: {
@@ -507,7 +507,7 @@ export default function ProviderCarousel(props: {
 		};
 
 		const apiResponse = await fetch(
-			`/api_internal/providers/${id}/projects/${projectId}/regions`,
+			`/api/ssr/providers/${id}/projects/${projectId}/regions`,
 			{
 				method: 'POST',
 				headers: {
@@ -531,7 +531,7 @@ export default function ProviderCarousel(props: {
 		};
 
 		const apiResponse = await fetch(
-			`/api_internal/providers/${id}/projects/${providerProjectData?.id}/regions/${providerProjectData?.region.region_id}`,
+			`/api/ssr/providers/${id}/projects/${providerProjectData?.id}/regions/${providerProjectData?.region.region_id}`,
 			{
 				method: 'PUT',
 				headers: {
@@ -548,7 +548,7 @@ export default function ProviderCarousel(props: {
 
 	async function deleteProviderProjectRegion() {
 		const apiResponse = await fetch(
-			`/api_internal/providers/${id}/projects/${providerProjectData?.id}/regions/${providerProjectData?.region.region_id}`,
+			`/api/ssr/providers/${id}/projects/${providerProjectData?.id}/regions/${providerProjectData?.region.region_id}`,
 			{
 				method: 'DELETE',
 				headers: {
@@ -573,15 +573,12 @@ export default function ProviderCarousel(props: {
 			return;
 
 		try {
-			const apiResponse = await fetch(
-				`/api_internal/providers/${id}/submit`,
-				{
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-				}
-			);
+			const apiResponse = await fetch(`/api/ssr/providers/${id}/submit`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+			});
 
 			if (apiResponse.ok) {
 				toaster.success('Provider submitted successfully');
@@ -624,7 +621,7 @@ export default function ProviderCarousel(props: {
 		}
 
 		try {
-			const apiResponse = await fetch(`/api_internal/providers/${id}`, {
+			const apiResponse = await fetch(`/api/ssr/providers/${id}`, {
 				method: 'PATCH',
 				headers: {
 					'Content-Type': 'application/json',
@@ -648,7 +645,7 @@ export default function ProviderCarousel(props: {
 
 	const deleteProvider = async (): Promise<void> => {
 		try {
-			const apiResponse = await fetch(`/api_internal/providers/${id}`, {
+			const apiResponse = await fetch(`/api/ssr/providers/${id}`, {
 				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json',
@@ -675,7 +672,7 @@ export default function ProviderCarousel(props: {
 	const assignProvider = async (): Promise<void> => {
 		try {
 			const apiResponse = await fetch(
-				`/api_internal/providers/${id}/testers`,
+				`/api/ssr/providers/${id}/testers`,
 				{
 					method: 'POST',
 					headers: {

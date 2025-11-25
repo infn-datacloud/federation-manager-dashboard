@@ -39,7 +39,7 @@ export default function SlaDetail(props: Readonly<ItemProps>) {
 	const deleteSla = async (): Promise<void> => {
 		try {
 			const apiResponse = await fetch(
-				`/api_internal/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}`,
+				`/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}`,
 				{
 					method: 'DELETE',
 					headers: {
@@ -92,7 +92,7 @@ export default function SlaDetail(props: Readonly<ItemProps>) {
 
 		try {
 			const apiResponse = await fetch(
-				`/api_internal/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}`,
+				`/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}`,
 				{
 					method: 'PUT',
 					headers: {

@@ -165,7 +165,7 @@ async function List() {
 
 async function getProviders() {
 	const apiResponse = await fetch(
-		`${process.env.FM_ENDPOINT_URL}api_internal/providers`,
+		`${process.env.FM_ENDPOINT_URL}/api/ssr/providers`,
 		{
 			method: 'GET',
 			headers: await headers(),
@@ -180,7 +180,7 @@ async function getProviders() {
 
 async function getUsers() {
 	const apiResponse = await fetch(
-		`${process.env.FM_ENDPOINT_URL}api_internal/users`,
+		`${process.env.FM_ENDPOINT_URL}/api/ssr/users`,
 		{
 			method: 'GET',
 			headers: await headers(),
@@ -194,7 +194,7 @@ async function getUsers() {
 
 async function getUserId() {
 	const apiResponse = await fetch(
-		`${process.env.FM_ENDPOINT_URL}api_internal/users/my-id`,
+		`${process.env.FM_ENDPOINT_URL}/api/ssr/users/my-id`,
 		{
 			method: 'GET',
 			headers: await headers(),

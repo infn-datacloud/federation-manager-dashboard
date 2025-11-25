@@ -58,7 +58,7 @@ FM_AUTH_SECRET="xxxxxxxx"
 
 API_SERVER_URL="http://192.168.1.1:8000/api/v1"
 
-FM_OIDC_URL="https://iam.example.it/"       # IMPORTANT: Remember the final "/"
+FM_OIDC_URL="https://iam.example.it"
 FM_OIDC_CLIENT_ID="xxxx-xxxx-xxxx-xxxx-xxxxxxx"
 FM_OIDC_CLIENT_SECRET="xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 FM_OIDC_SCOPES="openid profile email"

@@ -14,7 +14,7 @@ export const auth = betterAuth({
 			config: [
 				{
 					providerId: process.env.FM_OIDC_PROVIDER_ID!,
-					discoveryUrl: `${process.env.FM_OIDC_URL}.well-known/openid-configuration`,
+					discoveryUrl: `${process.env.FM_OIDC_URL}/.well-known/openid-configuration`,
 					clientId: process.env.FM_OIDC_CLIENT_ID!,
 					clientSecret: process.env.FM_OIDC_CLIENT_SECRET!,
 					scopes: process.env.FM_OIDC_SCOPES?.split(' '),

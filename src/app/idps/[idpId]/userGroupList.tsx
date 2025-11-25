@@ -57,7 +57,7 @@ export default function UserGroupsList(props: Readonly<ListProps>) {
 
 		try {
 			const apiResponse = await fetch(
-				`/api_internal/idps/${idpId}/user-groups`,
+				`/api/ssr/idps/${idpId}/user-groups`,
 				{
 					method: 'POST',
 					headers: {
