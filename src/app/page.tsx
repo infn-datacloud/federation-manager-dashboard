@@ -15,7 +15,7 @@ export default async function Home() {
 	} else {
 		if (session?.user?.email) {
 			await fetch(
-				`${process.env.BASE_URL}/api/users/ensure-user-exists`,
+				`${process.env.FM_ENDPOINT_URL}/api_internal/users/ensure-user-exists`,
 				{
 					method: 'POST',
 					headers: await headers(),

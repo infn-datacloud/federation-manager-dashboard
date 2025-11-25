@@ -164,10 +164,13 @@ async function List() {
 }
 
 async function getProviders() {
-	const apiResponse = await fetch(`${process.env.BASE_URL}/api/providers`, {
-		method: 'GET',
-		headers: await headers(),
-	});
+	const apiResponse = await fetch(
+		`${process.env.FM_ENDPOINT_URL}api_internal/providers`,
+		{
+			method: 'GET',
+			headers: await headers(),
+		}
+	);
 
 	const providers = await apiResponse.json();
 	const updatedProviders = await assignSiteTesterNames(providers.data);
@@ -176,10 +179,13 @@ async function getProviders() {
 }
 
 async function getUsers() {
-	const apiResponse = await fetch(`${process.env.BASE_URL}/api/users`, {
-		method: 'GET',
-		headers: await headers(),
-	});
+	const apiResponse = await fetch(
+		`${process.env.FM_ENDPOINT_URL}api_internal/users`,
+		{
+			method: 'GET',
+			headers: await headers(),
+		}
+	);
 
 	const users = await apiResponse.json();
 
@@ -187,10 +193,13 @@ async function getUsers() {
 }
 
 async function getUserId() {
-	const apiResponse = await fetch(`${process.env.BASE_URL}/api/users/my-id`, {
-		method: 'GET',
-		headers: await headers(),
-	});
+	const apiResponse = await fetch(
+		`${process.env.FM_ENDPOINT_URL}api_internal/users/my-id`,
+		{
+			method: 'GET',
+			headers: await headers(),
+		}
+	);
 
 	const id = await apiResponse.json();
 

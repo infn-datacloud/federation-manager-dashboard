@@ -20,7 +20,7 @@ export default async function Idp(props: Readonly<IdpPageProps>) {
 	});
 	if (!session) {
 		// Auth error, show 401 page
-		return <Custom401 />
+		return <Custom401 />;
 	}
 
 	const { idpId } = await props.params;
@@ -71,7 +71,7 @@ async function List({ idpId }: { idpId: string }) {
 }
 
 async function getIdentityProvider(id: string) {
-	const url = `${process.env.BASE_URL}/api/idps/${id}`;
+	const url = `${process.env.FM_ENDPOINT_URL}api_internal/idps/${id}`;
 
 	const apiResponse = await fetch(url, {
 		method: 'GET',
@@ -89,7 +89,7 @@ async function getIdentityProvider(id: string) {
 }
 
 async function getUserGroups(id: string) {
-	const url = `${process.env.BASE_URL}/api/idps/${id}/user-groups`;
+	const url = `${process.env.FM_ENDPOINT_URL}api_internal/idps/${id}/user-groups`;
 
 	const apiResponse = await fetch(url, {
 		method: 'GET',

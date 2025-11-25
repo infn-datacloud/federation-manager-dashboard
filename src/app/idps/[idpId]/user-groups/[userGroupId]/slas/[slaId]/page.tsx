@@ -4,7 +4,11 @@ import SlaDetail from './slaDetail';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import Custom401 from '@/app/pages/401';
-import { CalendarDaysIcon, DocumentDuplicateIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid';
+import {
+	CalendarDaysIcon,
+	DocumentDuplicateIcon,
+	ExclamationTriangleIcon,
+} from '@heroicons/react/24/solid';
 import { JSX, Suspense } from 'react';
 import { LoadingDetail, LoadingList } from './loading';
 
@@ -64,19 +68,26 @@ export default async function Sla(props: Readonly<IdpPageProps>) {
 			</h1>
 
 			<Suspense fallback={<LoadingDetail />}>
-				<Detail idpId={idpId} userGroupId={userGroupId} slaId={slaId} sla={sla} />
+				<Detail
+					idpId={idpId}
+					userGroupId={userGroupId}
+					slaId={slaId}
+					sla={sla}
+				/>
 			</Suspense>
 			<Suspense fallback={<LoadingList />}>
-				<List idpId={idpId} userGroupId={userGroupId} slaId={slaId} sla={sla} />
+				<List
+					idpId={idpId}
+					userGroupId={userGroupId}
+					slaId={slaId}
+					sla={sla}
+				/>
 			</Suspense>
 		</>
 	);
 }
 
 async function Detail({
-	idpId,
-	userGroupId,
-	slaId,
 	sla,
 }: {
 	idpId: string;
@@ -126,11 +137,17 @@ async function List({
 	const slaProjects = await getSlaProjects(idpId, userGroupId, slaId);
 	const projects = await getProjects();
 
-	return <ProjectsList slaProjects={slaProjects} projects={projects} endDate={sla.end_date} />;
+	return (
+		<ProjectsList
+			slaProjects={slaProjects}
+			projects={projects}
+			endDate={sla.end_date}
+		/>
+	);
 }
 
 async function getSla(idpId: string, userGroupId: string, slaId: string) {
-	const url = `${process.env.BASE_URL}/api/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}`;
+	const url = `${process.env.FM_ENDPOINT_URL}api_internal/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}`;
 
 	const apiResponse = await fetch(url, {
 		method: 'GET',
@@ -152,7 +169,7 @@ async function getSlaProjects(
 	userGroupId: string,
 	slaId: string
 ) {
-	const url = `${process.env.BASE_URL}/api/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`;
+	const url = `${process.env.FM_ENDPOINT_URL}api_internal/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`;
 
 	const apiResponse = await fetch(url, {
 		method: 'GET',
@@ -170,7 +187,7 @@ async function getSlaProjects(
 }
 
 async function getProjects() {
-	const url = `${process.env.BASE_URL}/api/providers`;
+	const url = `${process.env.FM_ENDPOINT_URL}api_internal/providers`;
 
 	const apiResponse = await fetch(url, {
 		method: 'GET',
@@ -210,7 +227,7 @@ async function getProjects() {
 }
 
 async function getProjectByProvider(providerId: string) {
-	const url = `${process.env.BASE_URL}/api/providers/${providerId}/projects`;
+	const url = `${process.env.FM_ENDPOINT_URL}api_internal/providers/${providerId}/projects`;
 
 	const apiResponse = await fetch(url, {
 		method: 'GET',
@@ -227,24 +244,25 @@ async function getProjectByProvider(providerId: string) {
 	return data.data;
 }
 
-export function getRemainingTime(endDate: string | Date): string|JSX.Element {
+function getRemainingTime(endDate: string | Date): string | JSX.Element {
 	const now = new Date();
 	const end = new Date(endDate);
 
 	const diff = end.getTime() - now.getTime();
 
-	if (diff <= 0) return (
-		<div className='text-white bg-danger/80 rounded-md px-6 py-4 mt-4'>
-			<div className='flex items-center mb-1'>
-				<ExclamationTriangleIcon className='size-4 mr-1' />
-				<div className='font-bold'>SLA Expired</div>
+	if (diff <= 0)
+		return (
+			<div className='text-white bg-danger/80 rounded-md px-6 py-4 mt-4'>
+				<div className='flex items-center mb-1'>
+					<ExclamationTriangleIcon className='size-4 mr-1' />
+					<div className='font-bold'>SLA Expired</div>
+				</div>
+				<div>
+					This SLA can no longer be associated with any project, as it
+					expired on {end.toLocaleDateString('it-IT')}.
+				</div>
 			</div>
-			<div>
-				This SLA can no longer be associated with any project, as it
-				expired on {end.toLocaleDateString('it-IT')}.
-			</div>
-		</div>
-	);
+		);
 
 	const oneDay = 1000 * 60 * 60 * 24;
 	const daysTotal = diff / oneDay;
@@ -265,4 +283,3 @@ export function getRemainingTime(endDate: string | Date): string|JSX.Element {
 
 	return result.join(', ') + ' remaining';
 }
-  

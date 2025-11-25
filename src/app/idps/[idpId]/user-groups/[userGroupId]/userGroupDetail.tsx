@@ -19,7 +19,7 @@ type ItemProps = {
 		id: string;
 		name: string;
 		description: string;
-	}
+	};
 };
 
 export default function UserGroupDetail(props: Readonly<ItemProps>) {
@@ -35,12 +35,15 @@ export default function UserGroupDetail(props: Readonly<ItemProps>) {
 
 	const deleteUserGroup = async (): Promise<void> => {
 		try {
-			const apiResponse = await fetch(`/api/idps/${idpId}/user-groups/${userGroupId}`, {
-				method: 'DELETE',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
+			const apiResponse = await fetch(
+				`/api_internal/idps/${idpId}/user-groups/${userGroupId}`,
+				{
+					method: 'DELETE',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}
+			);
 
 			const jsonResponse = await apiResponse; //.json();
 
@@ -88,7 +91,7 @@ export default function UserGroupDetail(props: Readonly<ItemProps>) {
 
 		try {
 			const apiResponse = await fetch(
-				`/api/idps/${idpId}/user-groups/${userGroupId}`,
+				`/api_internal/idps/${idpId}/user-groups/${userGroupId}`,
 				{
 					method: 'PUT',
 					headers: {

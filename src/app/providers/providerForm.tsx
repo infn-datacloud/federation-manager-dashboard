@@ -1,4 +1,10 @@
-import { Field, Checkbox, Select, SelectOption } from '@/components/form';
+import {
+	Field,
+	Checkbox,
+	Select,
+	SelectOption,
+	Label,
+} from '@/components/form';
 import { Input, InputList } from '@/components/inputs';
 
 type ProviderFormProps = {
@@ -16,7 +22,6 @@ type ProviderFormProps = {
 		status?: number;
 		user_name?: string;
 		rally_username?: string;
-		rally_password?: string;
 		test_flavor_name?: string;
 		test_network_id?: string;
 		floating_ips_enable: boolean;
@@ -93,12 +98,18 @@ export default function ProviderForm(props: Readonly<ProviderFormProps>) {
 				<Input
 					label='Rally password'
 					name='rally_password'
-					defaultValue={item?.rally_password}
 					placeholder='Password'
 					type='password'
-					required
+					required={item == undefined}
 					disabled={props.disabled}
 				/>
+				{item && (
+					<p className='text-sm font-medium opacity-50 mt-1'>
+						For security reasons the <b>password is not visible</b>.
+						Submitting the form with the field filled would
+						overwrite the old one.
+					</p>
+				)}
 			</Field>
 			<Field>
 				<Input

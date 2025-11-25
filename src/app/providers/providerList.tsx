@@ -63,7 +63,7 @@ export default function ProvierList(props: Readonly<ProvierListProps>) {
 		}
 
 		try {
-			const apiResponse = await fetch('/api/providers', {
+			const apiResponse = await fetch('/api_internal/providers', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',

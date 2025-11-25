@@ -7,13 +7,13 @@ import { ArrowLeftEndOnRectangleIcon } from '@heroicons/react/24/solid';
 
 export default function LoginPage() {
 	const handleLogin = async () => {
-		const { data, error } = await authClient.signIn.oauth2({
+		await authClient.signIn.oauth2({
 			providerId: 'iam',
 			callbackURL: '/',
 			errorCallbackURL: '/',
 			newUserCallbackURL: '/',
 			disableRedirect: false,
-			scopes: process.env.IAM_SCOPES?.split(' '),
+			scopes: process.env.FM_OIDC_SCOPES?.split(' '),
 			requestSignUp: false,
 		});
 	};

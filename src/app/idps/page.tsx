@@ -66,10 +66,13 @@ async function List() {
 }
 
 async function getIdentityProviders() {
-	const apiResponse = await fetch(`${process.env.BASE_URL}/api/idps`, {
-		method: 'GET',
-		headers: await headers(),
-	});
+	const apiResponse = await fetch(
+		`${process.env.FM_ENDPOINT_URL}api_internal/idps`,
+		{
+			method: 'GET',
+			headers: await headers(),
+		}
+	);
 
 	const identityProviders = await apiResponse.json();
 

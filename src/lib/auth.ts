@@ -8,15 +8,16 @@ const db = new Database('auth.sqlite');
 
 export const auth = betterAuth({
 	database: db,
+	baseURL: process.env.FM_ENDPOINT_URL,
 	plugins: [
 		genericOAuth({
 			config: [
 				{
-					providerId: process.env.IAM_PROVIDER_ID!,
-					discoveryUrl: process.env.IAM_DISCOVERY_URL!,
-					clientId: process.env.IAM_CLIENT_ID!,
-					clientSecret: process.env.IAM_CLIENT_SECRET!,
-					scopes: process.env.IAM_SCOPES?.split(' '),
+					providerId: process.env.FM_OIDC_PROVIDER_ID!,
+					discoveryUrl: `${process.env.FM_OIDC_URL}.well-known/openid-configuration`,
+					clientId: process.env.FM_OIDC_CLIENT_ID!,
+					clientSecret: process.env.FM_OIDC_CLIENT_SECRET!,
+					scopes: process.env.FM_OIDC_SCOPES?.split(' '),
 				},
 			],
 		}),

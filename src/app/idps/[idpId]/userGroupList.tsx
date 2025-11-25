@@ -56,13 +56,16 @@ export default function UserGroupsList(props: Readonly<ListProps>) {
 		const body: Record<string, unknown> = { ...entries };
 
 		try {
-			const apiResponse = await fetch(`/api/idps/${idpId}/user-groups`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify(body),
-			});
+			const apiResponse = await fetch(
+				`/api_internal/idps/${idpId}/user-groups`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify(body),
+				}
+			);
 
 			const jsonResponse = await apiResponse.json();
 

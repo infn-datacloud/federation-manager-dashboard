@@ -87,7 +87,7 @@ async function List({
 }
 
 async function getUserGroup(idpId: string, userGroupId: string) {
-	const url = `${process.env.BASE_URL}/api/idps/${idpId}/user-groups/${userGroupId}`;
+	const url = `${process.env.FM_ENDPOINT_URL}api_internal/idps/${idpId}/user-groups/${userGroupId}`;
 
 	const apiResponse = await fetch(url, {
 		method: 'GET',
@@ -105,7 +105,7 @@ async function getUserGroup(idpId: string, userGroupId: string) {
 }
 
 async function getSlas(idpId: string, userGroupId: string) {
-	const url = `${process.env.BASE_URL}/api/idps/${idpId}/user-groups/${userGroupId}/slas`;
+	const url = `${process.env.FM_ENDPOINT_URL}api_internal/idps/${idpId}/user-groups/${userGroupId}/slas`;
 
 	const apiResponse = await fetch(url, {
 		method: 'GET',

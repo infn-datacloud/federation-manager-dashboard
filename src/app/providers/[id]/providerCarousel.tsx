@@ -52,7 +52,6 @@ type providerProps = {
 	image_tags: Array<string>;
 	network_tags: Array<string>;
 	rally_username: string;
-	rally_password: string;
 	site_admins: Array<string>;
 	site_testers: Array<string>;
 	status_name: string;
@@ -179,13 +178,16 @@ export default function ProviderCarousel(props: {
 					overrides: body,
 				};
 
-				const apiResponse = await fetch(`/api/providers/${id}/idps`, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-					},
-					body: JSON.stringify(structuredBody),
-				});
+				const apiResponse = await fetch(
+					`/api_internal/providers/${id}/idps`,
+					{
+						method: 'POST',
+						headers: {
+							'Content-Type': 'application/json',
+						},
+						body: JSON.stringify(structuredBody),
+					}
+				);
 
 				const jsonResponse = await apiResponse.json();
 
@@ -205,7 +207,7 @@ export default function ProviderCarousel(props: {
 			/* UPDATE */
 			try {
 				const apiResponse = await fetch(
-					`/api/providers/${id}/idps/${providerIdpData.idp_id}`,
+					`/api_internal/providers/${id}/idps/${providerIdpData.idp_id}`,
 					{
 						method: 'PUT',
 						headers: {
@@ -236,7 +238,7 @@ export default function ProviderCarousel(props: {
 	const deleteProviderIdp = async (): Promise<void> => {
 		try {
 			const apiResponse = await fetch(
-				`/api/providers/${id}/idps/${providerIdpData?.idp_id}`,
+				`/api_internal/providers/${id}/idps/${providerIdpData?.idp_id}`,
 				{
 					method: 'DELETE',
 					headers: {
@@ -288,7 +290,7 @@ export default function ProviderCarousel(props: {
 			/* CREATE */
 			try {
 				const apiResponse = await fetch(
-					`/api/providers/${id}/regions`,
+					`/api_internal/providers/${id}/regions`,
 					{
 						method: 'POST',
 						headers: {
@@ -314,7 +316,7 @@ export default function ProviderCarousel(props: {
 			/* UPDATE */
 			try {
 				const apiResponse = await fetch(
-					`/api/providers/${id}/regions/${providerRegionData.id}`,
+					`/api_internal/providers/${id}/regions/${providerRegionData.id}`,
 					{
 						method: 'PUT',
 						headers: {
@@ -343,7 +345,7 @@ export default function ProviderCarousel(props: {
 	const deleteProviderRegion = async (): Promise<void> => {
 		try {
 			const apiResponse = await fetch(
-				`/api/providers/${id}/regions/${providerRegionData?.id}`,
+				`/api_internal/providers/${id}/regions/${providerRegionData?.id}`,
 				{
 					method: 'DELETE',
 					headers: {
@@ -395,7 +397,7 @@ export default function ProviderCarousel(props: {
 			/* CREATE */
 			try {
 				const apiResponse = await fetch(
-					`/api/providers/${id}/projects`,
+					`/api_internal/providers/${id}/projects`,
 					{
 						method: 'POST',
 						headers: {
@@ -430,7 +432,7 @@ export default function ProviderCarousel(props: {
 			/* UPDATE */
 			try {
 				const apiResponse = await fetch(
-					`/api/providers/${id}/projects/${providerProjectData.id}`,
+					`/api_internal/providers/${id}/projects/${providerProjectData.id}`,
 					{
 						method: 'PUT',
 						headers: {
@@ -461,7 +463,7 @@ export default function ProviderCarousel(props: {
 		try {
 			if (await deleteProviderProjectRegion()) {
 				const apiResponse = await fetch(
-					`/api/providers/${id}/projects/${providerProjectData?.id}`,
+					`/api_internal/providers/${id}/projects/${providerProjectData?.id}`,
 					{
 						method: 'DELETE',
 						headers: {
@@ -505,7 +507,7 @@ export default function ProviderCarousel(props: {
 		};
 
 		const apiResponse = await fetch(
-			`/api/providers/${id}/projects/${projectId}/regions`,
+			`/api_internal/providers/${id}/projects/${projectId}/regions`,
 			{
 				method: 'POST',
 				headers: {
@@ -529,7 +531,7 @@ export default function ProviderCarousel(props: {
 		};
 
 		const apiResponse = await fetch(
-			`/api/providers/${id}/projects/${providerProjectData?.id}/regions/${providerProjectData?.region.region_id}`,
+			`/api_internal/providers/${id}/projects/${providerProjectData?.id}/regions/${providerProjectData?.region.region_id}`,
 			{
 				method: 'PUT',
 				headers: {
@@ -546,7 +548,7 @@ export default function ProviderCarousel(props: {
 
 	async function deleteProviderProjectRegion() {
 		const apiResponse = await fetch(
-			`/api/providers/${id}/projects/${providerProjectData?.id}/regions/${providerProjectData?.region.region_id}`,
+			`/api_internal/providers/${id}/projects/${providerProjectData?.id}/regions/${providerProjectData?.region.region_id}`,
 			{
 				method: 'DELETE',
 				headers: {
@@ -571,12 +573,15 @@ export default function ProviderCarousel(props: {
 			return;
 
 		try {
-			const apiResponse = await fetch(`/api/providers/${id}/submit`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-			});
+			const apiResponse = await fetch(
+				`/api_internal/providers/${id}/submit`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+				}
+			);
 
 			if (apiResponse.ok) {
 				toaster.success('Provider submitted successfully');
@@ -619,7 +624,7 @@ export default function ProviderCarousel(props: {
 		}
 
 		try {
-			const apiResponse = await fetch(`/api/providers/${id}`, {
+			const apiResponse = await fetch(`/api_internal/providers/${id}`, {
 				method: 'PATCH',
 				headers: {
 					'Content-Type': 'application/json',
@@ -643,7 +648,7 @@ export default function ProviderCarousel(props: {
 
 	const deleteProvider = async (): Promise<void> => {
 		try {
-			const apiResponse = await fetch(`/api/providers/${id}`, {
+			const apiResponse = await fetch(`/api_internal/providers/${id}`, {
 				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json',
@@ -669,13 +674,16 @@ export default function ProviderCarousel(props: {
 
 	const assignProvider = async (): Promise<void> => {
 		try {
-			const apiResponse = await fetch(`/api/providers/${id}/testers`, {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json',
-				},
-				body: JSON.stringify({ id: userId }),
-			});
+			const apiResponse = await fetch(
+				`/api_internal/providers/${id}/testers`,
+				{
+					method: 'POST',
+					headers: {
+						'Content-Type': 'application/json',
+					},
+					body: JSON.stringify({ id: userId }),
+				}
+			);
 
 			if (apiResponse.ok) {
 				router.refresh();
@@ -1261,6 +1269,7 @@ export default function ProviderCarousel(props: {
 						name='name'
 						placeholder='My name'
 						defaultValue={providerIdpData?.overrides.name}
+						required
 					/>
 				</Field>
 				<Field>

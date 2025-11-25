@@ -30,7 +30,7 @@ export default function IdpDetail(props: Readonly<ItemProps>) {
 	const router = useRouter();
 
 	const { item } = props;
-	
+
 	const params = useParams();
 	const { idpId } = params;
 
@@ -39,11 +39,11 @@ export default function IdpDetail(props: Readonly<ItemProps>) {
 
 	const deleteIdentityProvider = async (): Promise<void> => {
 		try {
-			const apiResponse = await fetch(`/api/idps/${idpId}`, {
+			const apiResponse = await fetch(`/api_internal/idps/${idpId}`, {
 				method: 'DELETE',
 				headers: {
 					'Content-Type': 'application/json',
-				}
+				},
 			});
 
 			const jsonResponse = await apiResponse; //.json();
@@ -63,7 +63,7 @@ export default function IdpDetail(props: Readonly<ItemProps>) {
 		} finally {
 			return;
 		}
-	}
+	};
 
 	const updateIdentityProvider = async (
 		e: FormEvent<HTMLFormElement>
@@ -91,7 +91,7 @@ export default function IdpDetail(props: Readonly<ItemProps>) {
 		}
 
 		try {
-			const apiResponse = await fetch(`/api/idps/${idpId}`, {
+			const apiResponse = await fetch(`/api_internal/idps/${idpId}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ export default function IdpDetail(props: Readonly<ItemProps>) {
 				body: JSON.stringify(body),
 			});
 
-			const jsonResponse = await apiResponse//.json();
+			const jsonResponse = await apiResponse; //.json();
 
 			if (jsonResponse.ok) {
 				setShowIdpModal(false);

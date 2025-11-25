@@ -54,7 +54,7 @@ export default function IdpList(props: Readonly<Items>) {
 		}
 
 		try {
-			const apiResponse = await fetch('/api/idps', {
+			const apiResponse = await fetch('/api_internal/idps', {
 				method: 'POST',
 				headers: {
 					'Content-Type': 'application/json',
