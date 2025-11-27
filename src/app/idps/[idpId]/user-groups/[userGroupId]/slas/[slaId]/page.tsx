@@ -203,16 +203,8 @@ async function getProjects() {
 	const projects = [];
 
 	for (const item of data.data) {
-		const providerProjects = await getProjectByProvider(item.id);
-
-		for (const proj of providerProjects) {
-			proj.provider_name = item.name;
-		}
-
-		projects.push(...providerProjects);
-
-		// take Ready only
-		/* if (item.status == 1) {
+		// Excludes DRAFT, DEPRECATED and REMOVED
+		if (![0, 6, 7].includes(item.status)) {
 			const providerProjects = await getProjectByProvider(item.id);
 
 			for (const proj of providerProjects) {
@@ -220,7 +212,7 @@ async function getProjects() {
 			}
 
 			projects.push(...providerProjects);
-		} */
+		}
 	}
 
 	return projects;

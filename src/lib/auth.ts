@@ -9,6 +9,7 @@ const db = new Database('auth.sqlite');
 export const auth = betterAuth({
 	database: db,
 	baseURL: process.env.FM_ENDPOINT_URL,
+	secret: process.env.FM_AUTH_SECRET,
 	plugins: [
 		genericOAuth({
 			config: [
