@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import getAuthToken from '@/app/api/ssr/utils';
+import { findUserRoles } from '@/utils';
 
 export async function POST(req: Request) {
 	const accessToken = await getAuthToken();
@@ -23,9 +24,7 @@ export async function POST(req: Request) {
 
 export async function GET() {
 	const accessToken = await getAuthToken();
-	const userRoles = process.env.USER_ROLES
-		? process.env.USER_ROLES.split(',')
-		: [];
+  const userRoles = await findUserRoles();
 
 	let apiUrl = `${process.env.API_SERVER_URL}/providers?&status=ready&status=evaluation&status=pre-production&status=active&status=deprecated&status=removed&status=degraded&status=maintenance&status=re-evaluation`;
 
