@@ -7,7 +7,6 @@ import { Cog8ToothIcon } from '@heroicons/react/24/solid';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { ToasterPortal } from '@/components/toaster';
-import { findUserRoles } from '@/utils';
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -32,8 +31,6 @@ export default async function RootLayout({
 	const session = await auth.api.getSession({
 		headers: await headers(),
 	});
-
-	process.env.USER_ROLES = (await findUserRoles()).toString();
 
 	return (
 		<html lang='en'>

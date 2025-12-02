@@ -4,6 +4,8 @@ import { CloudIcon, IdentificationIcon } from '@heroicons/react/24/solid';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import Custom401 from '@/app/pages/401';
+import { findUserRoles } from '@/utils';
+
 
 export default async function Home() {
 	const session = await auth.api.getSession({
@@ -25,9 +27,7 @@ export default async function Home() {
 		}
 	}
 
-	const userRoles = process.env.USER_ROLES
-		? process.env.USER_ROLES.split(',')
-		: [];
+	const userRoles = (await findUserRoles()).toString();
 
 	return (
 		<>

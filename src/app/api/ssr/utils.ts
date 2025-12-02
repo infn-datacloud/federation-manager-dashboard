@@ -1,9 +1,10 @@
 import { auth } from '@/lib/auth';
-import { headers } from 'next/headers';
+import { headers as getHeaders} from 'next/headers';
 
 export default async function getAuthToken() {
+  const headers = await getHeaders();
 	const session = await auth.api.getSession({
-		headers: await headers(),
+		headers,
 	});
 
 	if (!session) {
@@ -16,6 +17,7 @@ export default async function getAuthToken() {
 			providerId: process.env.FM_OIDC_PROVIDER_ID!,
 			userId: session.user.id,
 		},
+		headers,
 	});
 
 	return accessToken.accessToken;
