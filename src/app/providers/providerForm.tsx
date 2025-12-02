@@ -71,7 +71,7 @@ export default function ProviderForm(props: Readonly<ProviderFormProps>) {
 				<Select
 					label='Provider type'
 					name='type'
-					defaultValue={item?.type ? item?.type : 'openstack'}
+					defaultValue={{id: 'openstack', name: 'openstack'}} // FIXME: is this correct?
 					disabled={props.disabled}
 				>
 					<SelectOption value={'openstack'}>openstack</SelectOption>
