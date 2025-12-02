@@ -8,8 +8,8 @@ WORKDIR /app
 
 # Install dependencies based on the preferred package manager
 COPY package.json package-lock.json ./
-RUN apk add --no-cache libc6-compat \
-    && npm ci
+RUN apk add --no-cache libc6-compat && \
+  npm ci
 
 # Rebuild the source code only when needed
 FROM base AS builder
@@ -38,17 +38,15 @@ ENV HOSTNAME=0.0.0.0
 
 EXPOSE ${PORT}
 
-COPY --from=builder /app/public ./public
-
 # Set the correct permission for prerender cache
-RUN apk add curl openssl \
-    && addgroup --system --gid 1001 nodejs \
-    && adduser --system --uid 1001 nextjs \
-    && mkdir .next \
-    && chown nextjs:nodejs .next
+RUN apk add curl && \
+  addgroup --system --gid 1001 nodejs && \
+  adduser --system --uid 1001 nextjs
+
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
+COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
