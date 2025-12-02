@@ -7,6 +7,7 @@ import { Cog8ToothIcon } from '@heroicons/react/24/solid';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import { ToasterPortal } from '@/components/toaster';
+import logo from '@/assets/infn_logo_white.png';
 
 const geistSans = Geist({
 	variable: '--font-geist-sans',
@@ -38,7 +39,7 @@ export default async function RootLayout({
 				className={`${geistSans.variable} ${geistMono.variable} antialiased`}
 			>
 				<Navbar
-					logo='/logos/infn_logo_white.png'
+					logo={logo}
 					name='Federation Manager'
 				>
 					<div className='flex items-center h-full text-white'>

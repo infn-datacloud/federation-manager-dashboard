@@ -5,6 +5,7 @@ import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import Custom401 from '@/app/pages/401';
 import { findUserRoles } from '@/utils';
+import logo from '@/assets/infn_logo.png';
 
 
 export default async function Home() {
@@ -32,7 +33,7 @@ export default async function Home() {
 	return (
 		<>
 			<Header
-				logo='/logos/infn_logo.png'
+				logo={logo}
 				title='Federation Manager'
 				subtitle='Seamlessly integrating providers and communities into DataCloud with simplicity, security, and automated resource management.'
 			/>

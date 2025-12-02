@@ -6,6 +6,7 @@ import { Suspense } from 'react';
 import { LoadingList } from './loading';
 import Header from '@/components/header';
 import { findUserRoles } from '@/utils';
+import logo from '@/assets/infn_logo.png';
 
 type ProvierProps = {
 	id: string;
@@ -46,7 +47,7 @@ export default async function Providers() {
 	return (
 		<>
 			<Header
-				logo='/logos/infn_logo.png'
+				logo={logo}
 				title='Providers'
 				subtitle='A Provider is a logical resource provider with geographical zones that collects Projects for quota federation and supports one or more identity providers (IdPs).'
 			/>

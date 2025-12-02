@@ -4,6 +4,7 @@ import { Button } from '@/components/buttons';
 import Header from '@/components/header';
 import { authClient } from '@/lib/auth-client';
 import { ArrowLeftEndOnRectangleIcon } from '@heroicons/react/24/solid';
+import logo from '@/assets/infn_logo.png';
 
 export default function LoginPage() {
 	const handleLogin = async () => {
@@ -21,7 +22,7 @@ export default function LoginPage() {
 	return (
 		<>
 			<Header
-				logo='/logos/infn_logo.png'
+				logo={logo}
 				title='Federation Manager'
 				subtitle='Seamlessly integrating providers and communities into DataCloud with simplicity, security, and automated resource management.'
 			/>

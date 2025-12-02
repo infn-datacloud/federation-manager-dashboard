@@ -5,6 +5,7 @@ import { headers } from 'next/headers';
 import Custom401 from '@/app/pages/401';
 import { Suspense } from 'react';
 import { LoadingList } from './loading';
+import logo from '@/assets/infn_logo.png';
 
 export default async function Idps() {
 	const session = await auth.api.getSession({
@@ -18,7 +19,7 @@ export default async function Idps() {
 	return (
 		<>
 			<Header
-				logo='/logos/infn_logo.png'
+				logo={logo}
 				title='Identity Providers'
 				subtitle='Identity Providers supported by Data Cloud. Resource providers must support at least one of them. Data Cloud users MUST be registered to at least one of those Identity Providers.'
 			/>
