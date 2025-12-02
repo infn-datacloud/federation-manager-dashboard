@@ -27,7 +27,7 @@ export default async function Home() {
 		}
 	}
 
-	const userRoles = (await findUserRoles()).toString();
+	const userRoles = await findUserRoles();
 
 	return (
 		<>

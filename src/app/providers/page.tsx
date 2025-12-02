@@ -5,6 +5,7 @@ import Custom401 from '@/app/pages/401';
 import { Suspense } from 'react';
 import { LoadingList } from './loading';
 import Header from '@/components/header';
+import { findUserRoles } from '@/utils';
 
 type ProvierProps = {
 	id: string;
@@ -59,10 +60,7 @@ export default async function Providers() {
 async function List() {
 	const providers = await getProviders();
 	const userId = await getUserId();
-
-	const userRoles = process.env.USER_ROLES
-		? process.env.USER_ROLES.split(',')
-		: [];
+	const userRoles = await findUserRoles();
 
 	return (
 		<ProviderList items={providers} userId={userId} userRoles={userRoles} />
