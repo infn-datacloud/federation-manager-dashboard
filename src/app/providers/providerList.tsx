@@ -54,26 +54,23 @@ export default function ProviderList(props: Readonly<ProviderListProps>) {
       support_emails: formData.getAll("support_emails"),
       site_admins: formData.getAll("site_admins"),
     });
-    try {
-      const apiResponse = await fetch("/api/ssr/providers", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body,
-      });
 
-      const jsonResponse = await apiResponse.json();
-      if (jsonResponse.id) {
-        setShowProviderModal(false);
-        router.refresh();
-        toaster.success("Provider created successfully");
-      }
-    } catch (err) {
-      console.error("API Error:", err);
-      if (err instanceof Error) {
-        toaster.error("Failed to create provider", err.message);
-      }
+    const response = await fetch("/api/ssr/providers", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body,
+    });
+
+    if (response.ok) {
+      setShowProviderModal(false);
+      router.refresh();
+      toaster.success("Provider created successfully");
+    } else {
+      const msg = await response.text();
+      console.error("API Error:", msg);
+      toaster.error("Failed to create provider", msg);
     }
   };
 
