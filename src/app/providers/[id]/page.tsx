@@ -3,6 +3,7 @@ import Status from '@/components/status';
 import { auth } from '@/lib/auth';
 import { headers } from 'next/headers';
 import Custom401 from '@/app/pages/401';
+import { findUserRoles } from '@/utils';
 
 type ProviderPageProps = {
 	params: Promise<{
@@ -26,6 +27,7 @@ export default async function Provider({
 	provider['tester_name'] = await getProviderTester(provider.site_testers);
 
 	const userId = await getUserId();
+	const userRoles = await findUserRoles();
 
 	/* IDPs */
 	const idps = await getIdentityProviders();
@@ -36,7 +38,6 @@ export default async function Provider({
 
 	/* Projects */
 	const providerProjects = await getProviderProjects(id);
-
 	return (
 		<>
 			<div className='flex flex-col md:flex-row justify-start md:justify-between items-center'>
@@ -55,11 +56,7 @@ export default async function Provider({
 
 			{provider.status !== 7 ? (
 				<ProviderCarousel
-					userRoles={
-						process.env.USER_ROLES
-							? process.env.USER_ROLES.split(',')
-							: []
-					}
+          userRoles={userRoles}
 					provider={provider}
 					idps={idps}
 					providerIdps={providerIdps}
