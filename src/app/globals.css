@@ -8,7 +8,7 @@
 
 @theme {
   --color-infn: #002a44;
-  --color-infn-hover: #1E374F;
+  --color-infn-hover: #1e374f;
   --color-primary: var(--color-neutral-950);
   --color-light: var(--color-slate-600);
   --color-extralight: var(--color-gray-500);
@@ -45,40 +45,40 @@
 
 @layer utilities {
   .btn-bold {
-    @apply btn font-bold uppercase border-3;
+    @apply btn border-3 font-bold uppercase;
   }
 
   .box {
-    @apply bg-white p-8 shadow-[-3px_3px_8px_rgba(0,0,0,0.1)] rounded-3xl mt-6;
+    @apply mt-6 rounded-3xl bg-white p-8 shadow-[-3px_3px_8px_rgba(0,0,0,0.1)];
   }
 
   .box-sm {
-    @apply bg-white p-6 shadow-[-3px_3px_6px_rgba(0,0,0,0.1)] rounded-3xl mt-3;
+    @apply mt-3 rounded-3xl bg-white p-6 shadow-[-3px_3px_6px_rgba(0,0,0,0.1)];
   }
 
   .clickable {
-    @apply cursor-pointer transform transition-transform duration-200 hover:scale-105 pointer-events-auto;
+    @apply pointer-events-auto transform cursor-pointer transition-transform duration-200 hover:scale-105;
   }
 }
 
 @utility btn {
-  @apply flex min-w-fit gap-2 p-1 cursor-pointer rounded-4xl px-5 text-base font-medium text-nowrap transition ease-out dark:font-normal disabled:cursor-not-allowed;
+  @apply flex min-w-fit cursor-pointer gap-2 rounded-4xl p-1 px-5 text-base font-medium text-nowrap transition ease-out disabled:cursor-not-allowed dark:font-normal;
 }
 
 @utility btn-primary {
-  @apply btn text-secondary focus:outline-1 disabled:border-infn/50 disabled:bg-infn/50 dark:border-secondary/30 dark:text-secondary border bg-infn hover:bg-infn-hover border-infn active:bg-infn/85 dark:border-none dark:bg-sky-600 dark:hover:bg-sky-700 dark:disabled:bg-sky-600/30 dark:disabled:text-white/40;
+  @apply btn text-secondary disabled:border-infn/50 disabled:bg-infn/50 dark:border-secondary/30 dark:text-secondary bg-infn hover:bg-infn-hover border-infn active:bg-infn/85 border focus:outline-1 dark:border-none dark:bg-sky-600 dark:hover:bg-sky-700 dark:disabled:bg-sky-600/30 dark:disabled:text-white/40;
 }
 
 @utility btn-secondary {
-  @apply btn border-infn text-infn border-2 hover:bg-infn/5 focus:outline-1 active:bg-infn/10 disabled:border-infn/50 disabled:bg-secondary/50 disabled:text-infn/50 dark:border-secondary/20 dark:text-secondary/90 dark:disabled:bg-light-gray/30 dark:disabled:text-secondary/50 dark:bg-slate-700 dark:hover:bg-slate-600 dark:active:bg-slate-500;
+  @apply btn border-infn text-infn hover:bg-infn/5 active:bg-infn/10 disabled:border-infn/50 disabled:bg-secondary/50 disabled:text-infn/50 dark:border-secondary/20 dark:text-secondary/90 dark:disabled:bg-light-gray/30 dark:disabled:text-secondary/50 border-2 focus:outline-1 dark:bg-slate-700 dark:hover:bg-slate-600 dark:active:bg-slate-500;
 }
 
 @utility btn-tertiary {
-  @apply btn hover:underline disabled:hover:no-underline disabled:text-infn/50;
+  @apply btn disabled:text-infn/50 hover:underline disabled:hover:no-underline;
 }
 
 @utility btn-danger {
-  @apply btn bg-danger border-danger text-secondary disabled:bg-danger/50 border-none hover:bg-danger/85 active:bg-danger/75;
+  @apply btn bg-danger border-danger text-secondary disabled:bg-danger/50 hover:bg-danger/85 active:bg-danger/75 border-none;
 }
 
 @utility btn-danger-secondary {
@@ -90,7 +90,7 @@
 }
 
 @utility iam-input {
-  @apply placeholder:text-infn/30 dark:bg-dark w-full rounded-2xl border border-gray-300 bg-white px-4 py-1 disabled:bg-transparent disabled:text-gray-400 placeholder:disabled:text-gray-400 data-[invalid=true]:outline dark:border-white/30 focus:outline-infn;
+  @apply placeholder:text-infn/30 dark:bg-dark focus:outline-infn w-full rounded-2xl border border-gray-300 bg-white px-4 py-1 disabled:bg-transparent disabled:text-gray-400 placeholder:disabled:text-gray-400 data-[invalid=true]:outline dark:border-white/30;
 }
 
 @utility iam-list-item {

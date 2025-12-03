@@ -1,0 +1,10 @@
+.vscode/
+.zed/
+dist/
+.next/
+node_modules/
+kubernetes/
+package.json
+package-lock.json
+.pre-commit-config.yaml
+README.md

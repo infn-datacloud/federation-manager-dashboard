@@ -1,36 +1,36 @@
-import { Field } from '@/components/form';
-import { Input } from '@/components/inputs';
+import { Field } from "@/components/form";
+import { Input } from "@/components/inputs";
 
 type Item = {
-    item?: {
-        id: string;
-        name: string;
-        description: string;
-    };
+  item?: {
+    id: string;
+    name: string;
+    description: string;
+  };
 };
 
 export default function UserGroupForm(props: Readonly<Item>) {
-    const { item } = props;
+  const { item } = props;
 
-    return (
-		<>
-			<Field>
-				<Input
-					label='Name'
-					name='name'
-					placeholder='Example name'
-					defaultValue={item?.name}
-					required
-				/>
-			</Field>
-			<Field>
-				<Input
-					label='Description'
-					name='description'
-					placeholder='Example description'
-					defaultValue={item?.description}
-				/>
-			</Field>
-		</>
-	);
+  return (
+    <>
+      <Field>
+        <Input
+          label="Name"
+          name="name"
+          placeholder="Example name"
+          defaultValue={item?.name}
+          required
+        />
+      </Field>
+      <Field>
+        <Input
+          label="Description"
+          name="description"
+          placeholder="Example description"
+          defaultValue={item?.description}
+        />
+      </Field>
+    </>
+  );
 }
