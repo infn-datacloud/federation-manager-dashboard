@@ -1,55 +1,55 @@
-import { NextResponse } from 'next/server';
-import getAuthToken from '@/app/api/ssr/utils';
-import { headers } from 'next/headers';
+import { NextResponse } from "next/server";
+import getAuthToken from "@/app/api/ssr/utils";
+import { headers } from "next/headers";
 
 export async function POST(req: Request) {
-	const accessToken = await getAuthToken();
+  const accessToken = await getAuthToken();
 
-	if (!accessToken) {
-		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-	}
+  if (!accessToken) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-	const body = await req.json();
-	const { email } = body;
+  const body = await req.json();
+  const { email } = body;
 
-	if (!email)
-		return NextResponse.json({ error: 'Email required' }, { status: 400 });
+  if (!email)
+    return NextResponse.json({ error: "Email required" }, { status: 400 });
 
-	const userExists = await ensureUserExists(email);
-	return NextResponse.json({ userExists });
+  const userExists = await ensureUserExists(email);
+  return NextResponse.json({ userExists });
 }
 
 async function ensureUserExists(email: string) {
-	const accessToken = await getAuthToken();
+  const accessToken = await getAuthToken();
 
-	if (!accessToken) {
-		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-	}
+  if (!accessToken) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-	const apiUrl = `${process.env.API_SERVER_URL}/users`;
+  const apiUrl = `${process.env.API_SERVER_URL}/users`;
 
-	const res = await fetch(apiUrl, {
-		method: 'GET',
-		headers: {
-			Authorization: `Bearer ${accessToken}`,
-		},
-	});
+  const res = await fetch(apiUrl, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 
-	const users = await res.json();
-	const userExists = users.data.some(
-		(item: { email: string }) => item.email === email
-	);
+  const users = await res.json();
+  const userExists = users.data.some(
+    (item: { email: string }) => item.email === email
+  );
 
-	if (!userExists) {
-		await createApiUser();
-	}
+  if (!userExists) {
+    await createApiUser();
+  }
 
-	return userExists;
+  return userExists;
 }
 
 async function createApiUser() {
-	await fetch(`${process.env.FM_ENDPOINT_URL}/api/ssr/users`, {
-		method: 'POST',
-		headers: await headers(),
-	});
+  await fetch(`${process.env.FM_ENDPOINT_URL}/api/ssr/users`, {
+    method: "POST",
+    headers: await headers(),
+  });
 }

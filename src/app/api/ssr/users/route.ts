@@ -1,45 +1,45 @@
-import { NextResponse } from 'next/server';
-import getAuthToken from '@/app/api/ssr/utils';
+import { NextResponse } from "next/server";
+import getAuthToken from "@/app/api/ssr/utils";
 
 export async function POST() {
-	const accessToken = await getAuthToken();
+  const accessToken = await getAuthToken();
 
-	if (!accessToken) {
-		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-	}
+  if (!accessToken) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-	const res = await fetch(`${process.env.API_SERVER_URL}/users`, {
-		method: 'POST',
-		headers: {
-			Authorization: `Bearer ${accessToken}`,
-			'Content-Type': 'application/json',
-		},
-	});
-	const data = await res.json();
-	return NextResponse.json(data, { status: res.status });
+  const res = await fetch(`${process.env.API_SERVER_URL}/users`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+  });
+  const data = await res.json();
+  return NextResponse.json(data, { status: res.status });
 }
 
 export async function GET() {
-	const accessToken = await getAuthToken();
+  const accessToken = await getAuthToken();
 
-	if (!accessToken) {
-		return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-	}
+  if (!accessToken) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
-	const apiUrl = `${process.env.API_SERVER_URL}/users`;
+  const apiUrl = `${process.env.API_SERVER_URL}/users`;
 
-	const res = await fetch(apiUrl, {
-		method: 'GET',
-		headers: {
-			Authorization: `Bearer ${accessToken}`,
-		},
-	});
+  const res = await fetch(apiUrl, {
+    method: "GET",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 
-	if (!res.ok) {
-		const text = await res.text();
-		console.error('API Error:', res.status, text);
-		return NextResponse.json({ error: text }, { status: res.status });
-	}
+  if (!res.ok) {
+    const text = await res.text();
+    console.error("API Error:", res.status, text);
+    return NextResponse.json({ error: text }, { status: res.status });
+  }
 
-	return NextResponse.json(await res.json(), { status: res.status });
+  return NextResponse.json(await res.json(), { status: res.status });
 }

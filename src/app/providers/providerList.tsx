@@ -82,9 +82,9 @@ export default function ProviderList(props: Readonly<ProviderListProps>) {
     <>
       <List items={items} />
       <>
-        <div className="md:w-full fixed bottom-0 right-0 py-8 px-4 flex items-center justify-center">
+        <div className="fixed right-0 bottom-0 flex items-center justify-center px-4 py-8 md:w-full">
           <Button
-            className="btn btn-primary font-bold uppercase rounded-full w-full md:w-3/4 lg:fixed lg:bottom-12 lg:right-12 p-6 lg:w-auto text-xl shadow-[-3px_3px_8px_rgba(0,0,0,0.1)] clickable "
+            className="btn btn-primary clickable w-full rounded-full p-6 text-xl font-bold uppercase shadow-[-3px_3px_8px_rgba(0,0,0,0.1)] md:w-3/4 lg:fixed lg:right-12 lg:bottom-12 lg:w-auto"
             onClick={() => setShowProviderModal(true)}
           >
             <PlusIcon className="size-7" />
@@ -106,7 +106,7 @@ export default function ProviderList(props: Readonly<ProviderListProps>) {
           <ModalBody>
             <Form action={createProvider}>
               <ProviderForm userId={userId} />
-              <div className="flex justify-between w-full pt-4">
+              <div className="flex w-full justify-between pt-4">
                 <Button
                   className="btn btn-bold btn-danger"
                   onClick={() => {

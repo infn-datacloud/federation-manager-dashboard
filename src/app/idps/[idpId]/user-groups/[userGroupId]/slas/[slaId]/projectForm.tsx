@@ -17,7 +17,7 @@ type Item = {
 export default function ProjectForm(props: Readonly<Item>) {
   const { item, projects } = props;
 
-  const items = projects?.map((item) => (
+  const items = projects?.map(item => (
     <SelectOption
       key={item.id}
       value={{ id: item.id, name: `${item.provider_name} - ${item.name}` }}
@@ -37,7 +37,8 @@ export default function ProjectForm(props: Readonly<Item>) {
     );
   }
 
-  const selectedProject = { // FIXME: consider using 'item.id' property
+  const selectedProject = {
+    // FIXME: consider using 'item.id' property
     id: projects[0].id,
     name: projects[0].provider_name + " - " + projects[0].name,
   };
