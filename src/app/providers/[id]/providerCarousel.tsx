@@ -659,10 +659,6 @@ export default function ProviderCarousel(props: {
                   Assign to me
                 </Button>
               )}
-              <Button className="md:w-fill btn btn-primary w-full">
-                <PlayIcon className="size-4" />
-                Start Tests
-              </Button>
             </div>
           )}
       </div>
@@ -1502,7 +1498,10 @@ export default function ProviderCarousel(props: {
             <Checkbox
               id="is_root"
               name="is_root"
-              defaultChecked={providerProjectData?.is_root}
+              defaultChecked={
+                providerProjectData?.is_root ||
+                (!providerProjectData && canBeRoot)
+              }
             />
             <Label>Is Root</Label>
           </Field>

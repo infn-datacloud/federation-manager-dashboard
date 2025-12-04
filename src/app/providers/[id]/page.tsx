@@ -6,6 +6,7 @@ import Custom401 from "@/app/pages/401";
 import { findUserRoles } from "@/utils";
 import { settings } from "@/config";
 import { toaster } from "@/components/toaster";
+import Link from "@/components/link";
 
 type ProviderPageProps = {
   params: Promise<{
@@ -42,6 +43,16 @@ export default async function Provider({
   const providerProjects = await getProviderProjects(id);
   return (
     <>
+      <div className="mb-2">
+        <Link href="/providers" className="opacity-50 hover:opacity-80">
+          Providers
+        </Link>
+        <span className="opacity-50">
+          {" > "}
+          Provider
+        </span>
+      </div>
+
       <div className="flex flex-col items-center justify-start md:flex-row md:justify-between">
         <div className="mb-4 w-full md:mb-0 md:w-3/4">
           <h1>{provider.name}</h1>
