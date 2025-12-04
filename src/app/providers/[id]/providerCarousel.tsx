@@ -686,7 +686,7 @@ export default function ProviderCarousel(props: {
       )}
 
       <div className="mt-8">
-        {userRoles.includes("site-admin") && (
+        {(userRoles.includes("admin") || userRoles.includes("site-admin")) && (
           <div className="mb-2 flex flex-col gap-4 md:flex-row">
             <Button
               className="btn btn-secondary w-full md:w-1/2"
@@ -709,25 +709,27 @@ export default function ProviderCarousel(props: {
           </div>
         )}
 
-        {provider.status > 1 && userRoles.includes("site-tester") && (
-          <div className="flex flex-col gap-4 md:flex-row">
-            {provider.tester_name == "" && (
-              <Button
-                className="md:w-fill btn btn-secondary w-full"
-                onClick={() => {
-                  assignProvider();
-                }}
-              >
-                <UserPlusIcon className="size-4" />
-                Assign to me
+        {provider.status > 1 &&
+          (userRoles.includes("admin") ||
+            userRoles.includes("site-tester")) && (
+            <div className="flex flex-col gap-4 md:flex-row">
+              {provider.tester_name == "" && (
+                <Button
+                  className="md:w-fill btn btn-secondary w-full"
+                  onClick={() => {
+                    assignProvider();
+                  }}
+                >
+                  <UserPlusIcon className="size-4" />
+                  Assign to me
+                </Button>
+              )}
+              <Button className="md:w-fill btn btn-primary w-full">
+                <PlayIcon className="size-4" />
+                Start Tests
               </Button>
-            )}
-            <Button className="md:w-fill btn btn-primary w-full">
-              <PlayIcon className="size-4" />
-              Start Tests
-            </Button>
-          </div>
-        )}
+            </div>
+          )}
       </div>
 
       {/* If provider is in status DRAFT */}
@@ -1070,7 +1072,8 @@ export default function ProviderCarousel(props: {
                     {row.overrides.name}
                   </div>
                 </div>
-                {userRoles.includes("site-admin") && (
+                {(userRoles.includes("admin") ||
+                  userRoles.includes("site-admin")) && (
                   <div className="flex flex-col">
                     <Options>
                       <Option
@@ -1255,7 +1258,8 @@ export default function ProviderCarousel(props: {
                   <div className="text-md truncate">{row.description}</div>
                 </div>
 
-                {userRoles.includes("site-admin") && (
+                {(userRoles.includes("admin") ||
+                  userRoles.includes("site-admin")) && (
                   <div className="flex flex-col">
                     <Options>
                       <Option
@@ -1437,7 +1441,8 @@ export default function ProviderCarousel(props: {
                   </div>
                 </div>
 
-                {userRoles.includes("site-admin") && (
+                {(userRoles.includes("admin") ||
+                  userRoles.includes("site-admin")) && (
                   <div className="flex flex-col">
                     <Options>
                       <Option
@@ -1648,7 +1653,8 @@ export default function ProviderCarousel(props: {
               &nbsp;Identity Providers
             </div>
 
-            {userRoles.includes("site-admin") && (
+            {(userRoles.includes("admin") ||
+              userRoles.includes("site-admin")) && (
               <Button
                 className="btn btn-secondary w-full md:w-auto lg:mt-0"
                 onClick={() => {
@@ -1672,7 +1678,8 @@ export default function ProviderCarousel(props: {
               &nbsp;Regions
             </div>
 
-            {userRoles.includes("site-admin") && (
+            {(userRoles.includes("admin") ||
+              userRoles.includes("site-admin")) && (
               <Button
                 className="btn btn-secondary w-full md:w-auto lg:mt-0"
                 onClick={() => {
@@ -1696,7 +1703,8 @@ export default function ProviderCarousel(props: {
               &nbsp;Projects
             </div>
 
-            {userRoles.includes("site-admin") && (
+            {(userRoles.includes("admin") ||
+              userRoles.includes("site-admin")) && (
               <Button
                 className="btn btn-secondary w-full md:w-auto lg:mt-0"
                 onClick={() => {

@@ -12,10 +12,10 @@ const fmOidcClientSecret = process.env.FM_OIDC_CLIENT_SECRET;
 const fmOidcScopes = process.env.FM_OIDC_SCOPES;
 const fmOidcProviderId = process.env.FM_OIDC_PROVIDER_ID;
 
+const groupsAdmin = process.env.GROUPS_ADMIN;
 const groupsSiteAdmin = process.env.GROUPS_SITE_ADMIN;
 const groupsSiteTester = process.env.GROUPS_SITE_TESTER;
 const groupsSlaManager = process.env.GROUPS_SLA_MANAGER;
-const groupsAdmin = process.env.GROUPS_ADMIN;
 
 export const settings = {
   fmEndpointUrl,

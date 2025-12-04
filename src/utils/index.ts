@@ -12,6 +12,9 @@ export async function findUserRoles() {
   const groups = (decoded as JwtPayloadWithGroups)?.groups;
   const userRoles: string[] = [];
 
+  const adminGroups = JSON.parse(settings.groupsAdmin!)[
+    `${settings.fmOidcUrl!}/`
+  ];
   const siteAdminGroups = JSON.parse(settings.groupsSiteAdmin!)[
     `${settings.fmOidcUrl!}/`
   ];
@@ -23,6 +26,12 @@ export async function findUserRoles() {
   ];
 
   groups?.forEach(group => {
+    if (adminGroups) {
+      if (adminGroups.includes(group) && !userRoles.includes("admin")) {
+        userRoles.push("admin");
+      }
+    }
+
     if (siteAdminGroups) {
       if (
         siteAdminGroups.includes(group) &&

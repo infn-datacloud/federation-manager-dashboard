@@ -33,7 +33,7 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  if (userRoles.includes("site-admin")) {
+  if (userRoles.includes("admin") || userRoles.includes("site-admin")) {
     apiUrl = `${settings.apiServerUrl}/providers`;
   }
 

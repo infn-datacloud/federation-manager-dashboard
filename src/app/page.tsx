@@ -37,7 +37,8 @@ export default async function Home() {
         title="Federation Manager"
         subtitle="Seamlessly integrating providers and communities into DataCloud with simplicity, security, and automated resource management."
       />
-      {(userRoles.includes("site-admin") ||
+      {(userRoles.includes("admin") ||
+        userRoles.includes("site-admin") ||
         userRoles.includes("site-tester")) && (
         <Box
           title="Providers"
@@ -48,7 +49,7 @@ export default async function Home() {
           icon={<CloudIcon />}
         />
       )}
-      {userRoles.includes("sla-manager") && (
+      {(userRoles.includes("admin") || userRoles.includes("sla-manager")) && (
         <Box
           title="Identity Providers"
           subtitle="Service that authenticates users and issues trusted credentials"
