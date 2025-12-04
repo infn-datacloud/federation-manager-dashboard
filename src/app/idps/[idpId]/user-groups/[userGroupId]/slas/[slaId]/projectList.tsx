@@ -86,56 +86,47 @@ export default function ProjectsList(props: Readonly<ListProps>) {
       project_id: body["project_id[id]"],
     };
 
-    try {
-      const apiResponse = await fetch(
-        `/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(formattedBody),
-        }
-      );
-
-      if (apiResponse.ok) {
-        setShowProjectModal(false);
-        router.refresh();
-        toaster.success("Project connected successfully");
+    const apiResponse = await fetch(
+      `/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`,
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formattedBody),
       }
-    } catch (err) {
-      console.error("API Error:", err);
-    } finally {
-      return;
+    );
+
+    if (apiResponse.ok) {
+      setShowProjectModal(false);
+      router.refresh();
+      toaster.success("Project connected successfully");
+    } else {
+      const msg = await apiResponse.text();
+      toaster.error("Connection failed", msg);
+      console.error("API Error:", msg);
     }
   };
 
   const disconnectProject = async (): Promise<void> => {
-    try {
-      const apiResponse = await fetch(
-        `/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects/${selectedItem?.id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      if (apiResponse.ok) {
-        setShowDeleteModal(false);
-        router.refresh();
-        toaster.success("Project disconnected successfully");
-      } else {
-        toaster.error(
-          "Error disconnecting project",
-          "Some error occurred while disconnecting the project. Please try again."
-        );
+    const apiResponse = await fetch(
+      `/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects/${selectedItem?.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    } catch (err) {
-      console.error("API Error:", err);
-    } finally {
-      return;
+    );
+
+    if (apiResponse.ok) {
+      setShowDeleteModal(false);
+      router.refresh();
+      toaster.success("Project disconnected successfully");
+    } else {
+      const msg = await apiResponse.text();
+      toaster.error("Error disconnecting the project", msg);
+      console.error("API Error:", msg);
     }
   };
 

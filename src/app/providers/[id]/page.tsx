@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 import Custom401 from "@/app/pages/401";
 import { findUserRoles } from "@/utils";
 import { settings } from "@/config";
+import { toaster } from "@/components/toaster";
 
 type ProviderPageProps = {
   params: Promise<{
@@ -81,7 +82,8 @@ export default async function Provider({
 
     if (!apiResponse.ok) {
       const errorText = await apiResponse.text();
-      throw new Error(`Failed to fetch provider(s): ${errorText}`);
+      toaster.error("Failed to fetch provider", errorText);
+      throw new Error(`Failed to fetch provider: ${errorText}`);
     }
 
     const data = await apiResponse.json();
@@ -100,7 +102,8 @@ export default async function Provider({
 
       if (!apiResponse.ok) {
         const errorText = await apiResponse.text();
-        throw new Error(`Failed to fetch provider(s): ${errorText}`);
+        toaster.error("Failed to fetch tester", errorText);
+        throw new Error(`Failed to fetch tester: ${errorText}`);
       }
 
       const data = await apiResponse.json();
@@ -122,8 +125,9 @@ export default async function Provider({
 
     if (!apiResponse.ok) {
       const errorText = await apiResponse.text();
+      toaster.error("Failed to fetch identity providers", errorText);
       throw new Error(
-        `Failed to fetch provider's identity provider(s): ${errorText}`
+        `Failed to fetch provider's identity providers: ${errorText}`
       );
     }
 
@@ -142,7 +146,8 @@ export default async function Provider({
 
     if (!apiResponse.ok) {
       const errorText = await apiResponse.text();
-      throw new Error(`Failed to fetch identity provider(s): ${errorText}`);
+      toaster.error("Failed to fetch identity providers", errorText);
+      throw new Error(`Failed to fetch identity providers: ${errorText}`);
     }
 
     const data = await apiResponse.json();
@@ -161,7 +166,8 @@ export default async function Provider({
 
     if (!apiResponse.ok) {
       const errorText = await apiResponse.text();
-      throw new Error(`Failed to fetch provider's region(s): ${errorText}`);
+      toaster.error("Failed to fetch provider's regions", errorText);
+      throw new Error(`Failed to fetch provider's regions: ${errorText}`);
     }
 
     const data = await apiResponse.json();
@@ -180,7 +186,8 @@ export default async function Provider({
 
     if (!apiResponse.ok) {
       const errorText = await apiResponse.text();
-      throw new Error(`Failed to fetch provider's project(s): ${errorText}`);
+      toaster.error("Failed to fetch provider's projects", errorText);
+      throw new Error(`Failed to fetch provider's projects: ${errorText}`);
     }
 
     const data = await apiResponse.json();
@@ -215,8 +222,9 @@ export default async function Provider({
 
     if (!apiResponse.ok) {
       const errorText = await apiResponse.text();
+      toaster.error("Failed to fetch project's regions", errorText);
       throw new Error(
-        `Failed to fetch provider project's region(s) : ${errorText}`
+        `Failed to fetch provider project's regions: ${errorText}`
       );
     }
 

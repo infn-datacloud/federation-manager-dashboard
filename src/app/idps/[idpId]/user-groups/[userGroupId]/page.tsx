@@ -8,6 +8,7 @@ import { UserGroupIcon } from "@heroicons/react/24/solid";
 import { Suspense } from "react";
 import { LoadingDetail, LoadingList } from "./loading";
 import { settings } from "@/config";
+import { toaster } from "@/components/toaster";
 
 type IdpPageProps = {
   params: Promise<{
@@ -97,6 +98,7 @@ async function getUserGroup(idpId: string, userGroupId: string) {
 
   if (!apiResponse.ok) {
     const errorText = await apiResponse.statusText;
+    toaster.error("Failed to fetch user group", errorText);
     throw new Error(`Failed to fetch user group: ${errorText}`);
   }
 
@@ -115,7 +117,8 @@ async function getSlas(idpId: string, userGroupId: string) {
 
   if (!apiResponse.ok) {
     const errorText = await apiResponse.text();
-    throw new Error(`Failed to fetch user groups: ${errorText}`);
+    toaster.error("Failed to fetch slas", errorText);
+    throw new Error(`Failed to fetch slas: ${errorText}`);
   }
 
   const data = await apiResponse.json();

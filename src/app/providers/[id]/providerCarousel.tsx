@@ -202,64 +202,49 @@ export default function ProviderCarousel(props: {
       }
     } else {
       /* UPDATE */
-      try {
-        const apiResponse = await fetch(
-          `/api/ssr/providers/${id}/idps/${providerIdpData.idp_id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
-          }
-        );
-
-        const jsonResponse = await apiResponse;
-
-        if (jsonResponse.ok) {
-          setShowProviderIdpModal(false);
-          setProviderIdpData(undefined);
-          router.refresh();
-          toaster.success("Connected IDP updated successfully");
+      const apiResponse = await fetch(
+        `/api/ssr/providers/${id}/idps/${providerIdpData.idp_id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(body),
         }
+      );
 
-        //PrintFormErrors(jsonResponse);
-      } catch (err) {
-        console.error("API Error:", err);
-      } finally {
-        return;
+      if (apiResponse.ok) {
+        setShowProviderIdpModal(false);
+        setProviderIdpData(undefined);
+        router.refresh();
+        toaster.success("Connected IDP updated successfully");
+      } else {
+        const msg = await apiResponse.text();
+        toaster.error("Update failed", msg);
+        console.error("API Error:", msg);
       }
     }
   };
 
   const deleteProviderIdp = async (): Promise<void> => {
-    try {
-      const apiResponse = await fetch(
-        `/api/ssr/providers/${id}/idps/${providerIdpData?.idp_id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      const jsonResponse = await apiResponse; //.json();
-
-      if (jsonResponse.ok) {
-        setShowProviderIdpDeleteModal(false);
-        router.refresh();
-        toaster.success("IDP deleted successfully");
-      } else {
-        toaster.error(
-          "Error deleting IDP",
-          "Some error occurred while deleting the identity provider. Please try again."
-        );
+    const apiResponse = await fetch(
+      `/api/ssr/providers/${id}/idps/${providerIdpData?.idp_id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    } catch (err) {
-      console.error("API Error:", err);
-    } finally {
-      return;
+    );
+
+    if (apiResponse.ok) {
+      setShowProviderIdpDeleteModal(false);
+      router.refresh();
+      toaster.success("IDP deleted successfully");
+    } else {
+      const msg = await apiResponse.text();
+      toaster.error("Error deleting IDP", msg);
+      console.error("API Error:", msg);
     }
   };
 
@@ -284,85 +269,68 @@ export default function ProviderCarousel(props: {
 
     if (providerRegionData == undefined) {
       /* CREATE */
-      try {
-        const apiResponse = await fetch(`/api/ssr/providers/${id}/regions`, {
-          method: "POST",
+      const apiResponse = await fetch(`/api/ssr/providers/${id}/regions`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+
+      if (apiResponse.ok) {
+        setShowProviderRegionModal(false);
+        router.refresh();
+        toaster.success("Region created successfully");
+      } else {
+        const msg = await apiResponse.text();
+        toaster.error("Creation failed", msg);
+        console.error("API Error:", msg);
+      }
+    } else {
+      /* UPDATE */
+      const apiResponse = await fetch(
+        `/api/ssr/providers/${id}/regions/${providerRegionData.id}`,
+        {
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(body),
-        });
-
-        const jsonResponse = await apiResponse;
-
-        if (jsonResponse.ok) {
-          setShowProviderRegionModal(false);
-          router.refresh();
-          toaster.success("Region created successfully");
         }
-      } catch (err) {
-        console.error("API Error:", err);
-      } finally {
-        return;
-      }
-    } else {
-      /* UPDATE */
-      try {
-        const apiResponse = await fetch(
-          `/api/ssr/providers/${id}/regions/${providerRegionData.id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
-          }
-        );
+      );
 
-        const jsonResponse = await apiResponse;
-
-        if (jsonResponse.ok) {
-          setShowProviderRegionModal(false);
-          setProviderRegionData(undefined);
-          router.refresh();
-          toaster.success("Region updated successfully");
-        }
-      } catch (err) {
-        console.error("API Error:", err);
-      } finally {
-        return;
+      if (apiResponse.ok) {
+        setShowProviderRegionModal(false);
+        setProviderRegionData(undefined);
+        router.refresh();
+        toaster.success("Region updated successfully");
+      } else {
+        const msg = await apiResponse.text();
+        toaster.error("Update failed", msg);
+        console.error("API Error:", msg);
       }
     }
   };
 
   const deleteProviderRegion = async (): Promise<void> => {
-    try {
-      const apiResponse = await fetch(
-        `/api/ssr/providers/${id}/regions/${providerRegionData?.id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      const jsonResponse = await apiResponse;
-
-      if (jsonResponse.ok) {
-        setShowProviderRegionDeleteModal(false);
-        router.refresh();
-        toaster.success("Region deleted successfully");
-      } else {
-        toaster.error(
-          "Error deleting region",
-          "Some error occurred while deleting the region. Please try again."
-        );
+    const apiResponse = await fetch(
+      `/api/ssr/providers/${id}/regions/${providerRegionData?.id}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    } catch (err) {
-      console.error("API Error:", err);
-    } finally {
-      return;
+    );
+
+    if (apiResponse.ok) {
+      setShowProviderRegionDeleteModal(false);
+      router.refresh();
+      toaster.success("Region deleted successfully");
+    } else {
+      const msg = await apiResponse.text();
+      toaster.error("Error deleting region", msg);
+      console.error("API Error:", msg);
     }
   };
 
@@ -388,89 +356,76 @@ export default function ProviderCarousel(props: {
 
     if (providerProjectData == undefined) {
       /* CREATE */
-      try {
-        const apiResponse = await fetch(`/api/ssr/providers/${id}/projects`, {
-          method: "POST",
+      const apiResponse = await fetch(`/api/ssr/providers/${id}/projects`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
+      });
+
+      const jsonResponse = await apiResponse.json();
+
+      if (apiResponse.ok) {
+        if (jsonResponse.id) {
+          if (await createProviderProjectRegion(jsonResponse.id, body)) {
+            setShowProviderProjectModal(false);
+            router.refresh();
+            toaster.success("Project created successfully");
+          }
+        }
+      } else {
+        const msg = await apiResponse.text();
+        toaster.error("Creation failed", msg);
+        console.error("API Error:", msg);
+      }
+    } else {
+      /* UPDATE */
+      const apiResponse = await fetch(
+        `/api/ssr/providers/${id}/projects/${providerProjectData.id}`,
+        {
+          method: "PUT",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify(body),
-        });
-
-        const jsonResponse = await apiResponse.json();
-
-        if (apiResponse.ok) {
-          if (jsonResponse.id) {
-            if (await createProviderProjectRegion(jsonResponse.id, body)) {
-              setShowProviderProjectModal(false);
-              router.refresh();
-              toaster.success("Project created successfully");
-            }
-          }
         }
-      } catch (err) {
-        console.error("API Error:", err);
-      } finally {
-        return;
-      }
-    } else {
-      /* UPDATE */
-      try {
-        const apiResponse = await fetch(
-          `/api/ssr/providers/${id}/projects/${providerProjectData.id}`,
-          {
-            method: "PUT",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify(body),
-          }
-        );
+      );
 
-        if (apiResponse.ok && (await updateProviderProjectRegion(body))) {
-          setShowProviderProjectModal(false);
-          setProviderProjectData(undefined);
-          router.refresh();
-          toaster.success("Project updated successfully");
-        }
-      } catch (err) {
-        console.error("API Error:", err);
-      } finally {
-        return;
+      if (apiResponse.ok && (await updateProviderProjectRegion(body))) {
+        setShowProviderProjectModal(false);
+        setProviderProjectData(undefined);
+        router.refresh();
+        toaster.success("Project updated successfully");
+      } else {
+        const msg = await apiResponse.text();
+        toaster.error("Update failed", msg);
+        console.error("API Error:", msg);
       }
     }
   };
 
   const deleteProviderProject = async (): Promise<void> => {
-    try {
-      if (await deleteProviderProjectRegion()) {
-        const apiResponse = await fetch(
-          `/api/ssr/providers/${id}/projects/${providerProjectData?.id}`,
-          {
-            method: "DELETE",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          }
-        );
-
-        const jsonResponse = await apiResponse;
-
-        if (jsonResponse.ok) {
-          setShowProviderProjectDeleteModal(false);
-          router.refresh();
-          toaster.success("Project deleted successfully");
-        } else {
-          toaster.error(
-            "Error deleting project",
-            "Some error occurred while deleting the project. Please try again."
-          );
+    if (await deleteProviderProjectRegion()) {
+      const apiResponse = await fetch(
+        `/api/ssr/providers/${id}/projects/${providerProjectData?.id}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
         }
+      );
+
+      if (apiResponse.ok) {
+        setShowProviderProjectDeleteModal(false);
+        router.refresh();
+        toaster.success("Project deleted successfully");
+      } else {
+        const msg = await apiResponse.text();
+        toaster.error("Delete failed", msg);
+        console.error("API Error:", msg);
       }
-    } catch (err) {
-      console.error("API Error:", err);
-    } finally {
-      return;
     }
   };
 
@@ -554,22 +509,20 @@ export default function ProviderCarousel(props: {
     )
       return;
 
-    try {
-      const apiResponse = await fetch(`/api/ssr/providers/${id}/submit`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+    const apiResponse = await fetch(`/api/ssr/providers/${id}/submit`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-      if (apiResponse.ok) {
-        toaster.success("Provider submitted successfully");
-        router.push("/providers/" + id);
-      }
-    } catch (err) {
-      console.error("API Error:", err);
-    } finally {
-      return;
+    if (apiResponse.ok) {
+      toaster.success("Provider submitted successfully");
+      router.push("/providers/" + id);
+    } else {
+      const msg = await apiResponse.text();
+      toaster.error("Submission failed", msg);
+      console.error("API Error:", msg);
     }
   }
 
@@ -600,78 +553,60 @@ export default function ProviderCarousel(props: {
       }
     }
 
-    try {
-      const apiResponse = await fetch(`/api/ssr/providers/${id}`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
+    const apiResponse = await fetch(`/api/ssr/providers/${id}`, {
+      method: "PATCH",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
 
-      if (apiResponse.ok) {
-        setShowProviderModal(false);
-        router.refresh();
-        toaster.success("Provider edited successfully");
-      }
-
-      //PrintFormErrors(jsonResponse);
-    } catch (err) {
-      console.error("API Error:", err);
-    } finally {
-      return;
+    if (apiResponse.ok) {
+      setShowProviderModal(false);
+      router.refresh();
+      toaster.success("Provider edited successfully");
+    } else {
+      const msg = await apiResponse.text();
+      toaster.error("Update failed", msg);
+      console.error("API Error:", msg);
     }
   };
 
   const deleteProvider = async (): Promise<void> => {
-    try {
-      const apiResponse = await fetch(`/api/ssr/providers/${id}`, {
-        method: "DELETE",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
+    const apiResponse = await fetch(`/api/ssr/providers/${id}`, {
+      method: "DELETE",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
-      if (apiResponse.ok) {
-        setShowDeleteModal(false);
-        router.push("/providers");
-        toaster.success("Provider deleted successfully");
-      } else {
-        toaster.error(
-          "Error deleting Provider",
-          "Some error occurred while deleting the provider. Please try again."
-        );
-      }
-    } catch (err) {
-      console.error("API Error:", err);
-    } finally {
-      return;
+    if (apiResponse.ok) {
+      setShowDeleteModal(false);
+      router.push("/providers");
+      toaster.success("Provider deleted successfully");
+    } else {
+      const msg = await apiResponse.text();
+      toaster.error("Error deleting the provider", msg);
+      console.error("API Error:", msg);
     }
   };
 
   const assignProvider = async (): Promise<void> => {
-    try {
-      const apiResponse = await fetch(`/api/ssr/providers/${id}/testers`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ id: userId }),
-      });
+    const apiResponse = await fetch(`/api/ssr/providers/${id}/testers`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ id: userId }),
+    });
 
-      if (apiResponse.ok) {
-        router.refresh();
-        toaster.success("Provider assigned successfully");
-      } else {
-        toaster.error(
-          "Error assigning Provider",
-          "Some error occurred while assigning the provider. Please try again."
-        );
-      }
-    } catch (err) {
-      console.error("API Error:", err);
-    } finally {
-      return;
+    if (apiResponse.ok) {
+      router.refresh();
+      toaster.success("Provider assigned successfully");
+    } else {
+      const msg = await apiResponse.text();
+      toaster.error("Error assigning provider", msg);
+      console.error("API Error:", msg);
     }
   };
 

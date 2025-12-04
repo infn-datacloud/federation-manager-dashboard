@@ -8,6 +8,7 @@ import { Suspense } from "react";
 import { LoadingDetail, LoadingList } from "./loading";
 import { IdentificationIcon } from "@heroicons/react/24/solid";
 import { settings } from "@/config";
+import { toaster } from "@/components/toaster";
 
 type IdpPageProps = {
   params: Promise<{
@@ -81,6 +82,7 @@ async function getIdentityProvider(id: string) {
 
   if (!apiResponse.ok) {
     const errorText = await apiResponse.text();
+    toaster.error("Failed to fetch identity provider", errorText);
     throw new Error(`Failed to fetch identity provider: ${errorText}`);
   }
 
@@ -99,6 +101,7 @@ async function getUserGroups(id: string) {
 
   if (!apiResponse.ok) {
     const errorText = await apiResponse.text();
+    toaster.error("Failed to fetch user groups", errorText);
     throw new Error(`Failed to fetch user groups: ${errorText}`);
   }
 

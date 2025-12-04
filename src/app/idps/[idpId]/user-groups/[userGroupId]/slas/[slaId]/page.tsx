@@ -12,6 +12,7 @@ import {
 import { JSX, Suspense } from "react";
 import { LoadingDetail, LoadingList } from "./loading";
 import { settings } from "@/config";
+import { toaster } from "@/components/toaster";
 
 type IdpPageProps = {
   params: Promise<{
@@ -152,6 +153,7 @@ async function getSla(idpId: string, userGroupId: string, slaId: string) {
 
   if (!apiResponse.ok) {
     const errorText = await apiResponse.statusText;
+    toaster.error("Failed to fetch sla", errorText);
     throw new Error(`Failed to fetch the sla: ${errorText}`);
   }
 
@@ -174,6 +176,7 @@ async function getSlaProjects(
 
   if (!apiResponse.ok) {
     const errorText = await apiResponse.text();
+    toaster.error("Failed to fetch projects", errorText);
     throw new Error(`Failed to fetch the projects: ${errorText}`);
   }
 
@@ -192,7 +195,8 @@ async function getProjects() {
 
   if (!apiResponse.ok) {
     const errorText = await apiResponse.text();
-    throw new Error(`Failed to fetch the projects: ${errorText}`);
+    toaster.error("Failed to fetch providers", errorText);
+    throw new Error(`Failed to fetch the providers: ${errorText}`);
   }
 
   const data = await apiResponse.json();
@@ -224,7 +228,8 @@ async function getProjectByProvider(providerId: string) {
 
   if (!apiResponse.ok) {
     const errorText = await apiResponse.text();
-    throw new Error(`Failed to fetch the project details: ${errorText}`);
+    toaster.error("Failed to fetch projects", errorText);
+    throw new Error(`Failed to fetch the projects: ${errorText}`);
   }
 
   const data = await apiResponse.json();
