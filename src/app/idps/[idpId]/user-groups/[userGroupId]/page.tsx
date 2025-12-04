@@ -7,6 +7,7 @@ import Custom401 from "@/app/pages/401";
 import { UserGroupIcon } from "@heroicons/react/24/solid";
 import { Suspense } from "react";
 import { LoadingDetail, LoadingList } from "./loading";
+import { settings } from "@/config";
 
 type IdpPageProps = {
   params: Promise<{
@@ -87,7 +88,7 @@ async function List({
 }
 
 async function getUserGroup(idpId: string, userGroupId: string) {
-  const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/idps/${idpId}/user-groups/${userGroupId}`;
+  const url = `${settings.fmEndpointUrl}/api/ssr/idps/${idpId}/user-groups/${userGroupId}`;
 
   const apiResponse = await fetch(url, {
     method: "GET",
@@ -105,7 +106,7 @@ async function getUserGroup(idpId: string, userGroupId: string) {
 }
 
 async function getSlas(idpId: string, userGroupId: string) {
-  const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas`;
+  const url = `${settings.fmEndpointUrl}/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas`;
 
   const apiResponse = await fetch(url, {
     method: "GET",

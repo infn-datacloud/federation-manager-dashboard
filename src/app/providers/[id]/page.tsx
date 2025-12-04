@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import Custom401 from "@/app/pages/401";
 import { findUserRoles } from "@/utils";
+import { settings } from "@/config";
 
 type ProviderPageProps = {
   params: Promise<{
@@ -71,7 +72,7 @@ export default async function Provider({
   );
 
   async function getProvider(id: string) {
-    const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/providers/${id}`;
+    const url = `${settings.fmEndpointUrl}/api/ssr/providers/${id}`;
 
     const apiResponse = await fetch(url, {
       method: "GET",
@@ -90,7 +91,7 @@ export default async function Provider({
 
   async function getProviderTester(site_testers: Array<string>) {
     if (site_testers.length > 0) {
-      const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/users/${site_testers[0]}`;
+      const url = `${settings.fmEndpointUrl}/api/ssr/users/${site_testers[0]}`;
 
       const apiResponse = await fetch(url, {
         method: "GET",
@@ -112,7 +113,7 @@ export default async function Provider({
 
   /* IDPs */
   async function getProviderIdps(providerId: string) {
-    const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/providers/${providerId}/idps`;
+    const url = `${settings.fmEndpointUrl}/api/ssr/providers/${providerId}/idps`;
 
     const apiResponse = await fetch(url, {
       method: "GET",
@@ -132,7 +133,7 @@ export default async function Provider({
   }
 
   async function getIdentityProviders() {
-    const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/idps`;
+    const url = `${settings.fmEndpointUrl}/api/ssr/idps`;
 
     const apiResponse = await fetch(url, {
       method: "GET",
@@ -151,7 +152,7 @@ export default async function Provider({
 
   /* Regions */
   async function getProviderRegions(providerId: string) {
-    const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/providers/${providerId}/regions`;
+    const url = `${settings.fmEndpointUrl}/api/ssr/providers/${providerId}/regions`;
 
     const apiResponse = await fetch(url, {
       method: "GET",
@@ -170,7 +171,7 @@ export default async function Provider({
 
   /* Projects */
   async function getProviderProjects(providerId: string) {
-    const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/providers/${providerId}/projects`;
+    const url = `${settings.fmEndpointUrl}/api/ssr/providers/${providerId}/projects`;
 
     const apiResponse = await fetch(url, {
       method: "GET",
@@ -205,7 +206,7 @@ export default async function Provider({
     providerId: string,
     projectId: string
   ) {
-    const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/providers/${providerId}/projects/${projectId}/regions`;
+    const url = `${settings.fmEndpointUrl}/api/ssr/providers/${providerId}/projects/${projectId}/regions`;
 
     const apiResponse = await fetch(url, {
       method: "GET",
@@ -226,7 +227,7 @@ export default async function Provider({
 
   async function getUserId() {
     const apiResponse = await fetch(
-      `${process.env.FM_ENDPOINT_URL}/api/ssr/users/my-id`,
+      `${settings.fmEndpointUrl}/api/ssr/users/my-id`,
       {
         method: "GET",
         headers: await headers(),

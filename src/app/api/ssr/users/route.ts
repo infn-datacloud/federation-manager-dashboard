@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import getAuthToken from "@/app/api/ssr/utils";
+import { settings } from "@/config";
 
 export async function POST() {
   const accessToken = await getAuthToken();
@@ -8,7 +9,7 @@ export async function POST() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const res = await fetch(`${process.env.API_SERVER_URL}/users`, {
+  const res = await fetch(`${settings.apiServerUrl}/users`, {
     method: "POST",
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -26,7 +27,7 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const apiUrl = `${process.env.API_SERVER_URL}/users`;
+  const apiUrl = `${settings.apiServerUrl}/users`;
 
   const res = await fetch(apiUrl, {
     method: "GET",

@@ -11,6 +11,7 @@ import {
 } from "@heroicons/react/24/solid";
 import { JSX, Suspense } from "react";
 import { LoadingDetail, LoadingList } from "./loading";
+import { settings } from "@/config";
 
 type IdpPageProps = {
   params: Promise<{
@@ -142,7 +143,7 @@ async function List({
 }
 
 async function getSla(idpId: string, userGroupId: string, slaId: string) {
-  const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}`;
+  const url = `${settings.fmEndpointUrl}/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}`;
 
   const apiResponse = await fetch(url, {
     method: "GET",
@@ -164,7 +165,7 @@ async function getSlaProjects(
   userGroupId: string,
   slaId: string
 ) {
-  const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`;
+  const url = `${settings.fmEndpointUrl}/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`;
 
   const apiResponse = await fetch(url, {
     method: "GET",
@@ -182,7 +183,7 @@ async function getSlaProjects(
 }
 
 async function getProjects() {
-  const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/providers`;
+  const url = `${settings.fmEndpointUrl}/api/ssr/providers`;
 
   const apiResponse = await fetch(url, {
     method: "GET",
@@ -214,7 +215,7 @@ async function getProjects() {
 }
 
 async function getProjectByProvider(providerId: string) {
-  const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/providers/${providerId}/projects`;
+  const url = `${settings.fmEndpointUrl}/api/ssr/providers/${providerId}/projects`;
 
   const apiResponse = await fetch(url, {
     method: "GET",

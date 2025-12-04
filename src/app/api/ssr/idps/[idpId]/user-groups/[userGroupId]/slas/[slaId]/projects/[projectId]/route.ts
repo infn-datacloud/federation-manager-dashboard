@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import getAuthToken from "@/app/api/ssr/utils";
+import { settings } from "@/config";
 
 interface Params {
   params: Promise<{
@@ -19,7 +20,7 @@ export async function DELETE(_: Request, { params }: Params) {
   }
 
   const res = await fetch(
-    `${process.env.API_SERVER_URL}/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects/${projectId}`,
+    `${settings.apiServerUrl}/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects/${projectId}`,
     {
       method: "DELETE",
       headers: {

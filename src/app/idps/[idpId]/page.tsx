@@ -7,6 +7,7 @@ import Custom401 from "@/app/pages/401";
 import { Suspense } from "react";
 import { LoadingDetail, LoadingList } from "./loading";
 import { IdentificationIcon } from "@heroicons/react/24/solid";
+import { settings } from "@/config";
 
 type IdpPageProps = {
   params: Promise<{
@@ -71,7 +72,7 @@ async function List({ idpId }: { idpId: string }) {
 }
 
 async function getIdentityProvider(id: string) {
-  const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/idps/${id}`;
+  const url = `${settings.fmEndpointUrl}/api/ssr/idps/${id}`;
 
   const apiResponse = await fetch(url, {
     method: "GET",
@@ -89,7 +90,7 @@ async function getIdentityProvider(id: string) {
 }
 
 async function getUserGroups(id: string) {
-  const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/idps/${id}/user-groups`;
+  const url = `${settings.fmEndpointUrl}/api/ssr/idps/${id}/user-groups`;
 
   const apiResponse = await fetch(url, {
     method: "GET",
