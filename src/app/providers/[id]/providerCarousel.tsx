@@ -30,8 +30,8 @@ import {
   ShieldCheckIcon,
   PlusIcon,
   UserPlusIcon,
-  PlayIcon,
   UserIcon,
+  UserMinusIcon,
 } from "@heroicons/react/24/solid";
 import { toaster } from "@/components/toaster";
 import { useParams, useRouter } from "next/navigation";
@@ -610,6 +610,31 @@ export default function ProviderCarousel(props: {
     }
   };
 
+  const unassignProvider = async (): Promise<void> => {
+    if (provider.site_testers[0] && provider.site_testers[0] != "") {
+      const apiResponse = await fetch(
+        `/api/ssr/providers/${id}/testers/${provider.site_testers[0]}`,
+        {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (apiResponse.ok) {
+        router.refresh();
+        toaster.success("Provider unassigned successfully");
+      } else {
+        const msg = await apiResponse.text();
+        toaster.error("Error unassigning provider", msg);
+        console.error("API Error:", msg);
+      }
+    } else {
+      toaster.error("Error unassigning provider", "No tester assigned");
+    }
+  };
+
   return (
     <>
       {provider.tester_name != "" && (
@@ -648,7 +673,7 @@ export default function ProviderCarousel(props: {
           (userRoles.includes("admin") ||
             userRoles.includes("site-tester")) && (
             <div className="flex flex-col gap-4 md:flex-row">
-              {provider.tester_name == "" && (
+              {provider.tester_name == "" ? (
                 <Button
                   className="md:w-fill btn btn-secondary w-full"
                   onClick={() => {
@@ -657,6 +682,16 @@ export default function ProviderCarousel(props: {
                 >
                   <UserPlusIcon className="size-4" />
                   Assign to me
+                </Button>
+              ) : (
+                <Button
+                  className="md:w-fill btn btn-secondary w-full"
+                  onClick={() => {
+                    unassignProvider();
+                  }}
+                >
+                  <UserMinusIcon className="size-4" />
+                  Unassign provider
                 </Button>
               )}
             </div>
