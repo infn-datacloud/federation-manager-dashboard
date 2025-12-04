@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import getAuthToken from "@/app/api/ssr/utils";
+import { settings } from "@/config";
 
 interface Params {
   params: Promise<{ idpId: string; userGroupId: string; slaId: string }>;
@@ -15,7 +16,7 @@ export async function POST(req: Request, { params }: Params) {
 
   const body = await req.json();
   const res = await fetch(
-    `${process.env.API_SERVER_URL}/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`,
+    `${settings.apiServerUrl}/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`,
     {
       method: "POST",
       headers: {
@@ -39,7 +40,7 @@ export async function GET(_: Request, { params }: Params) {
 
   try {
     const res = await fetch(
-      `${process.env.API_SERVER_URL}/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`,
+      `${settings.apiServerUrl}/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`,
       {
         method: "GET",
         headers: {

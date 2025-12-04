@@ -7,6 +7,8 @@ import Custom401 from "@/app/pages/401";
 import { UserGroupIcon } from "@heroicons/react/24/solid";
 import { Suspense } from "react";
 import { LoadingDetail, LoadingList } from "./loading";
+import { settings } from "@/config";
+import { toaster } from "@/components/toaster";
 
 type IdpPageProps = {
   params: Promise<{
@@ -87,7 +89,7 @@ async function List({
 }
 
 async function getUserGroup(idpId: string, userGroupId: string) {
-  const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/idps/${idpId}/user-groups/${userGroupId}`;
+  const url = `${settings.fmEndpointUrl}/api/ssr/idps/${idpId}/user-groups/${userGroupId}`;
 
   const apiResponse = await fetch(url, {
     method: "GET",
@@ -96,6 +98,7 @@ async function getUserGroup(idpId: string, userGroupId: string) {
 
   if (!apiResponse.ok) {
     const errorText = await apiResponse.statusText;
+    toaster.error("Failed to fetch user group", errorText);
     throw new Error(`Failed to fetch user group: ${errorText}`);
   }
 
@@ -105,7 +108,7 @@ async function getUserGroup(idpId: string, userGroupId: string) {
 }
 
 async function getSlas(idpId: string, userGroupId: string) {
-  const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas`;
+  const url = `${settings.fmEndpointUrl}/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas`;
 
   const apiResponse = await fetch(url, {
     method: "GET",
@@ -114,7 +117,8 @@ async function getSlas(idpId: string, userGroupId: string) {
 
   if (!apiResponse.ok) {
     const errorText = await apiResponse.text();
-    throw new Error(`Failed to fetch user groups: ${errorText}`);
+    toaster.error("Failed to fetch slas", errorText);
+    throw new Error(`Failed to fetch slas: ${errorText}`);
   }
 
   const data = await apiResponse.json();

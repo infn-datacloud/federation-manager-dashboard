@@ -4,15 +4,13 @@ import { settings } from "@/config";
 
 interface Params {
   params: Promise<{
-    idpId: string;
-    userGroupId: string;
-    slaId: string;
-    projectId: string;
+    id: string;
+    testerId: string;
   }>;
 }
 
 export async function DELETE(_: Request, { params }: Params) {
-  const { idpId, userGroupId, slaId, projectId } = await params;
+  const { id, testerId } = await params;
   const accessToken = await getAuthToken();
 
   if (!accessToken) {
@@ -20,7 +18,7 @@ export async function DELETE(_: Request, { params }: Params) {
   }
 
   const res = await fetch(
-    `${settings.apiServerUrl}/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects/${projectId}`,
+    `${settings.apiServerUrl}/providers/${id}/testers/${testerId}`,
     {
       method: "DELETE",
       headers: {

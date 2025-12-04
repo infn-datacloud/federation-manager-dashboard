@@ -5,6 +5,7 @@ import Header from "@/components/header";
 import { authClient } from "@/lib/auth-client";
 import { ArrowLeftEndOnRectangleIcon } from "@heroicons/react/24/solid";
 import logo from "@/assets/infn_logo.png";
+import { settings } from "@/config";
 
 export default function LoginPage() {
   const handleLogin = async () => {
@@ -14,7 +15,7 @@ export default function LoginPage() {
       errorCallbackURL: "/",
       newUserCallbackURL: "/",
       disableRedirect: false,
-      scopes: process.env.FM_OIDC_SCOPES?.split(" "),
+      scopes: settings.fmOidcScopes?.split(" "),
       requestSignUp: false,
     });
   };

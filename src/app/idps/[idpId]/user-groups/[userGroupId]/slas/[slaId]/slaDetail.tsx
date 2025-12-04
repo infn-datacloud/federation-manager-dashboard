@@ -37,33 +37,24 @@ export default function SlaDetail(props: Readonly<ItemProps>) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const deleteSla = async (): Promise<void> => {
-    try {
-      const apiResponse = await fetch(
-        `/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      const jsonResponse = await apiResponse; //.json();
-
-      if (jsonResponse.ok) {
-        setShowDeleteModal(false);
-        router.push(`/idps/${idpId}/user-groups/${userGroupId}`);
-        toaster.success("Sla deleted successfully");
-      } else {
-        toaster.error(
-          "Error deleting Sla",
-          "Some error occurred while deleting the Sla. Please try again."
-        );
+    const apiResponse = await fetch(
+      `/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    } catch (err) {
-      console.error("API Error:", err);
-    } finally {
-      return;
+    );
+
+    if (apiResponse.ok) {
+      setShowDeleteModal(false);
+      router.push(`/idps/${idpId}/user-groups/${userGroupId}`);
+      toaster.success("Sla deleted successfully");
+    } else {
+      const msg = await apiResponse.text();
+      toaster.error("Error deleting Sla", msg);
+      console.error("API Error:", msg);
     }
   };
 
@@ -90,31 +81,25 @@ export default function SlaDetail(props: Readonly<ItemProps>) {
       }
     }
 
-    try {
-      const apiResponse = await fetch(
-        `/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(body),
-        }
-      );
-
-      const jsonResponse = await apiResponse; //.json();
-
-      if (jsonResponse.ok) {
-        setShowSlaModal(false);
-        router.refresh();
-        toaster.success("Sla updated successfully");
-      } else {
-        toaster.error("Update failed", "Please try again.");
+    const apiResponse = await fetch(
+      `/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
       }
-    } catch (err) {
-      console.error("API Error:", err);
-    } finally {
-      return;
+    );
+
+    if (apiResponse.ok) {
+      setShowSlaModal(false);
+      router.refresh();
+      toaster.success("Sla updated successfully");
+    } else {
+      const msg = await apiResponse.text();
+      toaster.error("Update failed", msg);
+      console.error("API Error:", msg);
     }
   };
 

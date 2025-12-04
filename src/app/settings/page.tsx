@@ -4,6 +4,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import LogoutButton from "./LogoutButton";
 import Custom401 from "@/app/pages/401";
+import { findUserRoles } from "@/utils";
 
 export default async function Settings() {
   const session = await auth.api.getSession({
@@ -14,9 +15,7 @@ export default async function Settings() {
     return <Custom401 />;
   }
 
-  const userRoles = process.env.USER_ROLES
-    ? process.env.USER_ROLES.split(",")
-    : [];
+  const userRoles = await findUserRoles();
 
   return (
     <>

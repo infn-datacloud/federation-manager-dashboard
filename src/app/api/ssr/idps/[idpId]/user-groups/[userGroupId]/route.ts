@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import getAuthToken from "@/app/api/ssr/utils";
+import { settings } from "@/config";
 
 interface Params {
   params: Promise<{
@@ -18,7 +19,7 @@ export async function GET(_: Request, { params }: Params) {
 
   try {
     const res = await fetch(
-      `${process.env.API_SERVER_URL}/idps/${idpId}/user-groups/${userGroupId}`,
+      `${settings.apiServerUrl}/idps/${idpId}/user-groups/${userGroupId}`,
       {
         method: "GET",
         headers: {
@@ -54,7 +55,7 @@ export async function PUT(req: Request, { params }: Params) {
 
   const body = await req.json();
   const res = await fetch(
-    `${process.env.API_SERVER_URL}/idps/${idpId}/user-groups/${userGroupId}`,
+    `${settings.apiServerUrl}/idps/${idpId}/user-groups/${userGroupId}`,
     {
       method: "PUT",
       headers: {
@@ -88,7 +89,7 @@ export async function DELETE(_: Request, { params }: Params) {
   }
 
   const res = await fetch(
-    `${process.env.API_SERVER_URL}/idps/${idpId}/user-groups/${userGroupId}`,
+    `${settings.apiServerUrl}/idps/${idpId}/user-groups/${userGroupId}`,
     {
       method: "DELETE",
       headers: {

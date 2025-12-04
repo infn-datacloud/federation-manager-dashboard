@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import getAuthToken from "@/app/api/ssr/utils";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { settings } from "@/config";
 
 export async function GET() {
   const session = await auth.api.getSession({
@@ -14,7 +15,7 @@ export async function GET() {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const apiUrl = `${process.env.API_SERVER_URL}/users`;
+  const apiUrl = `${settings.apiServerUrl}/users`;
 
   const res = await fetch(apiUrl, {
     method: "GET",

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import getAuthToken from "@/app/api/ssr/utils";
+import { settings } from "@/config";
 
 interface Params {
   params: Promise<{ userId: string }>;
@@ -14,7 +15,7 @@ export async function GET(_: Request, { params }: Params) {
   }
 
   try {
-    const res = await fetch(`${process.env.API_SERVER_URL}/users/${userId}`, {
+    const res = await fetch(`${settings.apiServerUrl}/users/${userId}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${accessToken}`,

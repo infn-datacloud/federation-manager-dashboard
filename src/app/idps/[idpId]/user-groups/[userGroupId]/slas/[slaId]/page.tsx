@@ -11,6 +11,8 @@ import {
 } from "@heroicons/react/24/solid";
 import { JSX, Suspense } from "react";
 import { LoadingDetail, LoadingList } from "./loading";
+import { settings } from "@/config";
+import { toaster } from "@/components/toaster";
 
 type IdpPageProps = {
   params: Promise<{
@@ -142,7 +144,7 @@ async function List({
 }
 
 async function getSla(idpId: string, userGroupId: string, slaId: string) {
-  const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}`;
+  const url = `${settings.fmEndpointUrl}/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}`;
 
   const apiResponse = await fetch(url, {
     method: "GET",
@@ -151,6 +153,7 @@ async function getSla(idpId: string, userGroupId: string, slaId: string) {
 
   if (!apiResponse.ok) {
     const errorText = await apiResponse.statusText;
+    toaster.error("Failed to fetch sla", errorText);
     throw new Error(`Failed to fetch the sla: ${errorText}`);
   }
 
@@ -164,7 +167,7 @@ async function getSlaProjects(
   userGroupId: string,
   slaId: string
 ) {
-  const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`;
+  const url = `${settings.fmEndpointUrl}/api/ssr/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`;
 
   const apiResponse = await fetch(url, {
     method: "GET",
@@ -173,6 +176,7 @@ async function getSlaProjects(
 
   if (!apiResponse.ok) {
     const errorText = await apiResponse.text();
+    toaster.error("Failed to fetch projects", errorText);
     throw new Error(`Failed to fetch the projects: ${errorText}`);
   }
 
@@ -182,7 +186,7 @@ async function getSlaProjects(
 }
 
 async function getProjects() {
-  const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/providers`;
+  const url = `${settings.fmEndpointUrl}/api/ssr/providers`;
 
   const apiResponse = await fetch(url, {
     method: "GET",
@@ -191,7 +195,8 @@ async function getProjects() {
 
   if (!apiResponse.ok) {
     const errorText = await apiResponse.text();
-    throw new Error(`Failed to fetch the projects: ${errorText}`);
+    toaster.error("Failed to fetch providers", errorText);
+    throw new Error(`Failed to fetch the providers: ${errorText}`);
   }
 
   const data = await apiResponse.json();
@@ -214,7 +219,7 @@ async function getProjects() {
 }
 
 async function getProjectByProvider(providerId: string) {
-  const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/providers/${providerId}/projects`;
+  const url = `${settings.fmEndpointUrl}/api/ssr/providers/${providerId}/projects`;
 
   const apiResponse = await fetch(url, {
     method: "GET",
@@ -223,7 +228,8 @@ async function getProjectByProvider(providerId: string) {
 
   if (!apiResponse.ok) {
     const errorText = await apiResponse.text();
-    throw new Error(`Failed to fetch the project details: ${errorText}`);
+    toaster.error("Failed to fetch projects", errorText);
+    throw new Error(`Failed to fetch the projects: ${errorText}`);
   }
 
   const data = await apiResponse.json();

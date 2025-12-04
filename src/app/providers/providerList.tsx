@@ -74,7 +74,7 @@ export default function ProviderList(props: Readonly<ProviderListProps>) {
     }
   };
 
-  if (!userRoles.includes("site-admin")) {
+  if (!userRoles.includes("admin") && !userRoles.includes("site-admin")) {
     return <List items={items} />;
   }
 
