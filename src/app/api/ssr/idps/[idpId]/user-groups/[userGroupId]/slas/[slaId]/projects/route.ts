@@ -6,6 +6,8 @@ interface Params {
   params: Promise<{ idpId: string; userGroupId: string; slaId: string }>;
 }
 
+const idpsUrl = `${settings.apiServerUrl}/idps`;
+
 export async function POST(req: Request, { params }: Params) {
   const { idpId, userGroupId, slaId } = await params;
   const accessToken = await getAuthToken();
@@ -16,7 +18,7 @@ export async function POST(req: Request, { params }: Params) {
 
   const body = await req.json();
   const res = await fetch(
-    `${settings.apiServerUrl}/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`,
+    `${idpsUrl}/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`,
     {
       method: "POST",
       headers: {
@@ -40,7 +42,7 @@ export async function GET(_: Request, { params }: Params) {
 
   try {
     const res = await fetch(
-      `${settings.apiServerUrl}/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`,
+      `${idpsUrl}/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects`,
       {
         method: "GET",
         headers: {

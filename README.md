@@ -66,7 +66,7 @@ FM_OIDC_PROVIDER_ID="iam"
 
 # Groups for role-based access control
 GROUPS_ADMIN={"https://iam.cloud.infn.it/": ["admins"]}
-GROUPS_SITE_ADMIN={"https://iam.cloud.infn.it/": ["admins/bta-testers"]}
+GROUPS_SITE_ADMIN={"https://iam.cloud.infn.it/": ["admins/beta-testers"]}
 GROUPS_SITE_TESTER={"https://iam.cloud.infn.it/": ["admins/beta-testers"]}
 GROUPS_SLA_MANAGER={"https://iam.cloud.infn.it/": ["users/sla", "users/catchall"]}
 ```

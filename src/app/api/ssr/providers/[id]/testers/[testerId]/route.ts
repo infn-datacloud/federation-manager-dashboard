@@ -30,7 +30,10 @@ export async function DELETE(_: Request, { params }: Params) {
   if (!res.ok) {
     const text = await res.text();
     console.error("API Error:", res.status, text);
-    return NextResponse.json({ error: text }, { status: res.status });
+    return NextResponse.json(
+      { error: "There was an error trying to unassign the site tester." },
+      { status: res.status }
+    );
   }
 
   if (res.status == 204) {

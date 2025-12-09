@@ -6,6 +6,8 @@ interface Params {
   params: Promise<{ idpId: string }>;
 }
 
+const idpsUrl = `${settings.apiServerUrl}/idps`;
+
 export async function GET(_: Request, { params }: Params) {
   const { idpId } = await params;
   const accessToken = await getAuthToken();
@@ -15,7 +17,7 @@ export async function GET(_: Request, { params }: Params) {
   }
 
   try {
-    const res = await fetch(`${settings.apiServerUrl}/idps/${idpId}`, {
+    const res = await fetch(`${idpsUrl}/${idpId}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -48,7 +50,7 @@ export async function PUT(req: Request, { params }: Params) {
   }
 
   const body = await req.json();
-  const res = await fetch(`${settings.apiServerUrl}/idps/${idpId}`, {
+  const res = await fetch(`${idpsUrl}/${idpId}`, {
     method: "PUT",
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -79,7 +81,7 @@ export async function DELETE(_: Request, { params }: Params) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const res = await fetch(`${settings.apiServerUrl}/idps/${idpId}`, {
+  const res = await fetch(`${idpsUrl}/${idpId}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${accessToken}`,

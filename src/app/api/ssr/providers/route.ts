@@ -10,7 +10,24 @@ export async function POST(req: Request) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body = await req.json();
+  const requestData = await req.json();
+  const body = {
+    auth_endpoint: requestData.auth_endpoint,
+    description: requestData.description,
+    floating_ips_enable: requestData.floating_ips_enable,
+    image_tags: requestData.image_tags,
+    is_public: requestData.is_public,
+    name: requestData.name,
+    network_tags: requestData.network_tags,
+    rally_password: requestData.rally_password,
+    rally_username: requestData.rally_username,
+    site_admins: requestData.site_admins,
+    support_emails: requestData.support_emails,
+    test_flavor_name: requestData.test_flavor_name,
+    test_network_id: requestData.test_network_id,
+    type: requestData.type,
+  };
+
   const res = await fetch(`${settings.apiServerUrl}/providers`, {
     method: "POST",
     headers: {
@@ -27,14 +44,23 @@ export async function GET() {
   const accessToken = await getAuthToken();
   const userRoles = await findUserRoles();
 
-  let apiUrl = `${settings.apiServerUrl}/providers?&status=ready&status=evaluation&status=pre-production&status=active&status=deprecated&status=removed&status=degraded&status=maintenance&status=re-evaluation`;
+  let apiUrl = `${settings.apiServerUrl}/providers`;
 
   if (!accessToken) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  if (userRoles.includes("admin") || userRoles.includes("site-admin")) {
-    apiUrl = `${settings.apiServerUrl}/providers`;
+  if (!userRoles.includes("admin") && !userRoles.includes("site-admin")) {
+    apiUrl = `${settings.apiServerUrl}/providers?
+      &status=ready
+      &status=evaluation
+      &status=pre-production
+      &status=active
+      &status=deprecated
+      &status=removed
+      &status=degraded
+      &status=maintenance
+      &status=re-evaluation`;
   }
 
   const res = await fetch(apiUrl, {

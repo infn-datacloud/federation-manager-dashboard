@@ -11,6 +11,8 @@ interface Params {
   }>;
 }
 
+const idpsUrl = `${settings.apiServerUrl}/idps`;
+
 export async function DELETE(_: Request, { params }: Params) {
   const { idpId, userGroupId, slaId, projectId } = await params;
   const accessToken = await getAuthToken();
@@ -20,7 +22,7 @@ export async function DELETE(_: Request, { params }: Params) {
   }
 
   const res = await fetch(
-    `${settings.apiServerUrl}/idps/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects/${projectId}`,
+    `${idpsUrl}/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects/${projectId}`,
     {
       method: "DELETE",
       headers: {

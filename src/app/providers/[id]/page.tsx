@@ -67,6 +67,7 @@ export default async function Provider({
       </div>
       <div className="mt-4 text-justify">{provider.description}</div>
 
+      {/* If not REMOVED */}
       {provider.status !== 7 ? (
         <ProviderCarousel
           userRoles={userRoles}

@@ -14,7 +14,8 @@ export async function POST(req: Request, { params }: Params) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const body = await req.json();
+  const requestData = await req.json();
+  const body = { id: requestData.id };
 
   const res = await fetch(`${settings.apiServerUrl}/providers/${id}/testers`, {
     method: "POST",
