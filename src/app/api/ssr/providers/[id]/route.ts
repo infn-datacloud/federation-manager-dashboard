@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import getAuthToken from "@/app/api/ssr/utils";
+import { settings } from "@/config";
 
 interface Params {
   params: Promise<{ id: string }>;
@@ -14,7 +15,7 @@ export async function GET(_: Request, { params }: Params) {
   }
 
   try {
-    const res = await fetch(`${process.env.API_SERVER_URL}/providers/${id}`, {
+    const res = await fetch(`${settings.apiServerUrl}/providers/${id}`, {
       method: "GET",
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -47,7 +48,7 @@ export async function PATCH(req: Request, { params }: Params) {
   }
 
   const body = await req.json();
-  const res = await fetch(`${process.env.API_SERVER_URL}/providers/${id}`, {
+  const res = await fetch(`${settings.apiServerUrl}/providers/${id}`, {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -78,7 +79,7 @@ export async function DELETE(_: Request, { params }: Params) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const res = await fetch(`${process.env.API_SERVER_URL}/providers/${id}`, {
+  const res = await fetch(`${settings.apiServerUrl}/providers/${id}`, {
     method: "DELETE",
     headers: {
       Authorization: `Bearer ${accessToken}`,

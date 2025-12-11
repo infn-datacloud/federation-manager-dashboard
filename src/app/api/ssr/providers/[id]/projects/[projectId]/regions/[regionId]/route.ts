@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import getAuthToken from "@/app/api/ssr/utils";
+import { settings } from "@/config";
 
 interface Params {
   params: Promise<{
@@ -19,7 +20,7 @@ export async function GET(_: Request, { params }: Params) {
 
   try {
     const res = await fetch(
-      `${process.env.API_SERVER_URL}/providers/${id}/projects/${projectId}/regions/${regionId}`,
+      `${settings.apiServerUrl}/providers/${id}/projects/${projectId}/regions/${regionId}`,
       {
         method: "GET",
         headers: {
@@ -55,7 +56,7 @@ export async function PUT(req: Request, { params }: Params) {
 
   const body = await req.json();
   const res = await fetch(
-    `${process.env.API_SERVER_URL}/providers/${id}/projects/${projectId}/regions/${regionId}`,
+    `${settings.apiServerUrl}/providers/${id}/projects/${projectId}/regions/${regionId}`,
     {
       method: "PUT",
       headers: {
@@ -89,7 +90,7 @@ export async function DELETE(_: Request, { params }: Params) {
   }
 
   const res = await fetch(
-    `${process.env.API_SERVER_URL}/providers/${id}/projects/${projectId}/regions/${regionId}`,
+    `${settings.apiServerUrl}/providers/${id}/projects/${projectId}/regions/${regionId}`,
     {
       method: "DELETE",
       headers: {

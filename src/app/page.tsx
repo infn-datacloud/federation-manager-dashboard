@@ -6,6 +6,7 @@ import { headers } from "next/headers";
 import Custom401 from "@/app/pages/401";
 import { findUserRoles } from "@/utils";
 import logo from "@/assets/infn_logo.png";
+import { settings } from "@/config";
 
 export default async function Home() {
   const session = await auth.api.getSession({
@@ -17,7 +18,7 @@ export default async function Home() {
   } else {
     if (session?.user?.email) {
       await fetch(
-        `${process.env.FM_ENDPOINT_URL}/api/ssr/users/ensure-user-exists`,
+        `${settings.fmEndpointUrl}/api/ssr/users/ensure-user-exists`,
         {
           method: "POST",
           headers: await headers(),
@@ -36,7 +37,8 @@ export default async function Home() {
         title="Federation Manager"
         subtitle="Seamlessly integrating providers and communities into DataCloud with simplicity, security, and automated resource management."
       />
-      {(userRoles.includes("site-admin") ||
+      {(userRoles.includes("admin") ||
+        userRoles.includes("site-admin") ||
         userRoles.includes("site-tester")) && (
         <Box
           title="Providers"
@@ -47,7 +49,7 @@ export default async function Home() {
           icon={<CloudIcon />}
         />
       )}
-      {userRoles.includes("sla-manager") && (
+      {(userRoles.includes("admin") || userRoles.includes("sla-manager")) && (
         <Box
           title="Identity Providers"
           subtitle="Service that authenticates users and issues trusted credentials"

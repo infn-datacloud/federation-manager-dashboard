@@ -4,6 +4,9 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import Custom401 from "@/app/pages/401";
 import { findUserRoles } from "@/utils";
+import { settings } from "@/config";
+import { toaster } from "@/components/toaster";
+import Link from "@/components/link";
 
 type ProviderPageProps = {
   params: Promise<{
@@ -40,6 +43,16 @@ export default async function Provider({
   const providerProjects = await getProviderProjects(id);
   return (
     <>
+      <div className="mb-2">
+        <Link href="/providers" className="opacity-50 hover:opacity-80">
+          Providers
+        </Link>
+        <span className="opacity-50">
+          {" > "}
+          Provider
+        </span>
+      </div>
+
       <div className="flex flex-col items-center justify-start md:flex-row md:justify-between">
         <div className="mb-4 w-full md:mb-0 md:w-3/4">
           <h1>{provider.name}</h1>
@@ -54,6 +67,7 @@ export default async function Provider({
       </div>
       <div className="mt-4 text-justify">{provider.description}</div>
 
+      {/* If not REMOVED */}
       {provider.status !== 7 ? (
         <ProviderCarousel
           userRoles={userRoles}
@@ -71,7 +85,7 @@ export default async function Provider({
   );
 
   async function getProvider(id: string) {
-    const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/providers/${id}`;
+    const url = `${settings.fmEndpointUrl}/api/ssr/providers/${id}`;
 
     const apiResponse = await fetch(url, {
       method: "GET",
@@ -80,7 +94,8 @@ export default async function Provider({
 
     if (!apiResponse.ok) {
       const errorText = await apiResponse.text();
-      throw new Error(`Failed to fetch provider(s): ${errorText}`);
+      toaster.error("Failed to fetch provider", errorText);
+      throw new Error(`Failed to fetch provider: ${errorText}`);
     }
 
     const data = await apiResponse.json();
@@ -90,7 +105,7 @@ export default async function Provider({
 
   async function getProviderTester(site_testers: Array<string>) {
     if (site_testers.length > 0) {
-      const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/users/${site_testers[0]}`;
+      const url = `${settings.fmEndpointUrl}/api/ssr/users/${site_testers[0]}`;
 
       const apiResponse = await fetch(url, {
         method: "GET",
@@ -99,7 +114,8 @@ export default async function Provider({
 
       if (!apiResponse.ok) {
         const errorText = await apiResponse.text();
-        throw new Error(`Failed to fetch provider(s): ${errorText}`);
+        toaster.error("Failed to fetch tester", errorText);
+        throw new Error(`Failed to fetch tester: ${errorText}`);
       }
 
       const data = await apiResponse.json();
@@ -112,7 +128,7 @@ export default async function Provider({
 
   /* IDPs */
   async function getProviderIdps(providerId: string) {
-    const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/providers/${providerId}/idps`;
+    const url = `${settings.fmEndpointUrl}/api/ssr/providers/${providerId}/idps`;
 
     const apiResponse = await fetch(url, {
       method: "GET",
@@ -121,8 +137,9 @@ export default async function Provider({
 
     if (!apiResponse.ok) {
       const errorText = await apiResponse.text();
+      toaster.error("Failed to fetch identity providers", errorText);
       throw new Error(
-        `Failed to fetch provider's identity provider(s): ${errorText}`
+        `Failed to fetch provider's identity providers: ${errorText}`
       );
     }
 
@@ -132,7 +149,7 @@ export default async function Provider({
   }
 
   async function getIdentityProviders() {
-    const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/idps`;
+    const url = `${settings.fmEndpointUrl}/api/ssr/idps`;
 
     const apiResponse = await fetch(url, {
       method: "GET",
@@ -141,7 +158,8 @@ export default async function Provider({
 
     if (!apiResponse.ok) {
       const errorText = await apiResponse.text();
-      throw new Error(`Failed to fetch identity provider(s): ${errorText}`);
+      toaster.error("Failed to fetch identity providers", errorText);
+      throw new Error(`Failed to fetch identity providers: ${errorText}`);
     }
 
     const data = await apiResponse.json();
@@ -151,7 +169,7 @@ export default async function Provider({
 
   /* Regions */
   async function getProviderRegions(providerId: string) {
-    const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/providers/${providerId}/regions`;
+    const url = `${settings.fmEndpointUrl}/api/ssr/providers/${providerId}/regions`;
 
     const apiResponse = await fetch(url, {
       method: "GET",
@@ -160,7 +178,8 @@ export default async function Provider({
 
     if (!apiResponse.ok) {
       const errorText = await apiResponse.text();
-      throw new Error(`Failed to fetch provider's region(s): ${errorText}`);
+      toaster.error("Failed to fetch provider's regions", errorText);
+      throw new Error(`Failed to fetch provider's regions: ${errorText}`);
     }
 
     const data = await apiResponse.json();
@@ -170,7 +189,7 @@ export default async function Provider({
 
   /* Projects */
   async function getProviderProjects(providerId: string) {
-    const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/providers/${providerId}/projects`;
+    const url = `${settings.fmEndpointUrl}/api/ssr/providers/${providerId}/projects`;
 
     const apiResponse = await fetch(url, {
       method: "GET",
@@ -179,7 +198,8 @@ export default async function Provider({
 
     if (!apiResponse.ok) {
       const errorText = await apiResponse.text();
-      throw new Error(`Failed to fetch provider's project(s): ${errorText}`);
+      toaster.error("Failed to fetch provider's projects", errorText);
+      throw new Error(`Failed to fetch provider's projects: ${errorText}`);
     }
 
     const data = await apiResponse.json();
@@ -205,7 +225,7 @@ export default async function Provider({
     providerId: string,
     projectId: string
   ) {
-    const url = `${process.env.FM_ENDPOINT_URL}/api/ssr/providers/${providerId}/projects/${projectId}/regions`;
+    const url = `${settings.fmEndpointUrl}/api/ssr/providers/${providerId}/projects/${projectId}/regions`;
 
     const apiResponse = await fetch(url, {
       method: "GET",
@@ -214,8 +234,9 @@ export default async function Provider({
 
     if (!apiResponse.ok) {
       const errorText = await apiResponse.text();
+      toaster.error("Failed to fetch project's regions", errorText);
       throw new Error(
-        `Failed to fetch provider project's region(s) : ${errorText}`
+        `Failed to fetch provider project's regions: ${errorText}`
       );
     }
 
@@ -226,7 +247,7 @@ export default async function Provider({
 
   async function getUserId() {
     const apiResponse = await fetch(
-      `${process.env.FM_ENDPOINT_URL}/api/ssr/users/my-id`,
+      `${settings.fmEndpointUrl}/api/ssr/users/my-id`,
       {
         method: "GET",
         headers: await headers(),

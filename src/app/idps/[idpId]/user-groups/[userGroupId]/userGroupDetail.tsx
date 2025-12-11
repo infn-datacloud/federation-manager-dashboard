@@ -34,33 +34,24 @@ export default function UserGroupDetail(props: Readonly<ItemProps>) {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const deleteUserGroup = async (): Promise<void> => {
-    try {
-      const apiResponse = await fetch(
-        `/api/ssr/idps/${idpId}/user-groups/${userGroupId}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-
-      const jsonResponse = await apiResponse; //.json();
-
-      if (jsonResponse.ok) {
-        setShowDeleteModal(false);
-        router.push(`/idps/${idpId}`);
-        toaster.success("User group deleted successfully");
-      } else {
-        toaster.error(
-          "Error deleting User group",
-          "Some error occurred while deleting the user group. Please try again."
-        );
+    const apiResponse = await fetch(
+      `/api/ssr/idps/${idpId}/user-groups/${userGroupId}`,
+      {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
       }
-    } catch (err) {
-      console.error("API Error:", err);
-    } finally {
-      return;
+    );
+
+    if (apiResponse.ok) {
+      setShowDeleteModal(false);
+      router.push(`/idps/${idpId}`);
+      toaster.success("User group deleted successfully");
+    } else {
+      const msg = await apiResponse.text();
+      toaster.error("Error deleting user group", msg);
+      console.error("API Error:", msg);
     }
   };
 
@@ -89,33 +80,25 @@ export default function UserGroupDetail(props: Readonly<ItemProps>) {
       }
     }
 
-    try {
-      const apiResponse = await fetch(
-        `/api/ssr/idps/${idpId}/user-groups/${userGroupId}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(body),
-        }
-      );
-
-      const jsonResponse = await apiResponse; //.json();
-
-      if (jsonResponse.ok) {
-        setShowUserGroupModal(false);
-        router.refresh();
-        toaster.success("User group updated successfully");
-      } else {
-        toaster.error("Update failed", "Please try again.");
+    const apiResponse = await fetch(
+      `/api/ssr/idps/${idpId}/user-groups/${userGroupId}`,
+      {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(body),
       }
+    );
 
-      //PrintFormErrors(jsonResponse);
-    } catch (err) {
-      console.error("API Error:", err);
-    } finally {
-      return;
+    if (apiResponse.ok) {
+      setShowUserGroupModal(false);
+      router.refresh();
+      toaster.success("User group updated successfully");
+    } else {
+      const msg = await apiResponse.text();
+      toaster.error("Update failed", msg);
+      console.error("API Error:", msg);
     }
   };
 

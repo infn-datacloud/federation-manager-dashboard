@@ -1,4 +1,5 @@
 import getAuthToken from "@/app/api/ssr/utils";
+import { settings } from "@/config";
 
 export async function findUserRoles() {
   const accessToken = await getAuthToken();
@@ -11,17 +12,26 @@ export async function findUserRoles() {
   const groups = (decoded as JwtPayloadWithGroups)?.groups;
   const userRoles: string[] = [];
 
-  const siteAdminGroups = JSON.parse(process.env.GROUPS_SITE_ADMIN!)[
-    `${process.env.FM_OIDC_URL!}/`
+  const adminGroups = JSON.parse(settings.groupsAdmin!)[
+    `${settings.fmOidcUrl!}/`
   ];
-  const siteTesterGroups = JSON.parse(process.env.GROUPS_SITE_TESTER!)[
-    `${process.env.FM_OIDC_URL!}/`
+  const siteAdminGroups = JSON.parse(settings.groupsSiteAdmin!)[
+    `${settings.fmOidcUrl!}/`
   ];
-  const slaManagerGroups = JSON.parse(process.env.GROUPS_SLA_MANAGER!)[
-    `${process.env.FM_OIDC_URL!}/`
+  const siteTesterGroups = JSON.parse(settings.groupsSiteTester!)[
+    `${settings.fmOidcUrl!}/`
+  ];
+  const slaManagerGroups = JSON.parse(settings.groupsSlaManager!)[
+    `${settings.fmOidcUrl!}/`
   ];
 
   groups?.forEach(group => {
+    if (adminGroups) {
+      if (adminGroups.includes(group) && !userRoles.includes("admin")) {
+        userRoles.push("admin");
+      }
+    }
+
     if (siteAdminGroups) {
       if (
         siteAdminGroups.includes(group) &&

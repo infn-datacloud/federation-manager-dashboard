@@ -7,6 +7,7 @@ import { LoadingList } from "./loading";
 import Header from "@/components/header";
 import { findUserRoles } from "@/utils";
 import logo from "@/assets/infn_logo.png";
+import { settings } from "@/config";
 
 type ProvierProps = {
   id: string;
@@ -70,7 +71,7 @@ async function List() {
 
 async function getProviders() {
   const apiResponse = await fetch(
-    `${process.env.FM_ENDPOINT_URL}/api/ssr/providers`,
+    `${settings.fmEndpointUrl}/api/ssr/providers`,
     {
       method: "GET",
       headers: await headers(),
@@ -84,13 +85,10 @@ async function getProviders() {
 }
 
 async function getUsers() {
-  const apiResponse = await fetch(
-    `${process.env.FM_ENDPOINT_URL}/api/ssr/users`,
-    {
-      method: "GET",
-      headers: await headers(),
-    }
-  );
+  const apiResponse = await fetch(`${settings.fmEndpointUrl}/api/ssr/users`, {
+    method: "GET",
+    headers: await headers(),
+  });
 
   const users = await apiResponse.json();
 
@@ -99,7 +97,7 @@ async function getUsers() {
 
 async function getUserId() {
   const apiResponse = await fetch(
-    `${process.env.FM_ENDPOINT_URL}/api/ssr/users/my-id`,
+    `${settings.fmEndpointUrl}/api/ssr/users/my-id`,
     {
       method: "GET",
       headers: await headers(),

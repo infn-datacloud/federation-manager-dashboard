@@ -4,17 +4,13 @@ import { settings } from "@/config";
 
 interface Params {
   params: Promise<{
-    idpId: string;
-    userGroupId: string;
-    slaId: string;
-    projectId: string;
+    id: string;
+    testerId: string;
   }>;
 }
 
-const idpsUrl = `${settings.apiServerUrl}/idps`;
-
 export async function DELETE(_: Request, { params }: Params) {
-  const { idpId, userGroupId, slaId, projectId } = await params;
+  const { id, testerId } = await params;
   const accessToken = await getAuthToken();
 
   if (!accessToken) {
@@ -22,7 +18,7 @@ export async function DELETE(_: Request, { params }: Params) {
   }
 
   const res = await fetch(
-    `${idpsUrl}/${idpId}/user-groups/${userGroupId}/slas/${slaId}/projects/${projectId}`,
+    `${settings.apiServerUrl}/providers/${id}/testers/${testerId}`,
     {
       method: "DELETE",
       headers: {
@@ -34,7 +30,10 @@ export async function DELETE(_: Request, { params }: Params) {
   if (!res.ok) {
     const text = await res.text();
     console.error("API Error:", res.status, text);
-    return NextResponse.json({ error: text }, { status: res.status });
+    return NextResponse.json(
+      { error: "There was an error trying to unassign the site tester." },
+      { status: res.status }
+    );
   }
 
   if (res.status == 204) {

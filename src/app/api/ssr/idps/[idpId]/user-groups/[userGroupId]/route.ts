@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import getAuthToken from "@/app/api/ssr/utils";
+import { settings } from "@/config";
 
 interface Params {
   params: Promise<{
@@ -7,6 +8,8 @@ interface Params {
     userGroupId: string;
   }>;
 }
+
+const idpsUrl = `${settings.apiServerUrl}/idps`;
 
 export async function GET(_: Request, { params }: Params) {
   const { idpId, userGroupId } = await params;
@@ -17,15 +20,12 @@ export async function GET(_: Request, { params }: Params) {
   }
 
   try {
-    const res = await fetch(
-      `${process.env.API_SERVER_URL}/idps/${idpId}/user-groups/${userGroupId}`,
-      {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
-      }
-    );
+    const res = await fetch(`${idpsUrl}/${idpId}/user-groups/${userGroupId}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
     if (!res.ok) {
       const text = await res.text();
@@ -53,17 +53,14 @@ export async function PUT(req: Request, { params }: Params) {
   }
 
   const body = await req.json();
-  const res = await fetch(
-    `${process.env.API_SERVER_URL}/idps/${idpId}/user-groups/${userGroupId}`,
-    {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(body),
-    }
-  );
+  const res = await fetch(`${idpsUrl}/${idpId}/user-groups/${userGroupId}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(body),
+  });
 
   if (!res.ok) {
     const text = await res.text();
@@ -87,15 +84,12 @@ export async function DELETE(_: Request, { params }: Params) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
-  const res = await fetch(
-    `${process.env.API_SERVER_URL}/idps/${idpId}/user-groups/${userGroupId}`,
-    {
-      method: "DELETE",
-      headers: {
-        Authorization: `Bearer ${accessToken}`,
-      },
-    }
-  );
+  const res = await fetch(`${idpsUrl}/${idpId}/user-groups/${userGroupId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
 
   if (!res.ok) {
     const text = await res.text();

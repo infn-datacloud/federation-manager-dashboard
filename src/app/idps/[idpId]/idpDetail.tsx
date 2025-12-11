@@ -46,17 +46,14 @@ export default function IdpDetail(props: Readonly<ItemProps>) {
         },
       });
 
-      const jsonResponse = await apiResponse; //.json();
-
-      if (jsonResponse.ok) {
+      if (apiResponse.ok) {
         setShowDeleteModal(false);
         router.push("/idps");
         toaster.success("IDP deleted successfully");
       } else {
-        toaster.error(
-          "Error deleting IDP",
-          "Some error occurred while deleting the identity provider. Please try again."
-        );
+        const msg = await apiResponse.text();
+        toaster.error("Error deleting IDP", msg);
+        console.error("API Error:", msg);
       }
     } catch (err) {
       console.error("API Error:", err);
@@ -90,30 +87,22 @@ export default function IdpDetail(props: Readonly<ItemProps>) {
       }
     }
 
-    try {
-      const apiResponse = await fetch(`/api/ssr/idps/${idpId}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(body),
-      });
+    const apiResponse = await fetch(`/api/ssr/idps/${idpId}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(body),
+    });
 
-      const jsonResponse = await apiResponse; //.json();
-
-      if (jsonResponse.ok) {
-        setShowIdpModal(false);
-        router.refresh();
-        toaster.success("IDP updated successfully");
-      } else {
-        toaster.error("Update failed", "Please try again.");
-      }
-
-      //PrintFormErrors(jsonResponse);
-    } catch (err) {
-      console.error("API Error:", err);
-    } finally {
-      return;
+    if (apiResponse.ok) {
+      setShowIdpModal(false);
+      router.refresh();
+      toaster.success("IDP updated successfully");
+    } else {
+      const msg = await apiResponse.text();
+      toaster.error("Update failed", msg);
+      console.error("API Error:", msg);
     }
   };
 

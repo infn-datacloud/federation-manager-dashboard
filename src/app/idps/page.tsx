@@ -6,6 +6,7 @@ import Custom401 from "@/app/pages/401";
 import { Suspense } from "react";
 import { LoadingList } from "./loading";
 import logo from "@/assets/infn_logo.png";
+import { settings } from "@/config";
 
 export default async function Idps() {
   const session = await auth.api.getSession({
@@ -36,13 +37,10 @@ async function List() {
 }
 
 async function getIdentityProviders() {
-  const apiResponse = await fetch(
-    `${process.env.FM_ENDPOINT_URL}/api/ssr/idps`,
-    {
-      method: "GET",
-      headers: await headers(),
-    }
-  );
+  const apiResponse = await fetch(`${settings.fmEndpointUrl}/api/ssr/idps`, {
+    method: "GET",
+    headers: await headers(),
+  });
 
   const identityProviders = await apiResponse.json();
 
